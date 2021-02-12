@@ -1,0 +1,93 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://addons/cpp_file_editor/Scripts/CodeEditor.gd" type="Script" id=1]
+[ext_resource path="res://addons/cpp_file_editor/Fonts/ARIAL.TTF" type="DynamicFontData" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 2 )
+
+[node name="Editor" type="HBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -320.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+error_color = Color( 0.870588, 0.207843, 0.207843, 0.368627 )
+
+[node name="Container" type="PanelContainer" parent="."]
+margin_right = 640.0
+margin_bottom = 540.0
+rect_min_size = Vector2( 640, 474 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CodeEditor" type="TextEdit" parent="Container"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 633.0
+margin_bottom = 533.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/background_color = Color( 0.129412, 0.117647, 0.152941, 1 )
+highlight_current_line = true
+syntax_highlighting = true
+show_line_numbers = true
+highlight_all_occurrences = true
+caret_blink = true
+
+[node name="ErrorColor" type="ColorRect" parent="Container/CodeEditor"]
+visible = false
+margin_top = 2.0
+margin_right = 946.0
+margin_bottom = 20.0
+mouse_filter = 2
+color = Color( 0.913725, 0.309804, 0.309804, 0.376471 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 644.0
+margin_right = 960.0
+margin_bottom = 540.0
+
+[node name="ErrorLog" type="PanelContainer" parent="VBoxContainer"]
+margin_right = 316.0
+margin_bottom = 178.0
+rect_min_size = Vector2( 316, 178 )
+
+[node name="ErrorLog" type="TextEdit" parent="VBoxContainer/ErrorLog"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 309.0
+margin_bottom = 171.0
+custom_fonts/font = SubResource( 1 )
+custom_colors/background_color = Color( 0.141176, 0.141176, 0.164706, 1 )
+text = "Errors"
+readonly = true
+syntax_highlighting = true
+wrap_enabled = true
+
+[node name="VariableLog" type="PanelContainer" parent="VBoxContainer"]
+margin_top = 182.0
+margin_right = 316.0
+margin_bottom = 360.0
+rect_min_size = Vector2( 0, 178 )
+
+[node name="VariableLog" type="TextEdit" parent="VBoxContainer/VariableLog"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 309.0
+margin_bottom = 171.0
+custom_fonts/font = SubResource( 2 )
+text = "Variables"
+readonly = true
+syntax_highlighting = true
+wrap_enabled = true
+
+[connection signal="text_changed" from="Container/CodeEditor" to="." method="_on_CodeEditor_text_changed"]
