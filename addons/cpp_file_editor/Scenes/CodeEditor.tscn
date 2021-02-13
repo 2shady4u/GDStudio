@@ -21,7 +21,6 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-error_color = Color( 0.870588, 0.207843, 0.207843, 0.368627 )
 
 [node name="Container" type="PanelContainer" parent="."]
 margin_right = 640.0

@@ -1,6 +1,5 @@
 #tool
 extends Control
-export(Color) var error_color
 
 # Declare member variables here. Examples:
 # var a = 2
@@ -21,9 +20,8 @@ var keywords = ["auto", "short", "struct", "unsigned",
 "delete", "mutable", "protected", "true", "wchar_t",
 "const", "int", "float", "double", "char", "string"]
 var error_type = -1
-var error_types = {
-"line_end": "Expected ; at the end of the statement"
-}
+var error_messages = ["Expected ; at the end of the statement", 
+"Variable type mismatch"]
 var token_line_error = ""
 var operators = ["+", "-", "*", "/", "=", "%", "<<", ">>"]
 var variable_tracker = []
@@ -35,7 +33,6 @@ var text_changed = false
 var has_error = false
 var showing_error = false
 var error_line = -1
-var shader
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -44,9 +41,9 @@ func _ready():
 func set_initial_content(content):
 	$Container/CodeEditor.text = content
 	current_content = content
-	setup_tokens()
+	setup_syntax()
 
-func setup_tokens():
+func setup_syntax():
 	$Container/CodeEditor.add_color_region("\"", "\"",Color8(128, 64, 0,255),true)
 	$Container/CodeEditor.add_color_region("//", "",Color8(0, 192, 64,255),true)
 	for i in preprocessor:
@@ -113,8 +110,8 @@ func tokenize(line):
 					token += "c"
 	#print(line)
 	#print(token)
-	#final semicolon
 	if has_error == false:
+		#final semicolon
 		var code = token.find("c", 0)
 		if code > 0:
 			if token[code - 1] == "k" and not correct_line[correct_line.length() - 1].ends_with(")"):
@@ -123,6 +120,32 @@ func tokenize(line):
 					error_line = line
 					error_type = 0
 					token_line_error = token
+		#variable type
+		code = token.find("c", 0)
+		if token.length() > code + 1:
+			if token[code + 1] == "o":
+				for i in variable_tracker:
+					if i[1] == line_split[code]:
+						var data_type = ""
+						if line_split.size() >= code + 3:
+							if token[code + 2] != "c":
+								var final_line = line_split[code + 2]
+								var semicolon = line_split[code + 2].find(";", 0)
+								if semicolon > -1:
+									final_line.erase(semicolon, 999)
+								if final_line.is_valid_integer():
+									data_type = "int"
+								elif final_line.is_valid_float():
+									data_type = "float"
+									if i[0] == "double":
+										data_type = "double"
+								else:
+									data_type = "string"
+								if data_type != i[0]:
+									has_error = true
+									error_line = line
+									error_type = 1
+									token_line_error = token
 
 func check_errors(token: String, line: int):
 	match error_type:
@@ -135,6 +158,34 @@ func check_errors(token: String, line: int):
 					error_line = -1
 					error_type = -1
 					token_line_error = ""
+		1:
+			var correct_line = parse_line(line)
+			var line_split = correct_line.split(" ")
+			var code = token.find("c", 0)
+			if token.length() > code + 1:
+				if token[code + 1] != "o":
+					for i in variable_tracker:
+						if i[1] == line_split[code]:
+							var data_type = ""
+							if line_split.size() >= code + 3:
+								if token[code + 2] == "c":
+									var final_line = line_split[code + 2]
+									var semicolon = line_split[code + 2].find(";", 0)
+									if semicolon > -1:
+										final_line.erase(semicolon, 999)
+									if final_line.is_valid_integer():
+										data_type = "int"
+									elif final_line.is_valid_float():
+										data_type = "float"
+										if i[0] == "double":
+											data_type = "double"
+									else:
+										data_type = "string"
+									if data_type == i[0]:
+										has_error = false
+										error_line = -1
+										error_type = -1
+										token_line_error = ""
 
 func show_errors():
 	if has_error == true:
@@ -142,7 +193,7 @@ func show_errors():
 			var error_pos = error_line - $Container/CodeEditor.scroll_vertical
 			$Container/CodeEditor/ErrorColor.set_position(Vector2(0, 2 + (error_pos * 20)))
 			$Container/CodeEditor/ErrorColor.show()
-			error_text = "\n"+error_types["line_end"]
+			error_text = "\n"+error_messages[error_type]
 			$VBoxContainer/ErrorLog/ErrorLog.text += error_text
 			showing_error = true
 	else:
@@ -156,22 +207,6 @@ func show_errors():
 			$VBoxContainer/ErrorLog/ErrorLog.text = text
 			error_text = ""
 			showing_error = false
-
-func is_function(line: String):
-	if in_function == true:
-		if line == "{":
-			return true
-		elif line == "}":
-			in_function = false
-			return true
-	
-	var split_line = line.split(" ")
-	if split_line.size() > 2:
-		if keywords.has(split_line[0]) and split_line[1].ends_with(")"):
-			in_function = true
-			return true
-		else:
-			return false
 
 func check_variables(line):
 	var current_line = $Container/CodeEditor.get_line(line)
