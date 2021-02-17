@@ -33,6 +33,27 @@ var text_changed = false
 var has_error = false
 var showing_error = false
 var error_line = -1
+enum variable_types {
+	plus,
+	minus,
+	mult,
+	divide,
+	equal,
+	lparent,
+	rparent,
+	lbrace,
+	rbrace,
+	intType,
+	floatType,
+	doubleType,
+	number,
+	keyword,
+	identifier,
+	line_end,
+	comment,
+	illegal,
+}
+var line_index = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -68,124 +89,102 @@ func _on_CodeEditor_text_changed():
 	line_number = $Container/CodeEditor.get_line_count()
 	variable_tracker = []
 	$VBoxContainer/VariableLog/VariableLog.text = "Variables"
-	for i in line_number:
-		tokenize(i)
-		check_variables(i)
-	if error_type > -1:
-		check_errors(token_line_error, error_line)
+	var current_line = $Container/CodeEditor.cursor_get_line()
+	#check_line(current_line)
+	#if error_type > -1:
+	#	check_errors(token_line_error, error_line)
 	show_errors()
 
-func parse_line(line: int):
+func check_line(line: int):
+	check_variables(line)
+	token_line(line)
+
+func token_line(line: int):
+	line_index = 0
 	var current_line = $Container/CodeEditor.get_line(line)
-	var comments = current_line.find("//", 0)
-	if comments > -1:
-		current_line.erase(comments, 999)
 	var correct_line = current_line.strip_edges()
-	return correct_line
+	var token_return = []
+	var chara = ""
+	while correct_line.length() > 0:
+		chara = correct_line[line_index]
+		if chara != " ":
+			match chara:
+				"+":
+					token_return.append([variable_types.plus, "+"])
+				"-":
+					token_return.append([variable_types.minus, "-"])
+				"*":
+					token_return.append([variable_types.mult, "*"])
+				"/":
+					token_return.append([variable_types.divide, "/"])
+				"=":
+					token_return.append([variable_types.equal, "="])
+				"(":
+					token_return.append([variable_types.lparent, "("])
+				")":
+					token_return.append([variable_types.rparent, ")"])
+				";":
+					token_return.append([variable_types.line_end, ";"])
+				_:
+					if chara.is_valid_integer() == true:
+						var number = get_whole_integer(correct_line)
+						token_return.append([variable_types.number, number])
+					elif is_letter(chara):
+						var identifier = get_identifier(correct_line)
+						if keywords.has(identifier):
+							token_return.append([variable_types.keyword, identifier])
+						else:
+							token_return.append([variable_types.identifier, identifier])
+					else:
+						token_return.append([variable_types.illegal, chara])
+		line_index += 1
+		if line_index > correct_line.length() - 1:
+			break
+	for i in token_return:
+		print(i)
 
-func tokenize(line):
-	var correct_line = parse_line(line)
-	var line_split = correct_line.split(" ")
-	var token = ""
-	var is_string = false
-	for value in line_split:
-		if is_string == true:
-			token += "s"
-			if value.ends_with("\""):
-				is_string = false
-		else:
-			if value.begins_with("\""):
-				is_string = true
-				token += "s"
-			if value.begins_with("#"):
-				token += "p"
-			elif keywords.has(value):
-				token += "k"
-			elif operators.has(value):
-				token += "o"
-			elif value.is_valid_integer() or value.is_valid_float():
-				token += "n"
-			else:
-				if $Container/CodeEditor.get_line(line) != "":
-					token += "c"
-	#print(line)
-	#print(token)
-	if has_error == false:
-		#final semicolon
-		var code = token.find("c", 0)
-		if code > 0:
-			if token[code - 1] == "k" and not correct_line[correct_line.length() - 1].ends_with(")"):
-				if correct_line[correct_line.length() - 1] != ";":
-					has_error = true
-					error_line = line
-					error_type = 0
-					token_line_error = token
-		#variable type
-		code = token.find("c", 0)
-		if token.length() > code + 1:
-			if token[code + 1] == "o":
-				for i in variable_tracker:
-					if i[1] == line_split[code]:
-						var data_type = ""
-						if line_split.size() >= code + 3:
-							if token[code + 2] != "c":
-								var final_line = line_split[code + 2]
-								var semicolon = line_split[code + 2].find(";", 0)
-								if semicolon > -1:
-									final_line.erase(semicolon, 999)
-								if final_line.is_valid_integer():
-									data_type = "int"
-								elif final_line.is_valid_float():
-									data_type = "float"
-									if i[0] == "double":
-										data_type = "double"
-								else:
-									data_type = "string"
-								if data_type != i[0]:
-									has_error = true
-									error_line = line
-									error_type = 1
-									token_line_error = token
+func get_whole_integer(line: String):
+	var position = line_index
+	var final_position = line_index
+	while line[final_position].is_valid_integer() == true:
+		final_position += 1
+		if final_position > line.length() - 1:
+			break
+	var size = final_position - position
+	line_index += size - 1
+	return line.substr(position, size)
 
-func check_errors(token: String, line: int):
-	match error_type:
-		0:
-			var correct_line = parse_line(line)
-			var code = token.find("c", 0)
-			if token[code - 1] == "k":
-				if correct_line[correct_line.length() - 1] == ";":
-					has_error = false
-					error_line = -1
-					error_type = -1
-					token_line_error = ""
-		1:
-			var correct_line = parse_line(line)
-			var line_split = correct_line.split(" ")
-			var code = token.find("c", 0)
-			if token.length() > code + 1:
-				if token[code + 1] != "o":
-					for i in variable_tracker:
-						if i[1] == line_split[code]:
-							var data_type = ""
-							if line_split.size() >= code + 3:
-								if token[code + 2] == "c":
-									var final_line = line_split[code + 2]
-									var semicolon = line_split[code + 2].find(";", 0)
-									if semicolon > -1:
-										final_line.erase(semicolon, 999)
-									if final_line.is_valid_integer():
-										data_type = "int"
-									elif final_line.is_valid_float():
-										data_type = "float"
-										if i[0] == "double":
-											data_type = "double"
-									else:
-										data_type = "string"
-									if data_type == i[0]:
-										has_error = false
-										error_line = -1
-										error_type = -1
-										token_line_error = ""
+func get_identifier(line: String):
+	var position = line_index
+	var final_position = line_index
+	while is_letter(line[final_position]) == true:
+		final_position += 1
+		if final_position > line.length() - 1:
+			break
+	var size = final_position - position
+	line_index += size - 1
+	return line.substr(position, size)
+
+func is_letter(chara):
+	return 'a' <= chara && chara <= 'z' || 'A' <= chara && chara <= 'z' || chara == '_'
+
+func parse_line_tokens(token_array: Array):
+	match token_array[0][0]:
+		variable_types.keyword:
+			parse_declaration(token_array)
+
+func parse_declaration(token_array: Array):
+	var current_token = 1
+	if token_array[current_token][0] != variable_types.identifier:
+		print("error, expected identifier")
+		return 0
+	
+	current_token += 1
+	if token_array[current_token][0] != variable_types.equal:
+		print("error, expected = sign")
+		return 0
+	
+	current_token += 1
 
 func show_errors():
 	if has_error == true:
@@ -235,6 +234,12 @@ func find_arrays(search_array: Array, main_array: Array):
 func auto_add():
 	if $Container/CodeEditor.get_word_under_cursor() == "(":
 		print("yes")
+
+func _input(event):
+	if event is InputEventKey and event.pressed:
+		if event.scancode == KEY_HOME:
+			var line = $Container/CodeEditor.cursor_get_line()
+			token_line(line)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
