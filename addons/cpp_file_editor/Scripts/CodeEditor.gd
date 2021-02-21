@@ -4,9 +4,8 @@ extends Control
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
-var time = 0
+var line_index = 0
 var line_number = 0
-var current_line = 0
 var preprocessor = ["#"]
 var keywords = ["auto", "short", "struct", "unsigned",
 "break", "continue", "else", "for", "long", "signed", "switch", "void",
@@ -19,19 +18,13 @@ var keywords = ["auto", "short", "struct", "unsigned",
 "const_cast", "inline", "public", "throw", "virtual",
 "delete", "mutable", "protected", "true", "wchar_t",
 "const", "int", "float", "double", "char", "string"]
-var error_type = -1
-var error_messages = ["Expected ; at the end of the statement", 
-"Variable type mismatch"]
-var token_line_error = ""
 var operators = ["+", "-", "*", "/", "=", "%", "<<", ">>"]
 var variable_tracker = []
 var error_text = ""
 var current_content = ""
 var file_name = ""
-var in_function = false
 var text_changed = false
 var has_error = false
-var showing_error = false
 var error_line = -1
 enum variable_types {
 	plus,
@@ -53,7 +46,6 @@ enum variable_types {
 	comment,
 	illegal,
 }
-var line_index = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -89,11 +81,6 @@ func _on_CodeEditor_text_changed():
 	line_number = $Container/CodeEditor.get_line_count()
 	variable_tracker = []
 	$VBoxContainer/VariableLog/VariableLog.text = "Variables"
-	var current_line = $Container/CodeEditor.cursor_get_line()
-	#check_line(current_line)
-	#if error_type > -1:
-	#	check_errors(token_line_error, error_line)
-	show_errors()
 
 func check_line(line: int):
 	check_variables(line)
@@ -142,7 +129,7 @@ func token_line(line: int):
 			break
 	for i in token_return:
 		print(i)
-	parse_line_tokens(token_return)
+	parse_line_tokens(token_return, line)
 
 func get_whole_integer(line: String):
 	var position = line_index
@@ -169,20 +156,33 @@ func get_identifier(line: String):
 func is_letter(chara):
 	return 'a' <= chara && chara <= 'z' || 'A' <= chara && chara <= 'z' || chara == '_'
 
-func parse_line_tokens(token_array: Array):
+func parse_line_tokens(token_array: Array, line: int):
+	var error = 1
 	match token_array[0][0]:
 		variable_types.keyword:
-			parse_declaration(token_array)
+			error = parse_declaration(token_array)
+	
+	if error == 0:
+		has_error = true
+		error_line = line
+		show_error_text()
+	else:
+		has_error = false
+		error_line = -1
+		hide_error_text()
 
 func parse_declaration(token_array: Array):
 	var current_token = 1
+	while token_array[current_token][0] == variable_types.keyword:
+		current_token += 1
+	
 	if token_array[current_token][0] != variable_types.identifier:
-		print("error, expected identifier")
+		error_text = "error, expected identifier"
 		return 0
 	
 	current_token += 1
 	if token_array[current_token][0] != variable_types.equal:
-		print("error, expected = sign")
+		error_text = "error, expected = sign"
 		return 0
 	
 	current_token += 1
@@ -190,31 +190,26 @@ func parse_declaration(token_array: Array):
 		print(token_array.size())
 		current_token += 1
 		if token_array.size() <= current_token:
-			print("error, expected ;")
+			error_text = "error, expected ;"
 			return 0
 	
 	return 1
 
-func show_errors():
-	if has_error == true:
-		if showing_error == false:
-			var error_pos = error_line - $Container/CodeEditor.scroll_vertical
-			$Container/CodeEditor/ErrorColor.set_position(Vector2(0, 2 + (error_pos * 20)))
-			$Container/CodeEditor/ErrorColor.show()
-			error_text = "\n"+error_messages[error_type]
-			$VBoxContainer/ErrorLog/ErrorLog.text += error_text
-			showing_error = true
-	else:
-		if showing_error == true:
-			$Container/CodeEditor/ErrorColor.hide()
-			$Container/CodeEditor/ErrorColor.set_position(Vector2(0, 2 + (error_line * 20)))
-			var pos = $VBoxContainer/ErrorLog/ErrorLog.text.find(error_text)
-			var length = error_text.length()
-			var text = $VBoxContainer/ErrorLog/ErrorLog.text
-			text.erase(pos, length)
-			$VBoxContainer/ErrorLog/ErrorLog.text = text
-			error_text = ""
-			showing_error = false
+func show_error_text():
+	var error_pos = error_line - $Container/CodeEditor.scroll_vertical
+	$Container/CodeEditor/ErrorColor.set_position(Vector2(0, 2 + (error_pos * 20)))
+	$Container/CodeEditor/ErrorColor.show()
+	$VBoxContainer/ErrorLog/ErrorLog.text += "\n"+error_text
+
+func hide_error_text():
+	$Container/CodeEditor/ErrorColor.hide()
+	$Container/CodeEditor/ErrorColor.set_position(Vector2(0, 2 + (error_line * 20)))
+	var pos = $VBoxContainer/ErrorLog/ErrorLog.text.find(error_text)
+	var length = error_text.length()
+	var text = $VBoxContainer/ErrorLog/ErrorLog.text
+	text.erase(pos, length)
+	$VBoxContainer/ErrorLog/ErrorLog.text = text
+	error_text = ""
 
 func check_variables(line):
 	var current_line = $Container/CodeEditor.get_line(line)
@@ -252,6 +247,4 @@ func _input(event):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
-#	time += delta
-#	if time >= 0.8:
-#		time = 0
+#	pass
