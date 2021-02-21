@@ -49,7 +49,7 @@ enum variable_types {
 	number,
 	keyword,
 	identifier,
-	line_end,
+	semicolon,
 	comment,
 	illegal,
 }
@@ -124,7 +124,7 @@ func token_line(line: int):
 				")":
 					token_return.append([variable_types.rparent, ")"])
 				";":
-					token_return.append([variable_types.line_end, ";"])
+					token_return.append([variable_types.semicolon, ";"])
 				_:
 					if chara.is_valid_integer() == true:
 						var number = get_whole_integer(correct_line)
@@ -142,6 +142,7 @@ func token_line(line: int):
 			break
 	for i in token_return:
 		print(i)
+	parse_line_tokens(token_return)
 
 func get_whole_integer(line: String):
 	var position = line_index
@@ -185,6 +186,14 @@ func parse_declaration(token_array: Array):
 		return 0
 	
 	current_token += 1
+	while token_array[current_token][0] != variable_types.semicolon:
+		print(token_array.size())
+		current_token += 1
+		if token_array.size() <= current_token:
+			print("error, expected ;")
+			return 0
+	
+	return 1
 
 func show_errors():
 	if has_error == true:
