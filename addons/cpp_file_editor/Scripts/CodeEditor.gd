@@ -4,9 +4,10 @@ extends Control
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
+var search_path = "E:/codeblocks-20.03mingw-nosetup/MinGW/include"
 var line_index = 0
 var line_number = 0
-var preprocessor = ["#"]
+var preprocesor = ["#", "include", "define"]
 var keywords = ["auto", "short", "struct", "unsigned",
 "break", "continue", "else", "for", "long", "signed", "switch", "void",
 "case", "default", "enum", "goto", "register", "sizeof", "typedef", "volatile",
@@ -42,6 +43,7 @@ enum variable_types {
 	number,
 	keyword,
 	identifier,
+	preprocessor,
 	semicolon,
 	comment,
 	illegal,
@@ -59,7 +61,7 @@ func set_initial_content(content):
 func setup_syntax():
 	$Container/CodeEditor.add_color_region("\"", "\"",Color8(128, 64, 0,255),true)
 	$Container/CodeEditor.add_color_region("//", "",Color8(0, 192, 64,255),true)
-	for i in preprocessor:
+	for i in preprocesor:
 		$Container/CodeEditor.add_color_region(i, "",Color8(0, 128, 64,255),true)
 	
 	for i in keywords:
@@ -110,6 +112,8 @@ func token_line(line: int):
 					token_return.append([variable_types.lparent, "("])
 				")":
 					token_return.append([variable_types.rparent, ")"])
+				"#":
+					token_return.append([variable_types.preprocessor, "#"])
 				";":
 					token_return.append([variable_types.semicolon, ";"])
 				_:
@@ -161,6 +165,8 @@ func parse_line_tokens(token_array: Array, line: int):
 	match token_array[0][0]:
 		variable_types.keyword:
 			error = parse_declaration(token_array)
+		variable_types.preprocessor:
+			error = parse_preprocessor(token_array)
 	
 	if error == 0:
 		has_error = true
@@ -191,6 +197,68 @@ func parse_declaration(token_array: Array):
 		current_token += 1
 		if token_array.size() <= current_token:
 			error_text = "error, expected ;"
+			return 0
+	
+	return 1
+
+func parse_preprocessor(token_array: Array):
+	var current_token = 1
+	var preprocesor_var = 0
+	match token_array[current_token][1]:
+		"include":
+			preprocesor_var = 1
+		_:
+			error_text = "error, undefined preprocesor type"
+			return 0
+			
+	current_token += 1
+	
+	match preprocesor_var:
+		1:
+			return parse_preprocesor_include(current_token, token_array)
+		_:
+			error_text = "error, undefined token"
+			return 0
+
+func parse_preprocesor_include(current_token: int, token_array: Array):
+	var include_type = -1
+	match token_array[current_token][1]:
+		"<":
+			include_type = 0
+		"\"":
+			include_type = 1
+		_:
+			error_text = "error, undefined token"
+			return 0
+	
+	current_token += 1
+	if include_type == 0:
+		var file = File.new()
+		var file_name = token_array[current_token][1]
+		#file.open(search_path+file_name, File.READ)
+		if !file.file_exists(search_path+file_name):
+			error_text = "error, "+file_name+" doesn't exists"
+			return 0
+		current_token += 2
+	else:
+		var file = File.new()
+		var file_name = token_array[current_token][1]
+		file_name += token_array[current_token+1][1]
+		file_name += token_array[current_token+2][1]
+		current_token += 2
+		#file.open(search_path+file_name, File.READ)
+		if !file.file_exists(file_name):
+			error_text = "error, "+file_name+" doesn't exists"
+			return 0
+	
+	current_token += 1
+	if include_type == 0:
+		if token_array[current_token][1] != ">":
+			error_text = "error, expected >"
+			return 0
+	else:
+		if token_array[current_token][1] != "\"":
+			error_text = "error, expected \""
 			return 0
 	
 	return 1
