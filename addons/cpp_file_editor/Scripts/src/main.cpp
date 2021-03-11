@@ -1,5 +1,6 @@
 #include <Godot.hpp>
 #include "File.hpp"
+#include "CodeEditor.hpp"
 
 using namespace godot;
 
@@ -15,5 +16,5 @@ extern "C" void GDN_EXPORT godot_nativescript_init(void *handle) {
 	Godot::nativescript_init(handle);
 
 	register_class<EditorFile>();
-	//godot::register_class<SimpleSprite>();
+	register_class<CodeEditor>();
 }

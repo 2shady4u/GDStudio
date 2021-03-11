@@ -8,6 +8,7 @@ addons/cpp_file_editor/Scripts/bin/
 *.obj.import
 *.bat
 *.sconsign.dblite
+.vscode/
 # Mono-specific ignores
 .mono/
 data_*/

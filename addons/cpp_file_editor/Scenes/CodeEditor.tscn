@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://addons/cpp_file_editor/Scripts/CodeEditor.gd" type="Script" id=1]
+[ext_resource path="res://addons/cpp_file_editor/Scripts/native/code_editor.gdns" type="Script" id=1]
 [ext_resource path="res://addons/cpp_file_editor/Fonts/ARIAL.TTF" type="DynamicFontData" id=2]
 
 [sub_resource type="DynamicFont" id=1]
