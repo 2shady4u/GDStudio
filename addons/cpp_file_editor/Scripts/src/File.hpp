@@ -4,6 +4,7 @@
 #include <ResourceLoader.hpp>
 #include <String.hpp>
 
+#include "CodeEditor.hpp"
 using namespace godot;
 
 class EditorFile : public Control
@@ -30,6 +31,6 @@ private:
     String file_name = "";
     String file_path = "";
     Ref<PackedScene> code_scene;
-    Node *current_editor_instance;
+    CodeEditor *current_editor_instance;
     int tab_number = 0;
 };

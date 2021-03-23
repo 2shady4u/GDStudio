@@ -6,6 +6,8 @@
 
 using namespace godot;
 
+#ifndef CodeEditor_HEADER
+#define CodeEditor_HEADER
 class CodeEditor : public Control
 {
     GODOT_CLASS(CodeEditor, Control);
@@ -15,6 +17,12 @@ public:
     ~CodeEditor();
     void _init();
     void _ready();
+    void set_initial_content(String);
+    void setup_syntax();
+    String get_content();
+    void save_contents();
+    void _on_CodeEditor_text_changed();
+    void _input(const Ref<InputEvent>);
 
     static void _register_methods();
 
@@ -35,13 +43,10 @@ private:
                                  "delete", "mutable", "protected", "true", "wchar_t",
                                  "const", "int", "float", "double", "char", "string");
     Array operators = Array::make("+", "-", "*", "/", "=", "%", "<<", ">>");
-    Array variable_tracker{};
     String error_text = "";
     String current_content = "";
     String file_name = "";
     bool text_changed = false;
-    bool has_error = false;
-    int error_line = -1;
     enum variable_types
     {
         plus,
@@ -65,3 +70,5 @@ private:
         illegal,
     };
 };
+
+#endif

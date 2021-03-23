@@ -12,6 +12,8 @@
 #include <InputEventKey.hpp>
 #include <InputEventWithModifiers.hpp>
 #include <OS.hpp>
+#include <SceneTree.hpp>
+#include <Viewport.hpp>
 
 #include "File.hpp"
 using namespace godot;
@@ -31,10 +33,9 @@ void EditorFile::_init()
 void EditorFile::_ready()
 {
     open_file("res://godot.cpp");
-    Godot::print("iu");
     file_path = "res://godot.cpp";
     file_name = file_path.split("//")[1];
-    current_editor_instance = ((TabContainer *)get_node("TabContainer"))->get_child(0);
+    current_editor_instance = cast_to<CodeEditor>(((TabContainer *)get_node("TabContainer"))->get_child(0));
     ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->connect("id_pressed", this, "on_file_pressed");
     create_shortcuts();
 }
@@ -66,11 +67,11 @@ void EditorFile::open_file(String path)
     File *file = File::_new();
     file->open(path, 1);
     Node *new_instanced_scene = code_scene->instance();
+    get_tree()->get_root()->add_child(new_instanced_scene);
     String content = file->get_as_text();
     file->close();
     ((TabContainer *)get_node("TabContainer"))->add_child(new_instanced_scene, true);
-    // UPDATE THIS WHEN CODE EDITOR IS DONE
-    //new_instanced_scene->set_initial_content(content);
+    cast_to<CodeEditor>(new_instanced_scene)->set_initial_content(content);
     tab_number = ((TabContainer *)get_node("TabContainer"))->get_child_count();
     String name = path.split("//")[1];
     ((TabContainer *)get_node("TabContainer"))->set_tab_title(tab_number - 1, name);
@@ -126,7 +127,7 @@ void EditorFile::_on_TabContainer_tab_changed(int tab)
 {
     file_path = ((TabContainer *)get_node("TabContainer"))->get_tab_title(tab);
     file_name = file_path;
-    current_editor_instance = ((TabContainer *)get_node("TabContainer"))->get_child(tab);
+    current_editor_instance = cast_to<CodeEditor>(((TabContainer *)get_node("TabContainer"))->get_child(tab));
 }
 
 void EditorFile::_process()
