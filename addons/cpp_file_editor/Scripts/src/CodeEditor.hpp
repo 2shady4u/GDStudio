@@ -22,14 +22,13 @@ public:
     String get_content();
     void save_contents();
     void _on_CodeEditor_text_changed();
+
+    bool get_text_changed();
     void _input(const Ref<InputEvent>);
 
     static void _register_methods();
 
 private:
-    String search_path = "E:/codeblocks-20.03mingw-nosetup/MinGW/include";
-    int line_index = 0;
-    int line_number = 0;
     Array preprocessor = Array::make("#", "include", "define");
     Array keywords = Array::make("auto", "short", "struct", "unsigned",
                                  "break", "continue", "else", "for", "long", "signed", "switch", "void",

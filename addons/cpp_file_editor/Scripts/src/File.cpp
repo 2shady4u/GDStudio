@@ -81,9 +81,8 @@ void EditorFile::save_file()
 {
     File *file = File::_new();
     file->open(file_path, 0);
-    // UPDATE THIS WHEN CODE EDITOR IS DONE
-    //file->store_string(current_editor_instance->get_contents());
-    //current_editor_instance->save_contents();
+    file->store_string(current_editor_instance->get_content());
+    current_editor_instance->save_contents();
     file->close();
 }
 
@@ -133,11 +132,11 @@ void EditorFile::_on_TabContainer_tab_changed(int tab)
 void EditorFile::_process()
 {
     TabContainer *tabNode = ((TabContainer *)get_node("TabContainer"));
-    /*if (current_editor_instance.text_changed == true) {
+    if (current_editor_instance->get_text_changed() == true) {
         tabNode->set_tab_title(tabNode->get_current_tab(), file_name + "(*)");
     }else{
         tabNode->set_tab_title(tabNode->get_current_tab(), file_name);
-    }*/
+    }
 }
 
 void EditorFile::_register_methods()
@@ -146,5 +145,10 @@ void EditorFile::_register_methods()
     register_method((char *)"_ready", &EditorFile::_ready);
     register_method((char *)"on_file_pressed", &EditorFile::on_file_pressed);
     register_method((char *)"open_file", &EditorFile::open_file);
+    register_method((char *)"save_file", &EditorFile::save_file);
+    register_method((char *)"_on_NewFile_file_selected", &EditorFile::_on_NewFile_file_selected);
+    register_method((char *)"_on_OpenFile_file_selected", &EditorFile::_on_OpenFile_file_selected);
     register_method((char *)"create_shortcuts", &EditorFile::create_shortcuts);
+    register_method((char *)"_on_TabContainer_tab_changed", &EditorFile::_on_TabContainer_tab_changed);
+    register_method((char *)"_process", &EditorFile::_process);
 }

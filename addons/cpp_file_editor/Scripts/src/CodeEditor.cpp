@@ -17,7 +17,6 @@ CodeEditor::~CodeEditor()
 
 void CodeEditor::_init()
 {
-    Godot::print(preprocessor[1]);
 }
 
 void CodeEditor::_ready()
@@ -34,13 +33,14 @@ void CodeEditor::set_initial_content(String content) {
 
 void CodeEditor::setup_syntax()
 {
-    ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("\"", "\"",Color(128, 64, 0,255),true);
-    ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("//", "",Color(0, 192, 64,255),true);
-    for (int i = 0; i < this->preprocessor.size(); i++) {
-        ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region(i, "",Color(0, 128, 64,255),true);
+    ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("\"", "\"",Color(0.5, 0.25, 0,1),true);
+    ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("//", "",Color(0, 0.5, 0.25,1),true);
+    ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("/*", "*/",Color(0, 0.5, 0.25,1));
+    for (int j = 0; j < this->keywords.size(); j++) {
+        ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region(this->keywords[j], "",Color(0.6, 0, 0.8, 1), true);
     }
-    for (int i = 0; i < this->keywords.size(); i++) {
-        ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region(i, "",Color(128,0,255,255));
+    for (int i = 0; i < this->preprocessor.size(); i++) {
+        ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region(this->preprocessor[i], "",Color(0, 0.8, 0.75,1),true);
     }
 }
 
@@ -62,10 +62,20 @@ void CodeEditor::_on_CodeEditor_text_changed()
     }else{
         this->text_changed = true;
     }
-    this->line_number = ((TextEdit *)get_node("Container/CodeEditor"))->get_line_count();
+}
+
+bool CodeEditor::get_text_changed()
+{
+    return this->text_changed;
 }
 
 void CodeEditor::_register_methods()
 {
     register_method((char *)"_init", &CodeEditor::_init);
+    register_method((char *)"set_initial_content", &CodeEditor::set_initial_content);
+    register_method((char *)"setup_syntax", &CodeEditor::setup_syntax);
+    register_method((char *)"get_content", &CodeEditor::get_content);
+    register_method((char *)"save_contents", &CodeEditor::save_contents);
+    register_method((char *)"get_text_changed", &CodeEditor::get_text_changed);
+    register_method((char *)"_on_CodeEditor_text_changed", &CodeEditor::_on_CodeEditor_text_changed);
 }

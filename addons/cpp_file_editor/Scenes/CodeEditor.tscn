@@ -1,14 +1,6 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=2 format=2]
 
 [ext_resource path="res://addons/cpp_file_editor/Scripts/native/code_editor.gdns" type="Script" id=1]
-[ext_resource path="res://addons/cpp_file_editor/Fonts/ARIAL.TTF" type="DynamicFontData" id=2]
-
-[sub_resource type="DynamicFont" id=1]
-size = 14
-font_data = ExtResource( 2 )
-
-[sub_resource type="DynamicFont" id=2]
-font_data = ExtResource( 2 )
 
 [node name="Editor" type="HBoxContainer"]
 anchor_right = 1.0
@@ -32,7 +24,6 @@ margin_left = 7.0
 margin_top = 7.0
 margin_right = 633.0
 margin_bottom = 533.0
-custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/background_color = Color( 0.129412, 0.117647, 0.152941, 1 )
 highlight_current_line = true
@@ -68,7 +59,6 @@ margin_left = 7.0
 margin_top = 7.0
 margin_right = 309.0
 margin_bottom = 171.0
-custom_fonts/font = SubResource( 2 )
 custom_colors/background_color = Color( 0.141176, 0.141176, 0.164706, 1 )
 text = "Errors"
 readonly = true
