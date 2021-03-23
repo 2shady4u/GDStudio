@@ -36,11 +36,11 @@ void CodeEditor::setup_syntax()
     ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("\"", "\"",Color(0.5, 0.25, 0,1),true);
     ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("//", "",Color(0, 0.5, 0.25,1),true);
     ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("/*", "*/",Color(0, 0.5, 0.25,1));
-    for (int j = 0; j < this->keywords.size(); j++) {
-        ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region(this->keywords[j], "",Color(0.6, 0, 0.8, 1), true);
+    for (int j = 0; j < this->preprocessor.size(); j++) {
+        ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region(this->preprocessor[j], "",Color(0.6, 0, 0.8, 1), true);
     }
-    for (int i = 0; i < this->preprocessor.size(); i++) {
-        ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region(this->preprocessor[i], "",Color(0, 0.8, 0.75,1),true);
+    for (int i = 0; i < this->keywords.size(); i++) {
+        ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(this->keywords[i], Color(0, 0.8, 0.75,1));
     }
 }
 
