@@ -57,8 +57,7 @@ void CodeEditor::save_contents()
 
 void CodeEditor::_on_CodeEditor_text_changed()
 {
-    if ((TextEdit *)get_node("Container/CodeEditor")).text == this->current_content
-    {
+    if (((TextEdit *)get_node("Container/CodeEditor"))->get_text() == this->current_content) {
         this->text_changed = false;
     }else{
         this->text_changed = true;
