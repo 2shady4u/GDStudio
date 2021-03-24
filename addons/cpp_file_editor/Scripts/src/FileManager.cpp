@@ -14,6 +14,7 @@
 #include <OS.hpp>
 #include <SceneTree.hpp>
 #include <Viewport.hpp>
+#include <Object.hpp>
 
 #include "FileManager.hpp"
 using namespace godot;
@@ -24,19 +25,21 @@ EditorFile::EditorFile()
 
 EditorFile::~EditorFile()
 {
+    //code_scene->free();
+    //current_editor_instance->free();
 }
 
 void EditorFile::_init()
 {
-    code_scene = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Scenes/CodeEditor.tscn");
+    this->code_scene = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Scenes/CodeEditor.tscn");
 }
 
 void EditorFile::_ready()
 {
     open_file("res://godot.cpp");
-    file_path = "res://godot.cpp";
-    file_name = file_path.split("//")[1];
-    current_editor_instance = cast_to<CodeEditor>(((TabContainer *)get_node("TabContainer"))->get_child(0));
+    this->file_path = "res://godot.cpp";
+    this->file_name = this->file_path.split("//")[1];
+    this->current_editor_instance = cast_to<CodeEditor>(((TabContainer *)get_node("TabContainer"))->get_child(0));
     ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->connect("id_pressed", this, "on_file_pressed");
     create_shortcuts();
 }
@@ -68,12 +71,12 @@ void EditorFile::open_file(String path)
     File *file = File::_new();
     file->open(path, File::READ);
     Node *new_instanced_scene = code_scene->instance();
-    get_tree()->get_root()->add_child(new_instanced_scene);
+    //get_tree()->get_root()->add_child(new_instanced_scene);
     String content = file->get_as_text();
     file->close();
     ((TabContainer *)get_node("TabContainer"))->add_child(new_instanced_scene, true);
     cast_to<CodeEditor>(new_instanced_scene)->set_initial_content(content);
-    tab_number = ((TabContainer *)get_node("TabContainer"))->get_child_count();
+    this->tab_number = ((TabContainer *)get_node("TabContainer"))->get_child_count();
     String name = path.split("//")[1];
     ((TabContainer *)get_node("TabContainer"))->set_tab_title(tab_number - 1, name);
 }
@@ -83,7 +86,7 @@ void EditorFile::save_file()
     File *file = File::_new();
     file->open(file_path, File::WRITE);
     file->store_string(current_editor_instance->get_content());
-    current_editor_instance->save_contents();
+    this->current_editor_instance->save_contents();
     file->close();
 }
 
@@ -125,15 +128,15 @@ void EditorFile::create_shortcuts()
 
 void EditorFile::_on_TabContainer_tab_changed(int tab)
 {
-    file_path = ((TabContainer *)get_node("TabContainer"))->get_tab_title(tab);
-    file_name = file_path;
-    current_editor_instance = cast_to<CodeEditor>(((TabContainer *)get_node("TabContainer"))->get_child(tab));
+    this->file_path = ((TabContainer *)get_node("TabContainer"))->get_tab_title(tab);
+    this->file_name = this->file_path;
+    this->current_editor_instance = cast_to<CodeEditor>(((TabContainer *)get_node("TabContainer"))->get_child(tab));
 }
 
 void EditorFile::_process()
 {
     TabContainer *tabNode = ((TabContainer *)get_node("TabContainer"));
-    if (current_editor_instance->get_text_changed() == true) {
+    if (this->current_editor_instance->get_text_changed() == true) {
         tabNode->set_tab_title(tabNode->get_current_tab(), file_name + "(*)");
     }else{
         tabNode->set_tab_title(tabNode->get_current_tab(), file_name);
