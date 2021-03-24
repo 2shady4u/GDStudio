@@ -3,6 +3,7 @@
 #include <Array.hpp>
 #include <TextEdit.hpp>
 #include <Color.hpp>
+#include <InputEvent.hpp>
 
 #include "CodeEditor.hpp"
 using namespace godot;
@@ -69,6 +70,10 @@ bool CodeEditor::get_text_changed()
     return this->text_changed;
 }
 
+void CodeEditor::_input(Ref<InputEvent> event)
+{
+}
+
 void CodeEditor::_register_methods()
 {
     register_method((char *)"_init", &CodeEditor::_init);
@@ -78,4 +83,5 @@ void CodeEditor::_register_methods()
     register_method((char *)"save_contents", &CodeEditor::save_contents);
     register_method((char *)"get_text_changed", &CodeEditor::get_text_changed);
     register_method((char *)"_on_CodeEditor_text_changed", &CodeEditor::_on_CodeEditor_text_changed);
+    register_method((char *)"_input", &CodeEditor::_input);
 }

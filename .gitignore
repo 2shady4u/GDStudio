@@ -4,6 +4,7 @@
 export.cfg
 export_presets.cfg
 addons/cpp_file_editor/Scripts/bin/
+addons/cpp_file_editor/Scripts/godot-cpp/
 *.obj
 *.obj.import
 *.bat

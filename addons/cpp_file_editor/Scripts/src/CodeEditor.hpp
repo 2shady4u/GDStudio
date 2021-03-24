@@ -3,6 +3,7 @@
 #include <String.hpp>
 #include <Array.hpp>
 #include <Variant.hpp>
+#include <InputEvent.hpp>
 
 using namespace godot;
 
