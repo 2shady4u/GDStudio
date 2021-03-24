@@ -47,19 +47,22 @@ void EditorFile::on_file_pressed(int index)
     switch (index)
     {
     case 0:
-        ((FileDialog *)get_node(NodePath("NewFile")))->popup_centered();
+        Godot::print("New Project");
         break;
     case 1:
-        save_file();
+        ((FileDialog *)get_node(NodePath("NewFile")))->popup_centered();
         break;
     case 2:
-        Godot::print("somethin2");
-        break;
-    case 3:
         ((FileDialog *)get_node(NodePath("OpenFile")))->popup_centered();
         break;
+    case 3:
+        Godot::print("Close File");
+        break;
     case 4:
-        Godot::print("something4");
+        save_file();
+        break;
+    case 5:
+        Godot::print("Save as");
         break;
     }
 }
@@ -108,22 +111,26 @@ void EditorFile::create_shortcuts()
     Ref<InputEventKey> hotkey;
 
     hotkey.instance();
-    hotkey->set_scancode(83);
+    hotkey->set_scancode(80);
     hotkey->set_control(true);
-    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(2, hotkey->get_scancode_with_modifiers());
+    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(0, hotkey->get_scancode_with_modifiers());
 
     hotkey->set_scancode(78);
     hotkey->set_control(true);
-    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(0, hotkey->get_scancode_with_modifiers());
+    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(1, hotkey->get_scancode_with_modifiers());
+
+    hotkey->set_scancode(79);
+    hotkey->set_control(true);
+    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(2, hotkey->get_scancode_with_modifiers());
+
+    hotkey->set_scancode(83);
+    hotkey->set_control(true);
+    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(5, hotkey->get_scancode_with_modifiers());
 
     hotkey->set_scancode(82);
     hotkey->set_control(true);
     hotkey->set_alt(true);
-    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(3, hotkey->get_scancode_with_modifiers());
-
-    hotkey->set_scancode(79);
-    hotkey->set_control(true);
-    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(5, hotkey->get_scancode_with_modifiers());
+    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(6, hotkey->get_scancode_with_modifiers());
 
 }
 
