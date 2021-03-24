@@ -25,8 +25,6 @@ EditorFile::EditorFile()
 
 EditorFile::~EditorFile()
 {
-    //code_scene->free();
-    //current_editor_instance->free();
 }
 
 void EditorFile::_init()
@@ -70,10 +68,10 @@ void EditorFile::open_file(String path)
 {
     File *file = File::_new();
     file->open(path, File::READ);
-    Node *new_instanced_scene = code_scene->instance();
-    //get_tree()->get_root()->add_child(new_instanced_scene);
+    Node* new_instanced_scene = code_scene->instance();
     String content = file->get_as_text();
     file->close();
+    file->free();
     ((TabContainer *)get_node("TabContainer"))->add_child(new_instanced_scene, true);
     cast_to<CodeEditor>(new_instanced_scene)->set_initial_content(content);
     this->tab_number = ((TabContainer *)get_node("TabContainer"))->get_child_count();
@@ -88,6 +86,7 @@ void EditorFile::save_file()
     file->store_string(current_editor_instance->get_content());
     this->current_editor_instance->save_contents();
     file->close();
+    file->free();
 }
 
 void EditorFile::_on_NewFile_file_selected(String path)
@@ -95,6 +94,7 @@ void EditorFile::_on_NewFile_file_selected(String path)
     File *file = File::_new();
     file->open(path, File::WRITE);
     file->close();
+    file->free();
     open_file(path);
 }
 
@@ -124,6 +124,7 @@ void EditorFile::create_shortcuts()
     hotkey->set_scancode(79);
     hotkey->set_control(true);
     ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(5, hotkey->get_scancode_with_modifiers());
+
 }
 
 void EditorFile::_on_TabContainer_tab_changed(int tab)
