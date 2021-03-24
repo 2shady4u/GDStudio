@@ -15,12 +15,13 @@
 #include <SceneTree.hpp>
 #include <Viewport.hpp>
 
-#include "File.hpp"
+#include "FileManager.hpp"
 using namespace godot;
 
 EditorFile::EditorFile()
 {
 }
+
 EditorFile::~EditorFile()
 {
 }
@@ -65,7 +66,7 @@ void EditorFile::on_file_pressed(int index)
 void EditorFile::open_file(String path)
 {
     File *file = File::_new();
-    file->open(path, 1);
+    file->open(path, File::READ);
     Node *new_instanced_scene = code_scene->instance();
     get_tree()->get_root()->add_child(new_instanced_scene);
     String content = file->get_as_text();
@@ -80,7 +81,7 @@ void EditorFile::open_file(String path)
 void EditorFile::save_file()
 {
     File *file = File::_new();
-    file->open(file_path, 0);
+    file->open(file_path, File::WRITE);
     file->store_string(current_editor_instance->get_content());
     current_editor_instance->save_contents();
     file->close();
@@ -89,7 +90,7 @@ void EditorFile::save_file()
 void EditorFile::_on_NewFile_file_selected(String path)
 {
     File *file = File::_new();
-    file->open(path, 0);
+    file->open(path, File::WRITE);
     file->close();
     open_file(path);
 }
