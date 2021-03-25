@@ -23,9 +23,10 @@ public:
     String get_content();
     void save_contents();
     void _on_CodeEditor_text_changed();
+    void _on_CodeEditor_symbol_lookup(String, int, int);
 
     bool get_text_changed();
-    void _input(const Ref<InputEvent>);
+    void _on_CodeEditor_gui_input(InputEvent*);
 
     static void _register_methods();
 

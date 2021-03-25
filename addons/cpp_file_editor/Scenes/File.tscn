@@ -17,6 +17,7 @@ margin_top = 30.0
 margin_bottom = -948.001
 rect_min_size = Vector2( 640, 0 )
 tab_align = 0
+drag_to_rearrange_enabled = true
 __meta__ = {
 "_edit_use_anchors_": false
 }

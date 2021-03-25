@@ -29,6 +29,7 @@ custom_colors/background_color = Color( 0.129412, 0.117647, 0.152941, 1 )
 highlight_current_line = true
 syntax_highlighting = true
 show_line_numbers = true
+breakpoint_gutter = true
 highlight_all_occurrences = true
 caret_blink = true
 
@@ -44,4 +45,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[connection signal="gui_input" from="Container/CodeEditor" to="." method="_on_CodeEditor_gui_input"]
+[connection signal="symbol_lookup" from="Container/CodeEditor" to="." method="_on_CodeEditor_symbol_lookup"]
 [connection signal="text_changed" from="Container/CodeEditor" to="." method="_on_CodeEditor_text_changed"]
