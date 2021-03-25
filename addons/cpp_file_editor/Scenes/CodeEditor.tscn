@@ -9,7 +9,8 @@ font_data = ExtResource( 2 )
 [node name="Editor" type="HBoxContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -320.0
+margin_top = 31.0
+margin_bottom = 31.0
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false

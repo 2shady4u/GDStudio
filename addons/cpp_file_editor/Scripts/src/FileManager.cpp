@@ -3,18 +3,13 @@
 #include <PackedScene.hpp>
 #include <ResourceLoader.hpp>
 #include <String.hpp>
-#include <TabContainer.hpp>
+#include <Tabs.hpp>
+#include <Texture.hpp>
 #include <MenuButton.hpp>
 #include <File.hpp>
 #include <FileDialog.hpp>
 #include <PopupMenu.hpp>
-#include <Input.hpp>
 #include <InputEventKey.hpp>
-#include <InputEventWithModifiers.hpp>
-#include <OS.hpp>
-#include <SceneTree.hpp>
-#include <Viewport.hpp>
-#include <Object.hpp>
 
 #include "FileManager.hpp"
 using namespace godot;
@@ -37,7 +32,7 @@ void EditorFile::_ready()
     open_file("res://godot.cpp");
     this->file_path = "res://godot.cpp";
     this->file_name = this->file_path.split("//")[1];
-    this->current_editor_instance = cast_to<CodeEditor>(((TabContainer *)get_node("TabContainer"))->get_child(0));
+    this->current_editor_instance = cast_to<CodeEditor>(((Tabs *)get_node("TabContainer"))->get_child(0));
     ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->connect("id_pressed", this, "on_file_pressed");
     create_shortcuts();
 }
@@ -71,15 +66,16 @@ void EditorFile::open_file(String path)
 {
     File *file = File::_new();
     file->open(path, File::READ);
-    Node* new_instanced_scene = code_scene->instance();
+    Node *new_instanced_scene = code_scene->instance();
     String content = file->get_as_text();
     file->close();
     file->free();
-    ((TabContainer *)get_node("TabContainer"))->add_child(new_instanced_scene, true);
+    ((Tabs *)get_node("TabContainer"))->add_child(new_instanced_scene, true);
     cast_to<CodeEditor>(new_instanced_scene)->set_initial_content(content);
-    this->tab_number = ((TabContainer *)get_node("TabContainer"))->get_child_count();
+    this->tab_number = ((Tabs *)get_node("TabContainer"))->get_child_count();
     String name = path.split("//")[1];
-    ((TabContainer *)get_node("TabContainer"))->set_tab_title(tab_number - 1, name);
+    ((Tabs *)get_node("TabContainer"))->add_tab(name);
+    ((Tabs *)get_node("TabContainer"))->set_current_tab(tab_number - 1);
 }
 
 void EditorFile::save_file()
@@ -131,22 +127,24 @@ void EditorFile::create_shortcuts()
     hotkey->set_control(true);
     hotkey->set_alt(true);
     ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(6, hotkey->get_scancode_with_modifiers());
-
 }
 
 void EditorFile::_on_TabContainer_tab_changed(int tab)
 {
-    this->file_path = ((TabContainer *)get_node("TabContainer"))->get_tab_title(tab);
+    this->file_path = ((Tabs *)get_node("TabContainer"))->get_tab_title(tab);
     this->file_name = this->file_path;
-    this->current_editor_instance = cast_to<CodeEditor>(((TabContainer *)get_node("TabContainer"))->get_child(tab));
+    this->current_editor_instance = cast_to<CodeEditor>(((Tabs *)get_node("TabContainer"))->get_child(tab));
 }
 
 void EditorFile::_process()
 {
-    TabContainer *tabNode = ((TabContainer *)get_node("TabContainer"));
-    if (this->current_editor_instance->get_text_changed() == true) {
+    Tabs *tabNode = ((Tabs *)get_node("TabContainer"));
+    if (this->current_editor_instance->get_text_changed() == true)
+    {
         tabNode->set_tab_title(tabNode->get_current_tab(), file_name + "(*)");
-    }else{
+    }
+    else
+    {
         tabNode->set_tab_title(tabNode->get_current_tab(), file_name);
     }
 }

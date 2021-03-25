@@ -1,6 +1,11 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://addons/cpp_file_editor/Scripts/native/editor_file.gdns" type="Script" id=1]
+[ext_resource path="res://addons/cpp_file_editor/Fonts/RobotoSlab-VariableFont_wght.ttf" type="DynamicFontData" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+size = 14
+font_data = ExtResource( 2 )
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
@@ -10,17 +15,17 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TabContainer" type="TabContainer" parent="."]
+[node name="TabContainer" type="Tabs" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.87778
 margin_top = 30.0
-margin_bottom = -948.001
+margin_right = 6.10352e-05
+margin_bottom = -954.001
 rect_min_size = Vector2( 640, 0 )
+custom_fonts/font = SubResource( 1 )
 tab_align = 0
+tab_close_display_policy = 2
 drag_to_rearrange_enabled = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="TopBar" type="HBoxContainer" parent="."]
 margin_right = 960.0
