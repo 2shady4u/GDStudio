@@ -131,9 +131,11 @@ void EditorFile::create_shortcuts()
 
 void EditorFile::_on_TabContainer_tab_changed(int tab)
 {
+    this->current_editor_instance->hide();
     this->file_path = ((Tabs *)get_node("TabContainer"))->get_tab_title(tab);
     this->file_name = this->file_path;
     this->current_editor_instance = cast_to<CodeEditor>(((Tabs *)get_node("TabContainer"))->get_child(tab));
+    this->current_editor_instance->show();
 }
 
 void EditorFile::_process()
