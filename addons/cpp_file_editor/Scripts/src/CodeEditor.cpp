@@ -6,8 +6,7 @@
 #include <InputEvent.hpp>
 #include <InputEventKey.hpp>
 #include <GlobalConstants.hpp>
-#include <OS.hpp>
-#include <Variant.hpp>
+#include <Input.hpp>
 
 #include "CodeEditor.hpp"
 using namespace godot;
@@ -41,7 +40,7 @@ void CodeEditor::set_initial_content(String content)
 
 void CodeEditor::setup_syntax()
 {
-    ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("\"", "\"", Color(0.5, 0.25, 0, 1), true);
+    ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("\"", "\"", Color(0.5, 0.5, 0.5, 1), true);
     ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("//", "", Color(0, 0.5, 0.25, 1), true);
     ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("/*", "*/", Color(0, 0.5, 0.25, 1));
     for (int j = 0; j < this->preprocessor.size(); j++)
@@ -84,7 +83,6 @@ bool CodeEditor::get_text_changed()
 
 void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
 {
-    Object *os = OS::_new();
     InputEventKey *event_key = cast_to<InputEventKey>(event);
     if (event_key)
     {
@@ -94,17 +92,35 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
             int64_t line = ((TextEdit *)get_node("Container/CodeEditor"))->cursor_get_line();
             ((TextEdit *)get_node("Container/CodeEditor"))->select(line, column - 1, line, column);
             String text = ((TextEdit *)get_node("Container/CodeEditor"))->get_selection_text();
-            
-            if (text == "\"") {
-                ((TextEdit *)get_node("Container/CodeEditor"))->insert_text_at_cursor("\"\"");
-            }else if (text == "'") {
-                ((TextEdit *)get_node("Container/CodeEditor"))->insert_text_at_cursor("''");
-            }else if (text == "(") {
-                ((TextEdit *)get_node("Container/CodeEditor"))->insert_text_at_cursor("()");
-            }else if (text == "[") {
-                ((TextEdit *)get_node("Container/CodeEditor"))->insert_text_at_cursor("[]");
-            }else if (text == "{") {
-                ((TextEdit *)get_node("Container/CodeEditor"))->insert_text_at_cursor("{}");
+
+            switch (event_key->get_scancode())
+            {
+            case GlobalConstants::KEY_APOSTROPHE:
+                if (text == "'")
+                {
+                    ((TextEdit *)get_node("Container/CodeEditor"))->insert_text_at_cursor("''");
+                }
+                else if (text == "\"")
+                {
+                    ((TextEdit *)get_node("Container/CodeEditor"))->insert_text_at_cursor("\"\"");
+                }
+                break;
+            case GlobalConstants::KEY_9:
+                if (text == "(")
+                {
+                    ((TextEdit *)get_node("Container/CodeEditor"))->insert_text_at_cursor("()");
+                }
+                break;
+            case GlobalConstants::KEY_BRACELEFT:
+                if (text == "[")
+                {
+                    ((TextEdit *)get_node("Container/CodeEditor"))->insert_text_at_cursor("[]");
+                }
+                else if (text == "{")
+                {
+                    ((TextEdit *)get_node("Container/CodeEditor"))->insert_text_at_cursor("{}");
+                }
+                break;
             }
             ((TextEdit *)get_node("Container/CodeEditor"))->select(line, column, line, column);
             ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_column(column);
