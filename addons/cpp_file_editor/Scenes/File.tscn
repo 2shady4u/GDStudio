@@ -24,8 +24,11 @@ margin_bottom = -954.001
 rect_min_size = Vector2( 640, 0 )
 custom_fonts/font = SubResource( 1 )
 tab_align = 0
-tab_close_display_policy = 2
+tab_close_display_policy = 1
 drag_to_rearrange_enabled = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="TopBar" type="HBoxContainer" parent="."]
 margin_right = 960.0
@@ -139,5 +142,6 @@ margin_right = 448.0
 margin_bottom = 18.0
 
 [connection signal="tab_changed" from="TabContainer" to="." method="_on_TabContainer_tab_changed"]
+[connection signal="tab_close" from="TabContainer" to="." method="_on_TabContainer_tab_close"]
 [connection signal="file_selected" from="NewFile" to="." method="_on_NewFile_file_selected"]
 [connection signal="file_selected" from="OpenFile" to="." method="_on_OpenFile_file_selected"]

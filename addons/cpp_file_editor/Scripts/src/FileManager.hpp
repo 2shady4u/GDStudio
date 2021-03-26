@@ -24,6 +24,7 @@ public:
     void _on_NewFile_file_selected(String);
     void _on_OpenFile_file_selected(String);
     void _on_TabContainer_tab_changed(int);
+    void _on_TabContainer_tab_close(int);
 
     static void _register_methods();
 

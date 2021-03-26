@@ -138,6 +138,28 @@ void EditorFile::_on_TabContainer_tab_changed(int tab)
     this->instance_defined = true;
 }
 
+void EditorFile::_on_TabContainer_tab_close(int tab)
+{
+    this->instance_defined = false;
+    this->current_editor_instance->hide();
+    this->current_editor_instance->queue_free();
+    this->tab_number -= 1;
+    this->file_name = "";
+    this->file_path = "";
+    if (this->tab_number > 0)
+    {
+        if (tab == 0)
+        {
+            this->_on_TabContainer_tab_changed(tab + 1);
+        }
+        else
+        {
+            this->_on_TabContainer_tab_changed(tab - 1);
+        }
+    }
+    ((Tabs *)get_node("TabContainer"))->remove_tab(tab);
+}
+
 void EditorFile::_process()
 {
     Tabs *tabNode = ((Tabs *)get_node("TabContainer"));
@@ -165,5 +187,6 @@ void EditorFile::_register_methods()
     register_method((char *)"_on_OpenFile_file_selected", &EditorFile::_on_OpenFile_file_selected);
     register_method((char *)"create_shortcuts", &EditorFile::create_shortcuts);
     register_method((char *)"_on_TabContainer_tab_changed", &EditorFile::_on_TabContainer_tab_changed);
+    register_method((char *)"_on_TabContainer_tab_close", &EditorFile::_on_TabContainer_tab_close);
     register_method((char *)"_process", &EditorFile::_process);
 }
