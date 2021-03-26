@@ -15,6 +15,6 @@ extern "C" void GDN_EXPORT godot_gdnative_terminate(godot_gdnative_terminate_opt
 extern "C" void GDN_EXPORT godot_nativescript_init(void *handle) {
 	Godot::nativescript_init(handle);
 
-	register_class<EditorFile>();
-	register_class<CodeEditor>();
+	register_tool_class<EditorFile>();
+	register_tool_class<CodeEditor>();
 }

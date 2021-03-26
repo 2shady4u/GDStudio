@@ -1,4 +1,4 @@
-#tool
+tool
 extends EditorPlugin
 
 var editor = preload("res://addons/cpp_file_editor/Scenes/File.tscn")
