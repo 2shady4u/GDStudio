@@ -32,6 +32,7 @@ public:
     void _on_NewClassButton_pressed();
     void _on_FolderPath_dir_selected(String);
     void _on_ClassName_text_changed(String);
+    void _on_OkButton_pressed();
 
     static void _register_methods();
 

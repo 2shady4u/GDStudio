@@ -13,6 +13,9 @@
 #include <InputEventKey.hpp>
 #include <TabContainer.hpp>
 #include <LineEdit.hpp>
+#include <AcceptDialog.hpp>
+#include <MenuButton.hpp>
+#include <OptionButton.hpp>
 
 #include "FileManager.hpp"
 using namespace godot;
@@ -177,8 +180,46 @@ void EditorFile::_on_FolderPath_dir_selected(String path)
 
 void EditorFile::_on_ClassName_text_changed(String new_text)
 {
-    ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Main")))->set_text(new_text+".cpp");
-    ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Include")))->set_text(new_text+".h");
+    ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Main")))->set_text(new_text + ".cpp");
+    ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Include")))->set_text(new_text + ".h");
+}
+
+void EditorFile::_on_OkButton_pressed()
+{
+    String class_path = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewClass/PathLabel/FilePath")))->get_text();
+    String class_name = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewClass/ClassName/ClassName")))->get_text();
+    int inherit_item = ((OptionButton *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Inherit/Inherits")))->get_selected();
+    String class_inherit = ((OptionButton *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Inherit/Inherits")))->get_item_text(inherit_item);
+    switch (((TabContainer *)get_node(NodePath("ProjectManager/TabContainer")))->get_current_tab())
+    {
+    case 0:
+        if (class_name == "" || class_path == "")
+        {
+            ((AcceptDialog *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Warning")))->popup_centered();
+        }
+        else
+        {
+            File *file = File::_new();
+            file->open(class_path+"/"+class_name+".h", File::WRITE);
+            file->store_string("#include <Godot.hpp>\n#include <"+class_inherit+".hpp>\n\nclass "+class_name+" : public "+class_inherit+
+            "{\n\tGODOT_CLASS("+class_name+","+class_inherit+")"+
+            "\n\nprivate:\n\npublic:\n\tstatic void _register_methods();\n\t"+class_name+"();\n\t~"+
+            class_name+"();\n\n};");
+            file->close();
+            file->open(class_path+"/"+class_name+".cpp", File::WRITE);
+            file->store_string("#include <"+class_name+".h>\n\nusing namespace godot;\n\nvoid "+
+            class_name+"::_register_methods() {\n\tregister_method(\"_process\", &"+
+            class_name+"::_process);\n}\n\n"+class_name+"::"+class_name+
+            "() {\n}\n\n"+class_name+"::~"+class_name+"() {\n}");
+            file->close();
+            file->free();
+
+            ((WindowDialog *)get_node(NodePath("ProjectManager")))->hide();
+        }
+        break;
+    case 1:
+        break;
+    }
 }
 
 void EditorFile::create_shortcuts()
@@ -227,6 +268,7 @@ void EditorFile::_register_methods()
     register_method((char *)"_on_NewClassButton_pressed", &EditorFile::_on_NewClassButton_pressed);
     register_method((char *)"_on_FolderPath_dir_selected", &EditorFile::_on_FolderPath_dir_selected);
     register_method((char *)"_on_ClassName_text_changed", &EditorFile::_on_ClassName_text_changed);
+    register_method((char *)"_on_OkButton_pressed", &EditorFile::_on_OkButton_pressed);
     register_method((char *)"create_shortcuts", &EditorFile::create_shortcuts);
     register_method((char *)"_process", &EditorFile::_process);
 }

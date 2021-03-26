@@ -128,11 +128,30 @@ align = 1
 items = [ "GDNative C++", null, false, 0, null ]
 selected = 0
 
-[node name="ClassName" type="Label" parent="ProjectManager/TabContainer/NewClass"]
+[node name="Inherit" type="Label" parent="ProjectManager/TabContainer/NewClass"]
 margin_left = 196.0
 margin_top = 89.0
-margin_right = 236.0
+margin_right = 246.0
 margin_bottom = 103.0
+text = "Inherits"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Inherits" type="OptionButton" parent="ProjectManager/TabContainer/NewClass/Inherit"]
+margin_left = 60.0
+margin_top = -8.0
+margin_right = 178.0
+margin_bottom = 20.0
+text = "Node"
+items = [ "Node", null, false, 0, null, "Spatial", null, false, 1, null, "Control", null, false, 2, null ]
+selected = 0
+
+[node name="ClassName" type="Label" parent="ProjectManager/TabContainer/NewClass"]
+margin_left = 196.0
+margin_top = 133.0
+margin_right = 236.0
+margin_bottom = 147.0
 text = "Name"
 
 [node name="ClassName" type="LineEdit" parent="ProjectManager/TabContainer/NewClass/ClassName"]
@@ -145,9 +164,9 @@ caret_blink = true
 
 [node name="PathLabel" type="Label" parent="ProjectManager/TabContainer/NewClass"]
 margin_left = 82.0
-margin_top = 133.0
+margin_top = 185.0
 margin_right = 122.0
-margin_bottom = 147.0
+margin_bottom = 199.0
 text = "Path"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -166,22 +185,33 @@ margin_top = -6.0
 margin_right = 448.0
 margin_bottom = 18.0
 
-[node name="Include" type="LineEdit" parent="ProjectManager/TabContainer/NewClass"]
-margin_left = 60.0
-margin_top = 207.0
-margin_right = 245.0
-margin_bottom = 231.0
-editable = false
-
 [node name="Main" type="LineEdit" parent="ProjectManager/TabContainer/NewClass"]
 margin_left = 60.0
-margin_top = 165.0
+margin_top = 210.0
 margin_right = 245.0
-margin_bottom = 189.0
+margin_bottom = 234.0
 editable = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Include" type="LineEdit" parent="ProjectManager/TabContainer/NewClass"]
+margin_left = 60.0
+margin_top = 240.0
+margin_right = 245.0
+margin_bottom = 264.0
+editable = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Warning" type="AcceptDialog" parent="ProjectManager/TabContainer/NewClass"]
+margin_left = 138.0
+margin_top = 126.0
+margin_right = 446.0
+margin_bottom = 184.0
+dialog_text = "Name and Path fields cannot be empty"
+dialog_autowrap = true
 
 [node name="NewProject" type="Control" parent="ProjectManager/TabContainer"]
 visible = false
@@ -256,4 +286,5 @@ text = "Cancel"
 [connection signal="dir_selected" from="ProjectManager/FolderPath" to="." method="_on_FolderPath_dir_selected"]
 [connection signal="text_changed" from="ProjectManager/TabContainer/NewClass/ClassName/ClassName" to="." method="_on_ClassName_text_changed"]
 [connection signal="pressed" from="ProjectManager/TabContainer/NewClass/PathLabel/Button" to="." method="_on_NewClassButton_pressed"]
+[connection signal="pressed" from="ProjectManager/OkButton" to="." method="_on_OkButton_pressed"]
 [connection signal="pressed" from="ProjectManager/CancelButton" to="." method="_on_CancelButton_pressed"]
