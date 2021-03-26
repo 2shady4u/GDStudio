@@ -76,6 +76,7 @@ mode = 0
 filters = PoolStringArray( "*.cpp", "*.hpp" )
 
 [node name="ProjectManager" type="WindowDialog" parent="."]
+visible = true
 margin_right = 580.0
 margin_bottom = 390.0
 
@@ -102,10 +103,10 @@ margin_right = 580.0
 margin_bottom = 390.0
 
 [node name="ProjectType" type="Label" parent="ProjectManager/NewProject"]
-margin_left = 216.0
-margin_top = 96.0
-margin_right = 261.0
-margin_bottom = 110.0
+margin_left = 196.0
+margin_top = 75.0
+margin_right = 241.0
+margin_bottom = 89.0
 text = "Project"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -123,9 +124,9 @@ selected = 0
 
 [node name="PathLabel" type="Label" parent="ProjectManager/NewProject"]
 margin_left = 82.0
-margin_top = 147.0
+margin_top = 120.0
 margin_right = 122.0
-margin_bottom = 161.0
+margin_bottom = 134.0
 text = "Path"
 
 [node name="Button" type="Button" parent="ProjectManager/NewProject/PathLabel"]

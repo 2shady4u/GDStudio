@@ -29,6 +29,7 @@ void EditorFile::_init()
 
 void EditorFile::_ready()
 {
+    this->tabNode = ((Tabs *)get_node("TabContainer"));
     ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->connect("id_pressed", this, "on_file_pressed");
     create_shortcuts();
 }
@@ -71,6 +72,7 @@ void EditorFile::open_file(String path)
     this->tab_number = ((Tabs *)get_node("TabContainer"))->get_child_count();
     this->file_path = path;
     this->file_name = path.split("//")[1];
+    this->current_editor_instance = cast_to<CodeEditor>(((Tabs *)get_node("TabContainer"))->get_child(this->tab_number - 1));
     ((Tabs *)get_node("TabContainer"))->add_tab(this->file_name);
     ((Tabs *)get_node("TabContainer"))->set_current_tab(this->tab_number - 1);
 }
@@ -79,7 +81,7 @@ void EditorFile::save_file()
 {
     File *file = File::_new();
     file->open(file_path, File::WRITE);
-    file->store_string(current_editor_instance->get_content());
+    file->store_string(this->current_editor_instance->get_content());
     this->current_editor_instance->save_contents();
     file->close();
     file->free();
@@ -161,16 +163,15 @@ void EditorFile::_on_TabContainer_tab_close(int tab)
 
 void EditorFile::_process()
 {
-    Tabs *tabNode = ((Tabs *)get_node("TabContainer"));
     if (this->instance_defined == true)
     {
         if (this->current_editor_instance->get_text_changed() == true)
         {
-            tabNode->set_tab_title(tabNode->get_current_tab(), this->file_name + "(*)");
+            this->tabNode->set_tab_title(this->tabNode->get_current_tab(), this->file_name + "(*)");
         }
         else
         {
-            tabNode->set_tab_title(tabNode->get_current_tab(), this->file_name);
+            this->tabNode->set_tab_title(this->tabNode->get_current_tab(), this->file_name);
         }
     }
 }

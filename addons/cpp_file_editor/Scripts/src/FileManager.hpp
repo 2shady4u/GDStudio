@@ -3,6 +3,7 @@
 #include <PackedScene.hpp>
 #include <ResourceLoader.hpp>
 #include <String.hpp>
+#include <Tabs.hpp>
 
 #include "CodeEditor.hpp"
 using namespace godot;
@@ -35,4 +36,5 @@ private:
     CodeEditor *current_editor_instance;
     int tab_number = 0;
     bool instance_defined = false;
+    Tabs *tabNode;
 };
