@@ -49,7 +49,7 @@ void EditorFile::on_file_pressed(int index)
         ((FileDialog *)get_node(NodePath("OpenFile")))->popup_centered();
         break;
     case 3:
-        Godot::print("Close File");
+        this->_on_TabContainer_tab_close(((Tabs *)get_node("TabContainer"))->get_current_tab());
         break;
     case 4:
         save_file();
@@ -103,33 +103,6 @@ void EditorFile::_on_OpenFile_file_selected(String path)
     open_file(path);
 }
 
-void EditorFile::create_shortcuts()
-{
-    Ref<InputEventKey> hotkey;
-
-    hotkey.instance();
-    hotkey->set_scancode(80);
-    hotkey->set_control(true);
-    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(0, hotkey->get_scancode_with_modifiers());
-
-    hotkey->set_scancode(78);
-    hotkey->set_control(true);
-    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(1, hotkey->get_scancode_with_modifiers());
-
-    hotkey->set_scancode(79);
-    hotkey->set_control(true);
-    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(2, hotkey->get_scancode_with_modifiers());
-
-    hotkey->set_scancode(83);
-    hotkey->set_control(true);
-    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(5, hotkey->get_scancode_with_modifiers());
-
-    hotkey->set_scancode(82);
-    hotkey->set_control(true);
-    hotkey->set_alt(true);
-    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(6, hotkey->get_scancode_with_modifiers());
-}
-
 void EditorFile::_on_TabContainer_tab_changed(int tab)
 {
     if (this->instance_defined == true)
@@ -177,6 +150,37 @@ void EditorFile::_process()
     }
 }
 
+void EditorFile::create_shortcuts()
+{
+    Ref<InputEventKey> hotkey;
+
+    hotkey.instance();
+    hotkey->set_scancode(80);
+    hotkey->set_control(true);
+    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(0, hotkey->get_scancode_with_modifiers());
+
+    hotkey->set_scancode(78);
+    hotkey->set_control(true);
+    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(1, hotkey->get_scancode_with_modifiers());
+
+    hotkey->set_scancode(79);
+    hotkey->set_control(true);
+    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(2, hotkey->get_scancode_with_modifiers());
+
+    hotkey->set_scancode(52);
+    hotkey->set_control(true);
+    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(3, hotkey->get_scancode_with_modifiers());
+
+    hotkey->set_scancode(83);
+    hotkey->set_control(true);
+    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(5, hotkey->get_scancode_with_modifiers());
+
+    hotkey->set_scancode(83);
+    hotkey->set_control(true);
+    hotkey->set_alt(true);
+    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(6, hotkey->get_scancode_with_modifiers());
+}
+
 void EditorFile::_register_methods()
 {
     register_method((char *)"_init", &EditorFile::_init);
@@ -186,8 +190,8 @@ void EditorFile::_register_methods()
     register_method((char *)"save_file", &EditorFile::save_file);
     register_method((char *)"_on_NewFile_file_selected", &EditorFile::_on_NewFile_file_selected);
     register_method((char *)"_on_OpenFile_file_selected", &EditorFile::_on_OpenFile_file_selected);
-    register_method((char *)"create_shortcuts", &EditorFile::create_shortcuts);
     register_method((char *)"_on_TabContainer_tab_changed", &EditorFile::_on_TabContainer_tab_changed);
     register_method((char *)"_on_TabContainer_tab_close", &EditorFile::_on_TabContainer_tab_close);
+    register_method((char *)"create_shortcuts", &EditorFile::create_shortcuts);
     register_method((char *)"_process", &EditorFile::_process);
 }

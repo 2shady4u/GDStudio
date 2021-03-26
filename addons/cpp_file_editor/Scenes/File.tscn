@@ -78,7 +78,6 @@ mode = 0
 filters = PoolStringArray( "*.cpp", "*.hpp" )
 
 [node name="ProjectManager" type="WindowDialog" parent="."]
-visible = true
 margin_right = 580.0
 margin_bottom = 390.0
 __meta__ = {
@@ -99,6 +98,7 @@ __meta__ = {
 
 [node name="NewClass" type="Control" parent="ProjectManager/TabContainer"]
 anchor_bottom = 1.0
+margin_top = 24.0
 margin_right = -8.0
 margin_bottom = -36.0
 __meta__ = {
@@ -107,9 +107,9 @@ __meta__ = {
 
 [node name="ClassType" type="Label" parent="ProjectManager/TabContainer/NewClass"]
 margin_left = 196.0
-margin_top = 65.0
+margin_top = 41.0
 margin_right = 236.0
-margin_bottom = 79.0
+margin_bottom = 55.0
 text = "Class"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -127,9 +127,9 @@ selected = 0
 
 [node name="ClassName" type="Label" parent="ProjectManager/TabContainer/NewClass"]
 margin_left = 196.0
-margin_top = 114.0
+margin_top = 89.0
 margin_right = 236.0
-margin_bottom = 128.0
+margin_bottom = 103.0
 text = "Name"
 
 [node name="ClassName" type="LineEdit" parent="ProjectManager/TabContainer/NewClass/ClassName"]
@@ -142,9 +142,9 @@ caret_blink = true
 
 [node name="PathLabel" type="Label" parent="ProjectManager/TabContainer/NewClass"]
 margin_left = 82.0
-margin_top = 158.0
+margin_top = 133.0
 margin_right = 122.0
-margin_bottom = 172.0
+margin_bottom = 147.0
 text = "Path"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -165,9 +165,9 @@ margin_bottom = 18.0
 
 [node name="Tree" type="Tree" parent="ProjectManager/TabContainer/NewClass"]
 margin_left = 48.0
-margin_top = 201.0
+margin_top = 176.0
 margin_right = 230.0
-margin_bottom = 336.0
+margin_bottom = 311.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -176,14 +176,15 @@ __meta__ = {
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_top = 24.0
 margin_right = -8.0
 margin_bottom = -36.0
 
 [node name="ProjectType" type="Label" parent="ProjectManager/TabContainer/NewProject"]
 margin_left = 196.0
-margin_top = 65.0
+margin_top = 40.0
 margin_right = 241.0
-margin_bottom = 79.0
+margin_bottom = 54.0
 text = "Project"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -201,9 +202,9 @@ selected = 0
 
 [node name="PathLabel" type="Label" parent="ProjectManager/TabContainer/NewProject"]
 margin_left = 82.0
-margin_top = 110.0
+margin_top = 85.0
 margin_right = 122.0
-margin_bottom = 124.0
+margin_bottom = 99.0
 text = "Path"
 
 [node name="Button" type="Button" parent="ProjectManager/TabContainer/NewProject/PathLabel"]
