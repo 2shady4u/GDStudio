@@ -33,4 +33,5 @@ private:
     Ref<PackedScene> code_scene;
     CodeEditor *current_editor_instance;
     int tab_number = 0;
+    bool instance_defined = false;
 };

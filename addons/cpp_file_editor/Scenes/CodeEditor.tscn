@@ -4,6 +4,7 @@
 [ext_resource path="res://addons/cpp_file_editor/Fonts/RobotoSlab-VariableFont_wght.ttf" type="DynamicFontData" id=2]
 
 [sub_resource type="DynamicFont" id=1]
+size = 12
 font_data = ExtResource( 2 )
 
 [node name="Editor" type="HBoxContainer"]

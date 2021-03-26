@@ -29,10 +29,6 @@ void EditorFile::_init()
 
 void EditorFile::_ready()
 {
-    open_file("res://godot.cpp");
-    this->file_path = "res://godot.cpp";
-    this->file_name = this->file_path.split("//")[1];
-    this->current_editor_instance = cast_to<CodeEditor>(((Tabs *)get_node("TabContainer"))->get_child(0));
     ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->connect("id_pressed", this, "on_file_pressed");
     create_shortcuts();
 }
@@ -72,10 +68,11 @@ void EditorFile::open_file(String path)
     file->free();
     ((Tabs *)get_node("TabContainer"))->add_child(new_instanced_scene, true);
     cast_to<CodeEditor>(new_instanced_scene)->set_initial_content(content);
-    this->tab_number = ((Tabs *)get_node("TabContainer"))->get_child_count();
-    String name = path.split("//")[1];
-    ((Tabs *)get_node("TabContainer"))->add_tab(name);
-    ((Tabs *)get_node("TabContainer"))->set_current_tab(tab_number - 1);
+    this->tab_number = ((Tabs *)get_node("TabContainer"))->get_child_count() - 1;
+    this->file_path = path;
+    this->file_name = path.split("//")[1];
+    ((Tabs *)get_node("TabContainer"))->add_tab(this->file_name);
+    ((Tabs *)get_node("TabContainer"))->set_current_tab(this->tab_number);
 }
 
 void EditorFile::save_file()
@@ -131,23 +128,29 @@ void EditorFile::create_shortcuts()
 
 void EditorFile::_on_TabContainer_tab_changed(int tab)
 {
-    this->current_editor_instance->hide();
-    this->file_path = ((Tabs *)get_node("TabContainer"))->get_tab_title(tab);
-    this->file_name = this->file_path;
+    if (this->instance_defined == true)
+    {
+        this->current_editor_instance->hide();
+    }
     this->current_editor_instance = cast_to<CodeEditor>(((Tabs *)get_node("TabContainer"))->get_child(tab));
     this->current_editor_instance->show();
+    this->file_name = ((Tabs *)get_node("TabContainer"))->get_tab_title(tab);
+    this->instance_defined = true;
 }
 
 void EditorFile::_process()
 {
     Tabs *tabNode = ((Tabs *)get_node("TabContainer"));
-    if (this->current_editor_instance->get_text_changed() == true)
+    if (this->instance_defined == true)
     {
-        tabNode->set_tab_title(tabNode->get_current_tab(), file_name + "(*)");
-    }
-    else
-    {
-        tabNode->set_tab_title(tabNode->get_current_tab(), file_name);
+        if (this->current_editor_instance->get_text_changed() == true)
+        {
+            tabNode->set_tab_title(tabNode->get_current_tab(), this->file_name + "(*)");
+        }
+        else
+        {
+            tabNode->set_tab_title(tabNode->get_current_tab(), this->file_name);
+        }
     }
 }
 
