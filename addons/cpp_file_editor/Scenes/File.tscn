@@ -10,6 +10,8 @@ font_data = ExtResource( 2 )
 [node name="Control" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = -1.0
+margin_right = -1.0
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -79,40 +81,115 @@ filters = PoolStringArray( "*.cpp", "*.hpp" )
 visible = true
 margin_right = 580.0
 margin_bottom = 390.0
-
-[node name="Type" type="OptionButton" parent="ProjectManager"]
-margin_left = 242.0
-margin_top = 9.0
-margin_right = 360.0
-margin_bottom = 37.0
-text = "New Class"
-align = 1
-items = [ "New Class", null, false, 0, null, "New Project", null, false, 1, null, "New File", null, false, 2, null ]
-selected = 0
-
-[node name="NewClass" type="Control" parent="ProjectManager"]
-visible = false
-margin_right = 580.0
-margin_bottom = 390.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="NewProject" type="Control" parent="ProjectManager"]
-margin_right = 580.0
-margin_bottom = 390.0
+[node name="FolderPath" type="FileDialog" parent="ProjectManager"]
+margin_right = 315.0
+margin_bottom = 130.0
+window_title = "Abrir un Directorio"
+mode = 2
 
-[node name="ProjectType" type="Label" parent="ProjectManager/NewProject"]
+[node name="TabContainer" type="TabContainer" parent="ProjectManager"]
+anchor_right = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NewClass" type="Control" parent="ProjectManager/TabContainer"]
+anchor_bottom = 1.0
+margin_right = -8.0
+margin_bottom = -36.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ClassType" type="Label" parent="ProjectManager/TabContainer/NewClass"]
 margin_left = 196.0
-margin_top = 75.0
+margin_top = 65.0
+margin_right = 236.0
+margin_bottom = 79.0
+text = "Class"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ClassType" type="OptionButton" parent="ProjectManager/TabContainer/NewClass/ClassType"]
+margin_left = 60.0
+margin_top = -8.0
+margin_right = 178.0
+margin_bottom = 20.0
+text = "GDNative C++"
+align = 1
+items = [ "GDNative C++", null, false, 0, null ]
+selected = 0
+
+[node name="ClassName" type="Label" parent="ProjectManager/TabContainer/NewClass"]
+margin_left = 196.0
+margin_top = 114.0
+margin_right = 236.0
+margin_bottom = 128.0
+text = "Name"
+
+[node name="ClassName" type="LineEdit" parent="ProjectManager/TabContainer/NewClass/ClassName"]
+margin_left = 60.0
+margin_top = -8.0
+margin_right = 178.0
+margin_bottom = 20.0
+placeholder_text = "Class Name"
+caret_blink = true
+
+[node name="PathLabel" type="Label" parent="ProjectManager/TabContainer/NewClass"]
+margin_left = 82.0
+margin_top = 158.0
+margin_right = 122.0
+margin_bottom = 172.0
+text = "Path"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="ProjectManager/TabContainer/NewClass/PathLabel"]
+margin_left = 39.0
+margin_top = -4.0
+margin_right = 63.0
+margin_bottom = 16.0
+text = "..."
+
+[node name="FilePath" type="LineEdit" parent="ProjectManager/TabContainer/NewClass/PathLabel"]
+margin_left = 84.0
+margin_top = -6.0
+margin_right = 448.0
+margin_bottom = 18.0
+
+[node name="Tree" type="Tree" parent="ProjectManager/TabContainer/NewClass"]
+margin_left = 48.0
+margin_top = 201.0
+margin_right = 230.0
+margin_bottom = 336.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NewProject" type="Control" parent="ProjectManager/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -8.0
+margin_bottom = -36.0
+
+[node name="ProjectType" type="Label" parent="ProjectManager/TabContainer/NewProject"]
+margin_left = 196.0
+margin_top = 65.0
 margin_right = 241.0
-margin_bottom = 89.0
+margin_bottom = 79.0
 text = "Project"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ProjectType" type="OptionButton" parent="ProjectManager/NewProject/ProjectType"]
+[node name="ProjectType" type="OptionButton" parent="ProjectManager/TabContainer/NewProject/ProjectType"]
 margin_left = 60.0
 margin_top = -8.0
 margin_right = 176.0
@@ -122,25 +199,39 @@ align = 1
 items = [ "GDNative C++", null, false, 0, null, "Rust", null, false, 1, null ]
 selected = 0
 
-[node name="PathLabel" type="Label" parent="ProjectManager/NewProject"]
+[node name="PathLabel" type="Label" parent="ProjectManager/TabContainer/NewProject"]
 margin_left = 82.0
-margin_top = 120.0
+margin_top = 110.0
 margin_right = 122.0
-margin_bottom = 134.0
+margin_bottom = 124.0
 text = "Path"
 
-[node name="Button" type="Button" parent="ProjectManager/NewProject/PathLabel"]
+[node name="Button" type="Button" parent="ProjectManager/TabContainer/NewProject/PathLabel"]
 margin_left = 39.0
 margin_top = -4.0
 margin_right = 63.0
 margin_bottom = 16.0
 text = "..."
 
-[node name="LineEdit" type="LineEdit" parent="ProjectManager/NewProject/PathLabel"]
+[node name="LineEdit" type="LineEdit" parent="ProjectManager/TabContainer/NewProject/PathLabel"]
 margin_left = 84.0
 margin_top = -6.0
 margin_right = 448.0
 margin_bottom = 18.0
+
+[node name="OkButton" type="Button" parent="ProjectManager"]
+margin_left = 165.0
+margin_top = 350.0
+margin_right = 245.0
+margin_bottom = 374.0
+text = "Accept"
+
+[node name="CancelButton" type="Button" parent="ProjectManager"]
+margin_left = 300.0
+margin_top = 350.0
+margin_right = 380.0
+margin_bottom = 374.0
+text = "Cancel"
 
 [connection signal="tab_changed" from="TabContainer" to="." method="_on_TabContainer_tab_changed"]
 [connection signal="tab_close" from="TabContainer" to="." method="_on_TabContainer_tab_close"]

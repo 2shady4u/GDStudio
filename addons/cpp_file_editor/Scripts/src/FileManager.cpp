@@ -8,6 +8,7 @@
 #include <MenuButton.hpp>
 #include <File.hpp>
 #include <FileDialog.hpp>
+#include <WindowDialog.hpp>
 #include <PopupMenu.hpp>
 #include <InputEventKey.hpp>
 
@@ -39,7 +40,7 @@ void EditorFile::on_file_pressed(int index)
     switch (index)
     {
     case 0:
-        Godot::print("New Project");
+        ((WindowDialog *)get_node(NodePath("ProjectManager")))->popup_centered();
         break;
     case 1:
         ((FileDialog *)get_node(NodePath("NewFile")))->popup_centered();
@@ -75,6 +76,7 @@ void EditorFile::open_file(String path)
     this->current_editor_instance = cast_to<CodeEditor>(((Tabs *)get_node("TabContainer"))->get_child(this->tab_number - 1));
     ((Tabs *)get_node("TabContainer"))->add_tab(this->file_name);
     ((Tabs *)get_node("TabContainer"))->set_current_tab(this->tab_number - 1);
+    this->instance_defined = true;
 }
 
 void EditorFile::save_file()
@@ -137,7 +139,6 @@ void EditorFile::_on_TabContainer_tab_changed(int tab)
     this->current_editor_instance = cast_to<CodeEditor>(((Tabs *)get_node("TabContainer"))->get_child(tab));
     this->current_editor_instance->show();
     this->file_name = ((Tabs *)get_node("TabContainer"))->get_tab_title(tab);
-    this->instance_defined = true;
 }
 
 void EditorFile::_on_TabContainer_tab_close(int tab)
