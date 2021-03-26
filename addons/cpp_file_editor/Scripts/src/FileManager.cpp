@@ -11,6 +11,8 @@
 #include <WindowDialog.hpp>
 #include <PopupMenu.hpp>
 #include <InputEventKey.hpp>
+#include <TabContainer.hpp>
+#include <LineEdit.hpp>
 
 #include "FileManager.hpp"
 using namespace godot;
@@ -150,6 +152,35 @@ void EditorFile::_process()
     }
 }
 
+void EditorFile::_on_CancelButton_pressed()
+{
+    ((WindowDialog *)get_node(NodePath("ProjectManager")))->hide();
+}
+
+void EditorFile::_on_NewClassButton_pressed()
+{
+    ((FileDialog *)get_node(NodePath("ProjectManager/FolderPath")))->popup_centered();
+}
+
+void EditorFile::_on_FolderPath_dir_selected(String path)
+{
+    switch (((TabContainer *)get_node(NodePath("ProjectManager/TabContainer")))->get_current_tab())
+    {
+    case 0:
+        ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewClass/PathLabel/FilePath")))->set_text(path);
+        break;
+    case 1:
+        ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/PathLabel/FilePath")))->set_text(path);
+        break;
+    }
+}
+
+void EditorFile::_on_ClassName_text_changed(String new_text)
+{
+    ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Main")))->set_text(new_text+".cpp");
+    ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Include")))->set_text(new_text+".h");
+}
+
 void EditorFile::create_shortcuts()
 {
     Ref<InputEventKey> hotkey;
@@ -192,6 +223,10 @@ void EditorFile::_register_methods()
     register_method((char *)"_on_OpenFile_file_selected", &EditorFile::_on_OpenFile_file_selected);
     register_method((char *)"_on_TabContainer_tab_changed", &EditorFile::_on_TabContainer_tab_changed);
     register_method((char *)"_on_TabContainer_tab_close", &EditorFile::_on_TabContainer_tab_close);
+    register_method((char *)"_on_CancelButton_pressed", &EditorFile::_on_CancelButton_pressed);
+    register_method((char *)"_on_NewClassButton_pressed", &EditorFile::_on_NewClassButton_pressed);
+    register_method((char *)"_on_FolderPath_dir_selected", &EditorFile::_on_FolderPath_dir_selected);
+    register_method((char *)"_on_ClassName_text_changed", &EditorFile::_on_ClassName_text_changed);
     register_method((char *)"create_shortcuts", &EditorFile::create_shortcuts);
     register_method((char *)"_process", &EditorFile::_process);
 }

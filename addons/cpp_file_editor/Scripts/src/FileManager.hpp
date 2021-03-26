@@ -15,17 +15,23 @@ class EditorFile : public Control
 public:
     EditorFile();
     ~EditorFile();
+
     void _init();
     void _ready();
     void _process();
     void open_file(String);
-    void create_shortcuts();
     void on_file_pressed(int);
     void save_file();
+    void create_shortcuts();
+
     void _on_NewFile_file_selected(String);
     void _on_OpenFile_file_selected(String);
     void _on_TabContainer_tab_changed(int);
     void _on_TabContainer_tab_close(int);
+    void _on_CancelButton_pressed();
+    void _on_NewClassButton_pressed();
+    void _on_FolderPath_dir_selected(String);
+    void _on_ClassName_text_changed(String);
 
     static void _register_methods();
 

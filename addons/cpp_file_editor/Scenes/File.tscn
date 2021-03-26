@@ -3,7 +3,7 @@
 [ext_resource path="res://addons/cpp_file_editor/Scripts/native/editor_file.gdns" type="Script" id=1]
 [ext_resource path="res://addons/cpp_file_editor/Fonts/RobotoSlab-VariableFont_wght.ttf" type="DynamicFontData" id=2]
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=1438]
 size = 14
 font_data = ExtResource( 2 )
 
@@ -24,7 +24,7 @@ margin_top = 30.0
 margin_right = 6.10352e-05
 margin_bottom = -954.001
 rect_min_size = Vector2( 640, 0 )
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 1438 )
 tab_align = 0
 tab_close_display_policy = 1
 drag_to_rearrange_enabled = true
@@ -78,6 +78,7 @@ mode = 0
 filters = PoolStringArray( "*.cpp", "*.hpp" )
 
 [node name="ProjectManager" type="WindowDialog" parent="."]
+visible = true
 margin_right = 580.0
 margin_bottom = 390.0
 __meta__ = {
@@ -85,8 +86,8 @@ __meta__ = {
 }
 
 [node name="FolderPath" type="FileDialog" parent="ProjectManager"]
-margin_right = 315.0
-margin_bottom = 130.0
+margin_right = 530.0
+margin_bottom = 286.0
 window_title = "Abrir un Directorio"
 mode = 2
 
@@ -97,10 +98,12 @@ __meta__ = {
 }
 
 [node name="NewClass" type="Control" parent="ProjectManager/TabContainer"]
+anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = 24.0
-margin_right = -8.0
-margin_bottom = -36.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -163,11 +166,19 @@ margin_top = -6.0
 margin_right = 448.0
 margin_bottom = 18.0
 
-[node name="Tree" type="Tree" parent="ProjectManager/TabContainer/NewClass"]
-margin_left = 48.0
-margin_top = 176.0
-margin_right = 230.0
-margin_bottom = 311.0
+[node name="Include" type="LineEdit" parent="ProjectManager/TabContainer/NewClass"]
+margin_left = 60.0
+margin_top = 207.0
+margin_right = 245.0
+margin_bottom = 231.0
+editable = false
+
+[node name="Main" type="LineEdit" parent="ProjectManager/TabContainer/NewClass"]
+margin_left = 60.0
+margin_top = 165.0
+margin_right = 245.0
+margin_bottom = 189.0
+editable = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -176,9 +187,10 @@ __meta__ = {
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = 24.0
-margin_right = -8.0
-margin_bottom = -36.0
+margin_left = 5.0
+margin_top = 29.0
+margin_right = -5.0
+margin_bottom = -5.0
 
 [node name="ProjectType" type="Label" parent="ProjectManager/TabContainer/NewProject"]
 margin_left = 196.0
@@ -214,23 +226,26 @@ margin_right = 63.0
 margin_bottom = 16.0
 text = "..."
 
-[node name="LineEdit" type="LineEdit" parent="ProjectManager/TabContainer/NewProject/PathLabel"]
+[node name="FilePath" type="LineEdit" parent="ProjectManager/TabContainer/NewProject/PathLabel"]
 margin_left = 84.0
 margin_top = -6.0
 margin_right = 448.0
 margin_bottom = 18.0
 
 [node name="OkButton" type="Button" parent="ProjectManager"]
-margin_left = 165.0
+margin_left = 180.0
 margin_top = 350.0
-margin_right = 245.0
+margin_right = 260.0
 margin_bottom = 374.0
 text = "Accept"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="CancelButton" type="Button" parent="ProjectManager"]
-margin_left = 300.0
+margin_left = 320.0
 margin_top = 350.0
-margin_right = 380.0
+margin_right = 400.0
 margin_bottom = 374.0
 text = "Cancel"
 
@@ -238,3 +253,7 @@ text = "Cancel"
 [connection signal="tab_close" from="TabContainer" to="." method="_on_TabContainer_tab_close"]
 [connection signal="file_selected" from="NewFile" to="." method="_on_NewFile_file_selected"]
 [connection signal="file_selected" from="OpenFile" to="." method="_on_OpenFile_file_selected"]
+[connection signal="dir_selected" from="ProjectManager/FolderPath" to="." method="_on_FolderPath_dir_selected"]
+[connection signal="text_changed" from="ProjectManager/TabContainer/NewClass/ClassName/ClassName" to="." method="_on_ClassName_text_changed"]
+[connection signal="pressed" from="ProjectManager/TabContainer/NewClass/PathLabel/Button" to="." method="_on_NewClassButton_pressed"]
+[connection signal="pressed" from="ProjectManager/CancelButton" to="." method="_on_CancelButton_pressed"]
