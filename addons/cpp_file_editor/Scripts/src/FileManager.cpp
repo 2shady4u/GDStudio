@@ -16,6 +16,7 @@
 #include <AcceptDialog.hpp>
 #include <MenuButton.hpp>
 #include <OptionButton.hpp>
+#include <Directory.hpp>
 
 #include "FileManager.hpp"
 using namespace godot;
@@ -202,8 +203,10 @@ void EditorFile::_on_OkButton_pressed()
         this->create_new_class();
         break;
     case 1:
+        this->create_new_project();
         break;
     }
+    ((WindowDialog *)get_node(NodePath("ProjectManager")))->hide();
 }
 
 void EditorFile::_on_ProjectType_item_selected(int index)
@@ -233,7 +236,7 @@ void EditorFile::_on_SearchCPPButton_pressed()
 
 void EditorFile::_on_cppPathSearch_dir_selected(String path)
 {
-    ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/CPP/cppPath")))->set_text(path);
+    ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/CPP/cppPath/cppPath")))->set_text(path);
 }
 
 void EditorFile::create_shortcuts()
@@ -306,8 +309,114 @@ void EditorFile::create_new_class()
         }
 
         file->free();
+    }
+}
 
-        ((WindowDialog *)get_node(NodePath("ProjectManager")))->hide();
+void EditorFile::create_new_project()
+{
+    String path = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/PathLabel/FilePath")))->get_text();
+    String cpp_path = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/CPP/cppPath/cppPath")))->get_text();
+    String source_folder = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/CPP/Source/Source")))->get_text();
+    String scons_platform = "";
+    switch (((OptionButton *)get_node(NodePath("ProjectManager/TabContainer/NewProject/CPP/Platform/Platform")))->get_selected_id())
+    {
+    case 0:
+        scons_platform = "windows";
+        break;
+    case 1:
+        scons_platform = "linux";
+        break;
+    case 2:
+        scons_platform = "osx";
+        break;
+    }
+    switch (((OptionButton *)get_node(NodePath("ProjectManager/TabContainer/NewProject/ProjectType/ProjectType")))->get_selected_id())
+    {
+    case 0:
+        if (path == "" || cpp_path == "")
+        {
+            ((AcceptDialog *)get_node(NodePath("ProjectManager/TabContainer/NewProject/CPP/Warning")))->popup_centered();
+        }
+        else
+        {
+            File *file = File::_new();
+            Directory *dir = Directory::_new();
+            dir->open(path);
+            dir->make_dir(source_folder);
+            file->open(path + "/" + source_folder + "/main.cpp", File::WRITE);
+            file->store_string("#include <Godot.hpp>\n\n"
+                               "extern \"C\" void GDN_EXPORT godot_gdnative_init(godot_gdnative_init_options *o) {\n\t"
+                               "godot::Godot::gdnative_init(o);\n}\n\n"
+                               "extern \"C\" void GDN_EXPORT godot_gdnative_terminate(godot_gdnative_terminate_options *o) {\n\t"
+                               "godot::Godot::gdnative_terminate(o);\n}\n\n"
+                               "extern \"C\" void GDN_EXPORT godot_nativescript_init(void *handle) {\n\t"
+                               "godot::Godot::nativescript_init(handle);\n}");
+            file->close();
+            file->open(path + "/SConstruct", File::WRITE);
+            file->store_string("import os\n\n"
+                               "platform = ARGUMENTS.get(\"p\", \"linux\")\n"
+                               "platform = ARGUMENTS.get(\"platform\", platform)\n"
+                               "env = Environment()\n"
+                               "if platform == \"windows\":\n\t"
+                               "env = Environment(ENV=os.environ)\n\n"
+                               "godot_headers_path = ARGUMENTS.get(\"headers\", os.getenv(\"GODOT_HEADERS\", \"" +
+                               cpp_path + "/godot_headers\"))\n"
+                                          "godot_bindings_path = ARGUMENTS.get(\"cpp_bindings\", os.getenv(\"CPP_BINDINGS\", \"" +
+                               cpp_path + "\"))\n\n"
+                                          "target = ARGUMENTS.get(\"target\", \"debug\")\n\n"
+                                          "if ARGUMENTS.get(\"use_llvm\", \"no\") == \"yes\":\n\t"
+                                          "env[\"CXX\"] = \"clang++\"\n\n"
+                                          "if platform == \"osx\":\n\t"
+                                          "env.Append(CCFLAGS=[\"-g\", \"-O3\", \"-std=c++14\", \"-arch\", \"x86_64\"])\n\t"
+                                          "env.Append(LINKFLAGS=[\"-arch\", \"x86_64\", \"-framework\", \"Cocoa\", \"-Wl,-undefined,dynamic_lookup\"])\n"
+                                          "if platform == \"linux\":\n\t"
+                                          "env.Append(CCFLAGS=[\"-g\", \"-O3\", \"-std=c++14\", \"-Wno-writable-strings\"])\n\t"
+                                          "env.Append(LINKFLAGS=[\"-Wl,-R,'$$ORIGIN'\"])\n"
+                                          "if platform == \"windows\":\n\t"
+                                          "env.Append(LINKFLAGS=[\"/WX\"])\n\t"
+                                          "if target == \"debug\":\n\t\t"
+                                          "env.Append(CCFLAGS=[\"-EHsc\", \"-D_DEBUG\", \"/MDd\"])\n\t"
+                                          "else:\n\t\t"
+                                          "env.Append(CCFLAGS=[\"-O2\", \"-EHsc\", \"-DNDEBUG\", \"/MDd\"])\n\n"
+                                          "for f in os.listdir(dir):\n\t\t"
+                                          "if f.endswith(\".cpp\"):\n\t\t\t"
+                                          "sources.append(dir + \"/\" + f)\n\n"
+                                          "env.Append(\n\t"
+                                          "CPPPATH=[\n\t\t"
+                                          "godot_headers_path,\n\t\t"
+                                          "godot_bindings_path + \"/include\",\n\t\t"
+                                          "godot_bindings_path + \"/include/gen/\",\n\t\t"
+                                          "godot_bindings_path + \"/include/core/\",\n\t"
+                                          "],\n)"
+                                          "if target == \"debug\":\n\t"
+                                          "env.Append(LIBS=[\"libgodot-cpp." +
+                               scons_platform + ".debug.64\"])\n"
+                                                "else:\n\t"
+                                                "env.Append(LIBS=[\"libgodot-cpp." +
+                               scons_platform + ".release.64\"])\n"
+                                                "env.Append(LIBPATH=[godot_bindings_path + \"/bin/\"])\n\n"
+                                                "sources = []\n"
+                                                "add_sources(sources, \"" +
+                               source_folder + ")\n\n"
+                                               "library = env.SharedLibrary(target=\"bin/libconstructor\", source=sources)\n"
+                                               "Default(library)");
+            file->close();
+
+            file->open(path + "/settings.gdnproj", File::WRITE);
+            file->store_string("language=c++\n\n"
+                               "path=" +
+                               path + "\n"
+                                      "sources_folder=" +
+                               source_folder + "\n\n"
+                                               "godot_cpp_folder=" +
+                               cpp_path + "\n"
+                                          "include_folders=\"\"\n"
+                                          "linker_folders=\"\"");
+            file->close();
+
+            file->free();
+            dir->free();
+        }
     }
 }
 
@@ -320,6 +429,7 @@ void EditorFile::_register_methods()
     register_method((char *)"save_file", &EditorFile::save_file);
     register_method((char *)"create_shortcuts", &EditorFile::create_shortcuts);
     register_method((char *)"create_new_class", &EditorFile::create_new_class);
+    register_method((char *)"create_new_project", &EditorFile::create_new_project);
 
     register_method((char *)"_on_NewFile_file_selected", &EditorFile::_on_NewFile_file_selected);
     register_method((char *)"_on_OpenFile_file_selected", &EditorFile::_on_OpenFile_file_selected);

@@ -24,6 +24,7 @@ public:
     void save_file();
     void create_shortcuts();
     void create_new_class();
+    void create_new_project();
 
     void _on_NewFile_file_selected(String);
     void _on_OpenFile_file_selected(String);

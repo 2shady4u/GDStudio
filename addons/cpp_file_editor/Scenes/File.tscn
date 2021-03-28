@@ -310,6 +310,39 @@ margin_top = -5.0
 margin_right = 514.0
 margin_bottom = 19.0
 
+[node name="Source" type="Label" parent="ProjectManager/TabContainer/NewProject/CPP"]
+margin_left = 126.0
+margin_top = 173.0
+margin_right = 213.0
+margin_bottom = 187.0
+text = "Source Folder"
+
+[node name="Source" type="LineEdit" parent="ProjectManager/TabContainer/NewProject/CPP/Source"]
+margin_left = 109.0
+margin_top = -6.0
+margin_right = 250.0
+margin_bottom = 18.0
+text = "src"
+
+[node name="Platform" type="Label" parent="ProjectManager/TabContainer/NewProject/CPP"]
+margin_left = 140.0
+margin_top = 222.0
+margin_right = 194.0
+margin_bottom = 236.0
+text = "Platform"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Platform" type="OptionButton" parent="ProjectManager/TabContainer/NewProject/CPP/Platform"]
+margin_left = 78.0
+margin_top = -6.0
+margin_right = 196.0
+margin_bottom = 20.0
+text = "Windows"
+items = [ "Windows", null, false, 0, null, "Linux", null, false, 1, null, "Mac", null, false, 2, null ]
+selected = 0
+
 [node name="cppPathSearch" type="FileDialog" parent="ProjectManager/TabContainer/NewProject/CPP"]
 margin_left = 72.0
 margin_top = 79.0
@@ -320,6 +353,12 @@ mode = 2
 access = 2
 current_dir = "/Work/Godot/Code-Editor"
 current_path = "/Work/Godot/Code-Editor/"
+
+[node name="Warning" type="AcceptDialog" parent="ProjectManager/TabContainer/NewProject/CPP"]
+margin_right = 94.0
+margin_bottom = 58.0
+window_title = "¡Alerta!"
+dialog_text = "Project's Path and godot-cpp repo's path cannot be empty"
 
 [node name="Rust" type="Control" parent="ProjectManager/TabContainer/NewProject"]
 visible = false
