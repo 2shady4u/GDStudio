@@ -180,8 +180,18 @@ void EditorFile::_on_FolderPath_dir_selected(String path)
 
 void EditorFile::_on_ClassName_text_changed(String new_text)
 {
-    ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Main")))->set_text(new_text + ".cpp");
-    ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Include")))->set_text(new_text + ".h");
+    int class_lang = ((OptionButton *)get_node(NodePath("ProjectManager/TabContainer/NewClass/ClassType/ClassType")))->get_selected_id();
+    switch (class_lang)
+    {
+    case 0:
+        ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Main")))->set_text(new_text + ".cpp");
+        ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Include")))->set_text(new_text + ".h");
+        break;
+    case 1:
+        ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Main")))->set_text(new_text + ".rs");
+        ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Include")))->set_text("");
+        break;
+    }
 }
 
 void EditorFile::_on_OkButton_pressed()
@@ -190,6 +200,8 @@ void EditorFile::_on_OkButton_pressed()
     String class_name = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewClass/ClassName/ClassName")))->get_text();
     int inherit_item = ((OptionButton *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Inherit/Inherits")))->get_selected();
     String class_inherit = ((OptionButton *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Inherit/Inherits")))->get_item_text(inherit_item);
+    int class_lang = ((OptionButton *)get_node(NodePath("ProjectManager/TabContainer/NewClass/ClassType/ClassType")))->get_selected_id();
+
     switch (((TabContainer *)get_node(NodePath("ProjectManager/TabContainer")))->get_current_tab())
     {
     case 0:
@@ -200,18 +212,30 @@ void EditorFile::_on_OkButton_pressed()
         else
         {
             File *file = File::_new();
-            file->open(class_path+"/"+class_name+".h", File::WRITE);
-            file->store_string("#include <Godot.hpp>\n#include <"+class_inherit+".hpp>\n\nclass "+class_name+" : public "+class_inherit+
-            "{\n\tGODOT_CLASS("+class_name+","+class_inherit+")"+
-            "\n\nprivate:\n\npublic:\n\tstatic void _register_methods();\n\t"+class_name+"();\n\t~"+
-            class_name+"();\n\n};");
-            file->close();
-            file->open(class_path+"/"+class_name+".cpp", File::WRITE);
-            file->store_string("#include <"+class_name+".h>\n\nusing namespace godot;\n\nvoid "+
-            class_name+"::_register_methods() {\n\tregister_method(\"_process\", &"+
-            class_name+"::_process);\n}\n\n"+class_name+"::"+class_name+
-            "() {\n}\n\n"+class_name+"::~"+class_name+"() {\n}");
-            file->close();
+            if (class_lang == 0)
+            {
+                file->open(class_path + "/" + class_name + ".h", File::WRITE);
+                file->store_string("#include <Godot.hpp>\n#include <" + class_inherit + ".hpp>\n\nclass " + class_name + " : public " + class_inherit +
+                                   "{\n\tGODOT_CLASS(" + class_name + "," + class_inherit + ")" +
+                                   "\n\nprivate:\n\npublic:\n\tstatic void _register_methods();\n\t" + class_name + "();\n\t~" +
+                                   class_name + "();\n\n};");
+                file->close();
+                file->open(class_path + "/" + class_name + ".cpp", File::WRITE);
+                file->store_string("#include <" + class_name + ".h>\n\nusing namespace godot;\n\nvoid " +
+                                   class_name + "::_register_methods() {\n\tregister_method(\"_process\", &" +
+                                   class_name + "::_process);\n}\n\n" + class_name + "::" + class_name +
+                                   "() {\n}\n\n" + class_name + "::~" + class_name + "() {\n}");
+                file->close();
+            }
+            else
+            {
+                file->open(class_path + "/" + class_name + ".rs", File::WRITE);
+                file->store_string("use gdnative::api::{"+class_inherit+"};\nuse gdnative::prelude::*;\n\n#[derive(NativeClass)]\n"
+                +"#[inherit("+class_inherit+")]\npub struct "+class_name+";\n\n#[methods]\nimpl "+
+                class_name+" {\n\tfn new(_owner: &"+class_inherit+") -> Self {\n\t\tSelf\n\t}\n}");
+                file->close();
+            }
+            
             file->free();
 
             ((WindowDialog *)get_node(NodePath("ProjectManager")))->hide();
