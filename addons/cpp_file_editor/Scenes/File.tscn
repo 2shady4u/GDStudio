@@ -65,7 +65,7 @@ text = "Project"
 margin_right = 580.0
 margin_bottom = 250.0
 window_title = "Guardar un Archivo"
-filters = PoolStringArray( "cpp", "hpp" )
+filters = PoolStringArray( "cpp", "hpp", "rs" )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -75,7 +75,7 @@ margin_right = 580.0
 margin_bottom = 250.0
 window_title = "Abrir un Archivo"
 mode = 0
-filters = PoolStringArray( "*.cpp", "*.hpp" )
+filters = PoolStringArray( "*.cpp", "*.hpp", "*.rs" )
 
 [node name="ProjectManager" type="WindowDialog" parent="."]
 margin_right = 580.0
