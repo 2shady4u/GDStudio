@@ -78,6 +78,7 @@ mode = 0
 filters = PoolStringArray( "*.cpp", "*.hpp", "*.rs" )
 
 [node name="ProjectManager" type="WindowDialog" parent="."]
+visible = true
 margin_right = 580.0
 margin_bottom = 390.0
 __meta__ = {
@@ -256,7 +257,7 @@ margin_right = 176.0
 margin_bottom = 20.0
 text = "GDNative C++"
 align = 1
-items = [ "GDNative C++", null, false, 0, null, "Rust", null, false, 1, null ]
+items = [ "GDNative C++", null, false, 0, null, "GDNative Rust", null, false, 1, null ]
 selected = 0
 
 [node name="PathLabel" type="Label" parent="ProjectManager/TabContainer/NewProject"]
@@ -278,6 +279,61 @@ margin_left = 84.0
 margin_top = -6.0
 margin_right = 448.0
 margin_bottom = 18.0
+
+[node name="CPP" type="Control" parent="ProjectManager/TabContainer/NewProject"]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="cppPath" type="Label" parent="ProjectManager/TabContainer/NewProject/CPP"]
+margin_left = 15.0
+margin_top = 124.0
+margin_right = 111.0
+margin_bottom = 138.0
+text = "godot-cpp Path"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SearchButton" type="Button" parent="ProjectManager/TabContainer/NewProject/CPP/cppPath"]
+margin_left = 106.0
+margin_top = -4.0
+margin_right = 130.0
+margin_bottom = 16.0
+text = "..."
+
+[node name="cppPath" type="LineEdit" parent="ProjectManager/TabContainer/NewProject/CPP/cppPath"]
+margin_left = 151.0
+margin_top = -5.0
+margin_right = 514.0
+margin_bottom = 19.0
+
+[node name="Rust" type="Control" parent="ProjectManager/TabContainer/NewProject"]
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Version" type="Label" parent="ProjectManager/TabContainer/NewProject/Rust"]
+margin_left = 67.0
+margin_top = 138.0
+margin_right = 217.0
+margin_bottom = 152.0
+text = "GDNative Crate Version"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Version" type="LineEdit" parent="ProjectManager/TabContainer/NewProject/Rust/Version"]
+margin_left = 173.0
+margin_top = -6.0
+margin_right = 233.0
+margin_bottom = 20.0
+text = "0.9.3"
 
 [connection signal="tab_changed" from="TabContainer" to="." method="_on_TabContainer_tab_changed"]
 [connection signal="tab_close" from="TabContainer" to="." method="_on_TabContainer_tab_close"]
