@@ -423,15 +423,18 @@ void EditorFile::create_new_project()
     case 1:
         OS *cmd;
         PoolStringArray args;
+        String gdn_version = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/Rust/Version/Version")))->get_text();
+        String project_name = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/Rust/Name/Name")))->get_text();
         args.append("init");
         args.append("--lib");
-        args.append(path+"/"+((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/Rust/Name/Name")))->get_text());
+        args.append(path + "/" + project_name);
         cmd->execute("cargo", args);
+
         File *file = File::_new();
-        file->open(path+"/"+((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/Rust/Name/Name")))->get_text()+"/Cargo.toml", File::READ);
+        file->open(path + "/" + project_name + "/Cargo.toml", File::READ);
         int index = 1;
         String final_string;
-        while(file->eof_reached() == false)
+        while (file->eof_reached() == false)
         {
             String line = file->get_line();
             if (index == 8)
@@ -440,16 +443,26 @@ void EditorFile::create_new_project()
             }
             if (line == "[dependencies]")
             {
-                line+= "\ngdnative = \""+((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/Rust/Version/Version")))->get_text()+"\"";
+                line += "\ngdnative = \"" + gdn_version + "\"";
             }
             final_string += line;
             final_string += "\n";
             index += 1;
         }
         file->close();
-        file->open(path+"/"+((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/Rust/Name/Name")))->get_text()+"/Cargo.toml", File::WRITE);
+
+        file->open(path + "/" + ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/Rust/Name/Name")))->get_text() + "/Cargo.toml", File::WRITE);
         file->store_string(final_string);
         file->close();
+
+        file->open(path + project_name + "/settings.gdnproj", File::WRITE);
+        file->store_string("language=rust\n\n"
+                           "gnative_version = " +
+                           gdn_version + "\n"
+                                         "path=" +
+                           path + project_name + "\n");
+        file->close();
+
         file->free();
         break;
     }
