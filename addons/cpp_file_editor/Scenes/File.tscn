@@ -78,7 +78,6 @@ mode = 0
 filters = PoolStringArray( "*.cpp", "*.hpp", "*.rs" )
 
 [node name="ProjectManager" type="WindowDialog" parent="."]
-visible = true
 margin_right = 580.0
 margin_bottom = 390.0
 __meta__ = {
@@ -107,6 +106,9 @@ margin_right = 530.0
 margin_bottom = 286.0
 window_title = "Abrir un Directorio"
 mode = 2
+access = 2
+current_dir = "/Work/Godot/Code-Editor"
+current_path = "/Work/Godot/Code-Editor/"
 
 [node name="TabContainer" type="TabContainer" parent="ProjectManager"]
 anchor_right = 1.0
@@ -115,7 +117,6 @@ __meta__ = {
 }
 
 [node name="NewClass" type="Control" parent="ProjectManager/TabContainer"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -233,6 +234,7 @@ dialog_text = "Name and Path fields cannot be empty"
 dialog_autowrap = true
 
 [node name="NewProject" type="Control" parent="ProjectManager/TabContainer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -384,6 +386,20 @@ margin_top = -6.0
 margin_right = 233.0
 margin_bottom = 20.0
 text = "0.9.3"
+
+[node name="Name" type="Label" parent="ProjectManager/TabContainer/NewProject/Rust"]
+margin_left = 106.0
+margin_top = 188.0
+margin_right = 193.0
+margin_bottom = 202.0
+text = "Project Name"
+
+[node name="Name" type="LineEdit" parent="ProjectManager/TabContainer/NewProject/Rust/Name"]
+margin_left = 109.0
+margin_top = -6.0
+margin_right = 227.0
+margin_bottom = 20.0
+text = "gdnproj"
 
 [connection signal="tab_changed" from="TabContainer" to="." method="_on_TabContainer_tab_changed"]
 [connection signal="tab_close" from="TabContainer" to="." method="_on_TabContainer_tab_close"]

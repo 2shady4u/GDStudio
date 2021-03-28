@@ -10,7 +10,7 @@ addons/cpp_file_editor/Scripts/godot-cpp/
 *.bat
 *.sconsign.dblite
 .vscode/
-test/
+editor/
 # Mono-specific ignores
 .mono/
 data_*/

@@ -17,6 +17,8 @@
 #include <MenuButton.hpp>
 #include <OptionButton.hpp>
 #include <Directory.hpp>
+#include <OS.hpp>
+#include <PoolArrays.hpp>
 
 #include "FileManager.hpp"
 using namespace godot;
@@ -417,6 +419,39 @@ void EditorFile::create_new_project()
             file->free();
             dir->free();
         }
+        break;
+    case 1:
+        OS *cmd;
+        PoolStringArray args;
+        args.append("init");
+        args.append("--lib");
+        args.append(path+"/"+((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/Rust/Name/Name")))->get_text());
+        cmd->execute("cargo", args);
+        File *file = File::_new();
+        file->open(path+"/"+((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/Rust/Name/Name")))->get_text()+"/Cargo.toml", File::READ);
+        int index = 1;
+        String final_string;
+        while(file->eof_reached() == false)
+        {
+            String line = file->get_line();
+            if (index == 8)
+            {
+                line += "[lib]\ncrate-type = [\"cdylib\"]\n";
+            }
+            if (line == "[dependencies]")
+            {
+                line+= "\ngdnative = \""+((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/Rust/Version/Version")))->get_text()+"\"";
+            }
+            final_string += line;
+            final_string += "\n";
+            index += 1;
+        }
+        file->close();
+        file->open(path+"/"+((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/Rust/Name/Name")))->get_text()+"/Cargo.toml", File::WRITE);
+        file->store_string(final_string);
+        file->close();
+        file->free();
+        break;
     }
 }
 
