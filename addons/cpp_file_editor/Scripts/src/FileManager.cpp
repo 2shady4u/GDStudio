@@ -196,54 +196,44 @@ void EditorFile::_on_ClassName_text_changed(String new_text)
 
 void EditorFile::_on_OkButton_pressed()
 {
-    String class_path = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewClass/PathLabel/FilePath")))->get_text();
-    String class_name = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewClass/ClassName/ClassName")))->get_text();
-    int inherit_item = ((OptionButton *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Inherit/Inherits")))->get_selected();
-    String class_inherit = ((OptionButton *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Inherit/Inherits")))->get_item_text(inherit_item);
-    int class_lang = ((OptionButton *)get_node(NodePath("ProjectManager/TabContainer/NewClass/ClassType/ClassType")))->get_selected_id();
-
     switch (((TabContainer *)get_node(NodePath("ProjectManager/TabContainer")))->get_current_tab())
     {
     case 0:
-        if (class_name == "" || class_path == "")
-        {
-            ((AcceptDialog *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Warning")))->popup_centered();
-        }
-        else
-        {
-            File *file = File::_new();
-            if (class_lang == 0)
-            {
-                file->open(class_path + "/" + class_name + ".h", File::WRITE);
-                file->store_string("#include <Godot.hpp>\n#include <" + class_inherit + ".hpp>\n\nclass " + class_name + " : public " + class_inherit +
-                                   "{\n\tGODOT_CLASS(" + class_name + "," + class_inherit + ")" +
-                                   "\n\nprivate:\n\npublic:\n\tstatic void _register_methods();\n\t" + class_name + "();\n\t~" +
-                                   class_name + "();\n\n};");
-                file->close();
-                file->open(class_path + "/" + class_name + ".cpp", File::WRITE);
-                file->store_string("#include <" + class_name + ".h>\n\nusing namespace godot;\n\nvoid " +
-                                   class_name + "::_register_methods() {\n\tregister_method(\"_process\", &" +
-                                   class_name + "::_process);\n}\n\n" + class_name + "::" + class_name +
-                                   "() {\n}\n\n" + class_name + "::~" + class_name + "() {\n}");
-                file->close();
-            }
-            else
-            {
-                file->open(class_path + "/" + class_name + ".rs", File::WRITE);
-                file->store_string("use gdnative::api::{"+class_inherit+"};\nuse gdnative::prelude::*;\n\n#[derive(NativeClass)]\n"
-                +"#[inherit("+class_inherit+")]\npub struct "+class_name+";\n\n#[methods]\nimpl "+
-                class_name+" {\n\tfn new(_owner: &"+class_inherit+") -> Self {\n\t\tSelf\n\t}\n}");
-                file->close();
-            }
-            
-            file->free();
-
-            ((WindowDialog *)get_node(NodePath("ProjectManager")))->hide();
-        }
+        this->create_new_class();
         break;
     case 1:
         break;
     }
+}
+
+void EditorFile::_on_ProjectType_item_selected(int index)
+{
+    switch (index)
+    {
+    case 0:
+        ((Control *)get_node(NodePath("ProjectManager/TabContainer/NewProject/Rust")))->hide();
+        ((Control *)get_node(NodePath("ProjectManager/TabContainer/NewProject/CPP")))->show();
+        break;
+    case 1:
+        ((Control *)get_node(NodePath("ProjectManager/TabContainer/NewProject/CPP")))->hide();
+        ((Control *)get_node(NodePath("ProjectManager/TabContainer/NewProject/Rust")))->show();
+        break;
+    }
+}
+
+void EditorFile::_on_PathButton_pressed()
+{
+    ((FileDialog *)get_node(NodePath("ProjectManager/FolderPath")))->popup_centered();
+}
+
+void EditorFile::_on_SearchCPPButton_pressed()
+{
+    ((FileDialog *)get_node(NodePath("ProjectManager/TabContainer/NewProject/CPP/cppPathSearch")))->popup_centered();
+}
+
+void EditorFile::_on_cppPathSearch_dir_selected(String path)
+{
+    ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/CPP/cppPath")))->set_text(path);
 }
 
 void EditorFile::create_shortcuts()
@@ -277,6 +267,50 @@ void EditorFile::create_shortcuts()
     ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(6, hotkey->get_scancode_with_modifiers());
 }
 
+void EditorFile::create_new_class()
+{
+    String class_path = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewClass/PathLabel/FilePath")))->get_text();
+    String class_name = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewClass/ClassName/ClassName")))->get_text();
+    int inherit_item = ((OptionButton *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Inherit/Inherits")))->get_selected();
+    String class_inherit = ((OptionButton *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Inherit/Inherits")))->get_item_text(inherit_item);
+    int class_lang = ((OptionButton *)get_node(NodePath("ProjectManager/TabContainer/NewClass/ClassType/ClassType")))->get_selected_id();
+
+    if (class_name == "" || class_path == "")
+    {
+        ((AcceptDialog *)get_node(NodePath("ProjectManager/TabContainer/NewClass/Warning")))->popup_centered();
+    }
+    else
+    {
+        File *file = File::_new();
+        if (class_lang == 0)
+        {
+            file->open(class_path + "/" + class_name + ".h", File::WRITE);
+            file->store_string("#include <Godot.hpp>\n#include <" + class_inherit + ".hpp>\n\nclass " + class_name + " : public " + class_inherit +
+                               "{\n\tGODOT_CLASS(" + class_name + "," + class_inherit + ")" +
+                               "\n\nprivate:\n\npublic:\n\tstatic void _register_methods();\n\t" + class_name + "();\n\t~" +
+                               class_name + "();\n\n};");
+            file->close();
+            file->open(class_path + "/" + class_name + ".cpp", File::WRITE);
+            file->store_string("#include <" + class_name + ".h>\n\nusing namespace godot;\n\nvoid " +
+                               class_name + "::_register_methods() {\n\tregister_method(\"_process\", &" +
+                               class_name + "::_process);\n}\n\n" + class_name + "::" + class_name +
+                               "() {\n}\n\n" + class_name + "::~" + class_name + "() {\n}");
+            file->close();
+        }
+        else
+        {
+            file->open(class_path + "/" + class_name + ".rs", File::WRITE);
+            file->store_string("use gdnative::api::{" + class_inherit + "};\nuse gdnative::prelude::*;\n\n#[derive(NativeClass)]\n" + "#[inherit(" + class_inherit + ")]\npub struct " + class_name + ";\n\n#[methods]\nimpl " +
+                               class_name + " {\n\tfn new(_owner: &" + class_inherit + ") -> Self {\n\t\tSelf\n\t}\n}");
+            file->close();
+        }
+
+        file->free();
+
+        ((WindowDialog *)get_node(NodePath("ProjectManager")))->hide();
+    }
+}
+
 void EditorFile::_register_methods()
 {
     register_method((char *)"_init", &EditorFile::_init);
@@ -284,6 +318,9 @@ void EditorFile::_register_methods()
     register_method((char *)"on_file_pressed", &EditorFile::on_file_pressed);
     register_method((char *)"open_file", &EditorFile::open_file);
     register_method((char *)"save_file", &EditorFile::save_file);
+    register_method((char *)"create_shortcuts", &EditorFile::create_shortcuts);
+    register_method((char *)"create_new_class", &EditorFile::create_new_class);
+
     register_method((char *)"_on_NewFile_file_selected", &EditorFile::_on_NewFile_file_selected);
     register_method((char *)"_on_OpenFile_file_selected", &EditorFile::_on_OpenFile_file_selected);
     register_method((char *)"_on_TabContainer_tab_changed", &EditorFile::_on_TabContainer_tab_changed);
@@ -293,6 +330,9 @@ void EditorFile::_register_methods()
     register_method((char *)"_on_FolderPath_dir_selected", &EditorFile::_on_FolderPath_dir_selected);
     register_method((char *)"_on_ClassName_text_changed", &EditorFile::_on_ClassName_text_changed);
     register_method((char *)"_on_OkButton_pressed", &EditorFile::_on_OkButton_pressed);
-    register_method((char *)"create_shortcuts", &EditorFile::create_shortcuts);
+    register_method((char *)"_on_ProjectType_item_selected", &EditorFile::_on_ProjectType_item_selected);
+    register_method((char *)"_on_PathButton_pressed", &EditorFile::_on_PathButton_pressed);
+    register_method((char *)"_on_SearchCPPButton_pressed", &EditorFile::_on_SearchCPPButton_pressed);
+    register_method((char *)"_on_cppPathSearch_dir_selected", &EditorFile::_on_cppPathSearch_dir_selected);
     register_method((char *)"_process", &EditorFile::_process);
 }

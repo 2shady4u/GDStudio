@@ -23,6 +23,7 @@ public:
     void on_file_pressed(int);
     void save_file();
     void create_shortcuts();
+    void create_new_class();
 
     void _on_NewFile_file_selected(String);
     void _on_OpenFile_file_selected(String);
@@ -33,6 +34,10 @@ public:
     void _on_FolderPath_dir_selected(String);
     void _on_ClassName_text_changed(String);
     void _on_OkButton_pressed();
+    void _on_ProjectType_item_selected(int);
+    void _on_PathButton_pressed();
+    void _on_SearchCPPButton_pressed();
+    void _on_cppPathSearch_dir_selected(String);
 
     static void _register_methods();
 

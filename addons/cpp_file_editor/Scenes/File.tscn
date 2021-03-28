@@ -115,6 +115,7 @@ __meta__ = {
 }
 
 [node name="NewClass" type="Control" parent="ProjectManager/TabContainer"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -232,7 +233,6 @@ dialog_text = "Name and Path fields cannot be empty"
 dialog_autowrap = true
 
 [node name="NewProject" type="Control" parent="ProjectManager/TabContainer"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
@@ -267,7 +267,7 @@ margin_right = 122.0
 margin_bottom = 99.0
 text = "Path"
 
-[node name="Button" type="Button" parent="ProjectManager/TabContainer/NewProject/PathLabel"]
+[node name="PathButton" type="Button" parent="ProjectManager/TabContainer/NewProject/PathLabel"]
 margin_left = 39.0
 margin_top = -4.0
 margin_right = 63.0
@@ -310,6 +310,17 @@ margin_top = -5.0
 margin_right = 514.0
 margin_bottom = 19.0
 
+[node name="cppPathSearch" type="FileDialog" parent="ProjectManager/TabContainer/NewProject/CPP"]
+margin_left = 72.0
+margin_top = 79.0
+margin_right = 517.0
+margin_bottom = 293.0
+window_title = "Open a Folder"
+mode = 2
+access = 2
+current_dir = "/Work/Godot/Code-Editor"
+current_path = "/Work/Godot/Code-Editor/"
+
 [node name="Rust" type="Control" parent="ProjectManager/TabContainer/NewProject"]
 visible = false
 margin_right = 40.0
@@ -344,3 +355,7 @@ text = "0.9.3"
 [connection signal="dir_selected" from="ProjectManager/FolderPath" to="." method="_on_FolderPath_dir_selected"]
 [connection signal="text_changed" from="ProjectManager/TabContainer/NewClass/ClassName/ClassName" to="." method="_on_ClassName_text_changed"]
 [connection signal="pressed" from="ProjectManager/TabContainer/NewClass/PathLabel/Button" to="." method="_on_NewClassButton_pressed"]
+[connection signal="item_selected" from="ProjectManager/TabContainer/NewProject/ProjectType/ProjectType" to="." method="_on_ProjectType_item_selected"]
+[connection signal="pressed" from="ProjectManager/TabContainer/NewProject/PathLabel/PathButton" to="." method="_on_PathButton_pressed"]
+[connection signal="pressed" from="ProjectManager/TabContainer/NewProject/CPP/cppPath/SearchButton" to="." method="_on_SearchCPPButton_pressed"]
+[connection signal="dir_selected" from="ProjectManager/TabContainer/NewProject/CPP/cppPathSearch" to="." method="_on_cppPathSearch_dir_selected"]
