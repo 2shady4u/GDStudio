@@ -88,10 +88,12 @@ void EditorFile::open_file(String path)
 
     if (file_extension == "cpp")
     {
+        cast_to<CodeEditor>(new_instanced_scene)->setup_language("cpp");
         icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/cplusplus-original.svg", "Texture");
     }
     else if (file_extension == "rs")
     {
+        cast_to<CodeEditor>(new_instanced_scene)->setup_language("rust");
         icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/rust-plain.svg", "Texture");
     }
     else

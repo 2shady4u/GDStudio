@@ -43,13 +43,51 @@ void CodeEditor::setup_syntax()
     ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("\"", "\"", Color(0.5, 0.5, 0.5, 1), false);
     ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("//", "", Color(0, 0.5, 0, 1), true);
     ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("/*", "*/", Color(0, 0.5, 0, 1));
-    for (int j = 0; j < this->preprocessor.size(); j++)
+}
+
+void CodeEditor::setup_language(String lang)
+{
+    if (lang == "cpp")
     {
-        ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region(this->preprocessor[j], "", Color(0.5, 0.25, 0, 1), true);
+        Array preprocessor = Array::make("#", "include", "define");
+        Array keywords = Array::make("auto", "short", "struct", "unsigned",
+                                     "break", "continue", "else", "for", "long", "signed", "switch", "void",
+                                     "case", "default", "enum", "goto", "register", "sizeof", "typedef", "volatile",
+                                     "do", "extern", "if", "return", "static", "union", "while",
+                                     "asm", "dynamic_cast", "namespace", "reinterpret_cast", "try",
+                                     "bool", "explicit", "new", "static_cast", "typeid",
+                                     "catch", "false", "operator", "template", "typename",
+                                     "class", "friend", "private", "this", "using",
+                                     "const_cast", "inline", "public", "throw", "virtual",
+                                     "delete", "mutable", "protected", "true", "wchar_t",
+                                     "const", "int", "float", "double", "char", "string");
+        Array operators = Array::make("+", "-", "*", "/", "=", "%", "<<", ">>");
+        for (int j = 0; j < preprocessor.size(); j++)
+        {
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region(preprocessor[j], "", Color(0.5, 0.25, 0, 1), true);
+        }
+        for (int i = 0; i < keywords.size(); i++)
+        {
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(keywords[i], Color(0.5, 0, 0.5, 1));
+        }
     }
-    for (int i = 0; i < this->keywords.size(); i++)
+    else if (lang == "rust")
     {
-        ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(this->keywords[i], Color(0.5, 0, 0.5, 1));
+        Array keywords = Array::make("alignof", "as", "be", "box", "break", "const", "continue", "crate",
+        "do", "else", "enum", "extern", "false", "fn", "for", "if", "impl", "in", "let", "loop",
+        "match", "mod", "mut", "offsetof", "once", "priv", "proc", "pub", "pure", "ref", "return", "self",
+        "sizeof", "static", "struct", "super", "trait", "true", "type", "typeof", "unsafe", "unsized",
+        "use", "virtual", "while", "yield");
+        Array types = Array::make("bool", "char", "f32", "f64", "i8", "i16", "i32", "i64", 
+        "str", "u8", "u16", "u32", "u64", "Self");
+        for (int i = 0; i < keywords.size(); i++)
+        {
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(keywords[i], Color(0, 0, 0.5, 1));
+        }
+        for (int i = 0; i < types.size(); i++)
+        {
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(types[i], Color(0, 0, 0.5, 1));
+        }
     }
 }
 
@@ -138,6 +176,7 @@ void CodeEditor::_register_methods()
     register_method((char *)"_init", &CodeEditor::_init);
     register_method((char *)"set_initial_content", &CodeEditor::set_initial_content);
     register_method((char *)"setup_syntax", &CodeEditor::setup_syntax);
+    register_method((char *)"setup_language", &CodeEditor::setup_language);
     register_method((char *)"get_content", &CodeEditor::get_content);
     register_method((char *)"save_contents", &CodeEditor::save_contents);
     register_method((char *)"get_text_changed", &CodeEditor::get_text_changed);
