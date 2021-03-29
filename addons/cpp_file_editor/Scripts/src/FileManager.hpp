@@ -26,6 +26,8 @@ public:
     void create_shortcuts();
     void create_new_class();
     void create_new_project();
+    void build_cpp_project(String);
+    void build_rust_project();
 
     void _on_NewFile_file_selected(String);
     void _on_OpenFile_file_selected(String);
@@ -46,6 +48,7 @@ public:
 private:
     String file_name = "";
     String file_path = "";
+    String project_config = "";
     Ref<PackedScene> code_scene;
     CodeEditor *current_editor_instance;
     int tab_number = 0;

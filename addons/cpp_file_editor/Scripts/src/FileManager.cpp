@@ -77,12 +77,46 @@ void EditorFile::on_project_pressed(int index)
     {
     case 0:
         ConfigFile *proj_file = ConfigFile::_new();
-        proj_file->load("E:/Work/Godot/Code-Editor/editor/settings.gdnproj");
-        String lang = proj_file->get_value("settings", "language");
-        Godot::print(lang);
-        proj_file->free();
+        if (this->project_config == "")
+        {
+            ((WindowDialog *)get_node(NodePath("BuildWarning")))->popup_centered();
+        }
+        else
+        {
+            proj_file->load(this->project_config);
+            String lang = proj_file->get_value("settings", "language");
+            String path = proj_file->get_value("settings", "path");
+            if (lang == "c++")
+            {
+                build_cpp_project(path);
+            }
+            else if (lang == "rust")
+            {
+                build_rust_project();
+            }
+            proj_file->free();
+        }
         break;
     }
+}
+
+void EditorFile::build_cpp_project(String path)
+{
+    OS *cmd;
+    Directory *dir = Directory::_new();
+    PoolStringArray args;
+    args.append("-C");
+    args.append(path);
+    args.append("platform=windows");
+    dir->change_dir("/editor");
+    Godot::print(dir->get_current_dir());
+    cmd->execute("scons", args);
+    dir->free();
+}
+
+void EditorFile::build_rust_project()
+{
+
 }
 
 void EditorFile::open_file(String path)
@@ -117,7 +151,7 @@ void EditorFile::open_file(String path)
     {
         icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/file.svg", "Texture");
     }
-    
+
     this->current_editor_instance = cast_to<CodeEditor>(((Tabs *)get_node("TabContainer"))->get_child(this->tab_number - 1));
     ((Tabs *)get_node("TabContainer"))->add_tab(this->file_name, icon);
     ((Tabs *)get_node("TabContainer"))->set_current_tab(this->tab_number - 1);
@@ -145,6 +179,12 @@ void EditorFile::_on_NewFile_file_selected(String path)
 
 void EditorFile::_on_OpenFile_file_selected(String path)
 {
+    int file_extension_size = path.split(".").size();
+    String file_extension = path.split(".")[file_extension_size - 1];
+    if (file_extension == "gdnproj")
+    {
+        this->project_config = path;
+    }
     open_file(path);
 }
 
@@ -442,7 +482,8 @@ void EditorFile::create_new_project()
             file->close();
 
             file->open(path + "/settings.gdnproj", File::WRITE);
-            file->store_string("language=\"c++\"\n\n"
+            file->store_string("[settings]\n"
+                               "language=\"c++\"\n\n"
                                "path=\"" +
                                path + "\"\n"
                                       "sources_folder=\"" +
@@ -453,6 +494,7 @@ void EditorFile::create_new_project()
                                           "linker_folders=\"\"");
             file->close();
 
+            this->project_config = path + "/settings.gdnproj";
             open_file(path + "/" + source_folder + "/main.cpp");
             file->free();
             dir->free();
@@ -494,13 +536,15 @@ void EditorFile::create_new_project()
         file->close();
 
         file->open(path + project_name + "/settings.gdnproj", File::WRITE);
-        file->store_string("language=\"rust\"\n\n"
+        file->store_string("[settings]\n"
+                           "language=\"rust\"\n\n"
                            "gnative_version=\"" +
                            gdn_version + "\"\n"
                                          "path=\"" +
                            path + project_name + "\"\n");
         file->close();
 
+        this->project_config = path + "/settings.gdnproj";
         open_file(path + "/" + project_name + "/src/lib.rs");
         file->free();
         break;
@@ -518,6 +562,8 @@ void EditorFile::_register_methods()
     register_method((char *)"create_shortcuts", &EditorFile::create_shortcuts);
     register_method((char *)"create_new_class", &EditorFile::create_new_class);
     register_method((char *)"create_new_project", &EditorFile::create_new_project);
+    register_method((char *)"build_cpp_project", &EditorFile::build_cpp_project);
+    register_method((char *)"build_rust_project", &EditorFile::build_rust_project);
 
     register_method((char *)"_on_NewFile_file_selected", &EditorFile::_on_NewFile_file_selected);
     register_method((char *)"_on_OpenFile_file_selected", &EditorFile::_on_OpenFile_file_selected);

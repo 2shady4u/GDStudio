@@ -410,6 +410,12 @@ margin_right = 227.0
 margin_bottom = 20.0
 text = "gdnproj"
 
+[node name="BuildWarning" type="AcceptDialog" parent="."]
+margin_right = 94.0
+margin_bottom = 58.0
+window_title = "¡Alerta!"
+dialog_text = "You need to open a project file to use the build command"
+
 [connection signal="tab_changed" from="TabContainer" to="." method="_on_TabContainer_tab_changed"]
 [connection signal="tab_close" from="TabContainer" to="." method="_on_TabContainer_tab_close"]
 [connection signal="file_selected" from="NewFile" to="." method="_on_NewFile_file_selected"]
