@@ -92,7 +92,7 @@ void EditorFile::on_project_pressed(int index)
             }
             else if (lang == "rust")
             {
-                build_rust_project();
+                build_rust_project(path);
             }
             proj_file->free();
         }
@@ -111,9 +111,17 @@ void EditorFile::build_cpp_project(String path)
     cmd->execute("scons", args);
 }
 
-void EditorFile::build_rust_project()
+void EditorFile::build_rust_project(String path)
 {
+    OS *cmd;
+    PoolStringArray args;
+    String os_name = cmd->get_name();
+    String platform = "platform=" + this->current_editor_instance->get_build_platform_cpp();
 
+    args.append("build");
+    
+    args.append("--manifest-path="+path+"/Cargo.toml");
+    cmd->execute("cargo", args);
 }
 
 void EditorFile::open_file(String path)
@@ -533,7 +541,7 @@ void EditorFile::create_new_project()
         file->store_string(final_string);
         file->close();
 
-        file->open(path + project_name + "/settings.gdnproj", File::WRITE);
+        file->open(path + "/" + project_name + "/settings.gdnproj", File::WRITE);
         file->store_string("[settings]\n"
                            "language=\"rust\"\n\n"
                            "gnative_version=\"" +
@@ -542,7 +550,7 @@ void EditorFile::create_new_project()
                            path + project_name + "\"\n");
         file->close();
 
-        this->project_config = path + "/settings.gdnproj";
+        this->project_config = path + "/" + project_name + "/settings.gdnproj";
         open_file(path + "/" + project_name + "/src/lib.rs");
         file->free();
         break;
