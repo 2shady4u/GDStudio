@@ -1,7 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://addons/cpp_file_editor/Scripts/native/editor_file.gdns" type="Script" id=1]
 [ext_resource path="res://addons/cpp_file_editor/Fonts/RobotoSlab-VariableFont_wght.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://addons/cpp_file_editor/Icons/rust-plain.svg" type="Texture" id=3]
+[ext_resource path="res://addons/cpp_file_editor/Icons/cplusplus-original.svg" type="Texture" id=4]
 
 [sub_resource type="DynamicFont" id=1]
 size = 14
@@ -140,11 +142,13 @@ __meta__ = {
 [node name="ClassType" type="OptionButton" parent="ProjectManager/TabContainer/NewClass/ClassType"]
 margin_left = 60.0
 margin_top = -8.0
-margin_right = 178.0
+margin_right = 206.0
 margin_bottom = 20.0
 text = "GDNative C++"
+icon = ExtResource( 4 )
 align = 1
-items = [ "GDNative C++", null, false, 0, null, "GDNative Rust", null, false, 1, null ]
+expand_icon = true
+items = [ "GDNative C++", ExtResource( 4 ), false, 0, null, "GDNative Rust", ExtResource( 3 ), false, 1, null ]
 selected = 0
 
 [node name="Inherit" type="Label" parent="ProjectManager/TabContainer/NewClass"]
@@ -160,7 +164,7 @@ __meta__ = {
 [node name="Inherits" type="OptionButton" parent="ProjectManager/TabContainer/NewClass/Inherit"]
 margin_left = 60.0
 margin_top = -8.0
-margin_right = 178.0
+margin_right = 207.0
 margin_bottom = 20.0
 text = "Node"
 items = [ "Node", null, false, 0, null, "Spatial", null, false, 1, null, "Control", null, false, 2, null ]
@@ -258,8 +262,10 @@ margin_top = -8.0
 margin_right = 176.0
 margin_bottom = 20.0
 text = "GDNative C++"
+icon = ExtResource( 4 )
 align = 1
-items = [ "GDNative C++", null, false, 0, null, "GDNative Rust", null, false, 1, null ]
+expand_icon = true
+items = [ "GDNative C++", ExtResource( 4 ), false, 0, null, "GDNative Rust", ExtResource( 3 ), false, 1, null ]
 selected = 0
 
 [node name="PathLabel" type="Label" parent="ProjectManager/TabContainer/NewProject"]
@@ -350,7 +356,7 @@ margin_left = 72.0
 margin_top = 79.0
 margin_right = 517.0
 margin_bottom = 293.0
-window_title = "Open a Folder"
+window_title = "Abrir un Directorio"
 mode = 2
 access = 2
 current_dir = "/Work/Godot/Code-Editor"

@@ -451,7 +451,7 @@ void EditorFile::create_new_project()
         }
         file->close();
 
-        file->open(path + "/" + ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/Rust/Name/Name")))->get_text() + "/Cargo.toml", File::WRITE);
+        file->open(path + "/" + project_name + "/Cargo.toml", File::WRITE);
         file->store_string(final_string);
         file->close();
 
