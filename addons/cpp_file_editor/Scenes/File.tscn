@@ -76,7 +76,10 @@ margin_right = 580.0
 margin_bottom = 250.0
 window_title = "Abrir un Archivo"
 mode = 0
-filters = PoolStringArray( "*.cpp", "*.hpp", "*.rs" )
+access = 2
+filters = PoolStringArray( "*.gdnproj", "*.cpp", "*.hpp", "*.rs" )
+current_dir = "/Work/Godot/Code-Editor"
+current_path = "/Work/Godot/Code-Editor/"
 
 [node name="ProjectManager" type="WindowDialog" parent="."]
 margin_right = 580.0

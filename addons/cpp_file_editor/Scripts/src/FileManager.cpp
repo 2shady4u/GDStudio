@@ -81,7 +81,8 @@ void EditorFile::open_file(String path)
     cast_to<CodeEditor>(new_instanced_scene)->set_initial_content(content);
     this->tab_number = ((Tabs *)get_node("TabContainer"))->get_child_count();
     this->file_path = path;
-    this->file_name = path.split("//")[1];
+    int name_split_size = path.split("/").size();
+    this->file_name = path.split("/")[name_split_size - 1];
     int path_split_size = this->file_name.split(".").size();
     String file_extension = this->file_name.split(".")[path_split_size - 1];
     Ref<Texture> icon;
@@ -436,6 +437,7 @@ void EditorFile::create_new_project()
                                           "linker_folders=\"\"");
             file->close();
 
+            open_file(path + "/" + source_folder + "/main.cpp");
             file->free();
             dir->free();
         }
@@ -483,6 +485,7 @@ void EditorFile::create_new_project()
                            path + project_name + "\n");
         file->close();
 
+        open_file(path + "/" + project_name + "/src/lib.rs");
         file->free();
         break;
     }
