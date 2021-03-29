@@ -5,6 +5,7 @@
 #include <String.hpp>
 #include <Tabs.hpp>
 #include <Texture.hpp>
+#include <TextureRect.hpp>
 #include <MenuButton.hpp>
 #include <File.hpp>
 #include <FileDialog.hpp>
@@ -81,8 +82,21 @@ void EditorFile::open_file(String path)
     this->tab_number = ((Tabs *)get_node("TabContainer"))->get_child_count();
     this->file_path = path;
     this->file_name = path.split("//")[1];
+    int path_split_size = this->file_name.split(".").size();
+    String file_extension = this->file_name.split(".")[path_split_size - 1];
+    Ref<Texture> icon;
+
+    if (file_extension == "cpp")
+    {
+        icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/cplusplus-original.svg", "Texture");
+    }
+    else if (file_extension == "rs")
+    {
+        icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/rust-plain.svg", "Texture");
+    }
+    
     this->current_editor_instance = cast_to<CodeEditor>(((Tabs *)get_node("TabContainer"))->get_child(this->tab_number - 1));
-    ((Tabs *)get_node("TabContainer"))->add_tab(this->file_name);
+    ((Tabs *)get_node("TabContainer"))->add_tab(this->file_name, icon);
     ((Tabs *)get_node("TabContainer"))->set_current_tab(this->tab_number - 1);
     this->instance_defined = true;
 }
