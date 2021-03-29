@@ -7,6 +7,7 @@
 #include <InputEventKey.hpp>
 #include <GlobalConstants.hpp>
 #include <Input.hpp>
+#include <OptionButton.hpp>
 
 #include "CodeEditor.hpp"
 using namespace godot;
@@ -74,12 +75,12 @@ void CodeEditor::setup_language(String lang)
     else if (lang == "rust")
     {
         Array keywords = Array::make("alignof", "as", "be", "box", "break", "const", "continue", "crate",
-        "do", "else", "enum", "extern", "false", "fn", "for", "if", "impl", "in", "let", "loop",
-        "match", "mod", "mut", "offsetof", "once", "priv", "proc", "pub", "pure", "ref", "return", "self",
-        "sizeof", "static", "struct", "super", "trait", "true", "type", "typeof", "unsafe", "unsized",
-        "use", "virtual", "while", "yield");
-        Array types = Array::make("bool", "char", "f32", "f64", "i8", "i16", "i32", "i64", 
-        "str", "u8", "u16", "u32", "u64", "Self");
+                                     "do", "else", "enum", "extern", "false", "fn", "for", "if", "impl", "in", "let", "loop",
+                                     "match", "mod", "mut", "offsetof", "once", "priv", "proc", "pub", "pure", "ref", "return", "self",
+                                     "sizeof", "static", "struct", "super", "trait", "true", "type", "typeof", "unsafe", "unsized",
+                                     "use", "virtual", "while", "yield");
+        Array types = Array::make("bool", "char", "f32", "f64", "i8", "i16", "i32", "i64",
+                                  "str", "u8", "u16", "u32", "u64", "Self");
         for (int i = 0; i < keywords.size(); i++)
         {
             ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(keywords[i], Color(0, 0, 0.5, 1));
@@ -166,9 +167,32 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
     }
 }
 
-void _on_CodeEditor_symbol_lookup(String symbol, int row, int column)
+void CodeEditor::_on_CodeEditor_symbol_lookup(String symbol, int row, int column)
 {
     Godot::print(symbol);
+}
+
+String CodeEditor::get_build_platform_cpp()
+{
+    int index = ((OptionButton *)get_node(NodePath("BuildContainer/Build/CPP/Platform/Platform")))->get_selected_id();
+    switch (index)
+    {
+    case 0:
+        return "windows";
+        break;
+    case 1:
+        return "linux";
+        break;
+    case 2:
+        return "osx";
+        break;
+    case 3:
+        return "android";
+        break;
+    case 4:
+        return "ios";
+        break;
+    }
 }
 
 void CodeEditor::_register_methods()
@@ -180,6 +204,7 @@ void CodeEditor::_register_methods()
     register_method((char *)"get_content", &CodeEditor::get_content);
     register_method((char *)"save_contents", &CodeEditor::save_contents);
     register_method((char *)"get_text_changed", &CodeEditor::get_text_changed);
+    register_method((char *)"get_build_platform_cpp", &CodeEditor::get_build_platform_cpp);
     register_method((char *)"_on_CodeEditor_text_changed", &CodeEditor::_on_CodeEditor_text_changed);
     register_method((char *)"_on_CodeEditor_gui_input", &CodeEditor::_on_CodeEditor_gui_input);
 }
