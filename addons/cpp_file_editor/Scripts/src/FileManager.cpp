@@ -94,6 +94,10 @@ void EditorFile::open_file(String path)
     {
         icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/rust-plain.svg", "Texture");
     }
+    else
+    {
+        icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/file.svg", "Texture");
+    }
     
     this->current_editor_instance = cast_to<CodeEditor>(((Tabs *)get_node("TabContainer"))->get_child(this->tab_number - 1));
     ((Tabs *)get_node("TabContainer"))->add_tab(this->file_name, icon);

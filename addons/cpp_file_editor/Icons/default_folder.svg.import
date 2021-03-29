@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/cplusplus-original.svg-d94601ec7a448521a30ab700c8ff0b6f.stex"
+path="res://.import/default_folder.svg-8b17886c0db73fc75ab931e831196cf4.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/cpp_file_editor/Icons/cplusplus-original.svg"
-dest_files=[ "res://.import/cplusplus-original.svg-d94601ec7a448521a30ab700c8ff0b6f.stex" ]
+source_file="res://addons/cpp_file_editor/Icons/default_folder.svg"
+dest_files=[ "res://.import/default_folder.svg-8b17886c0db73fc75ab931e831196cf4.stex" ]
 
 [params]
 
@@ -31,4 +31,4 @@ process/invert_color=false
 stream=false
 size_limit=0
 detect_3d=true
-svg/scale=0.145
+svg/scale=0.565
