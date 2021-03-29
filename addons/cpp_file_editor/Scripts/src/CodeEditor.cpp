@@ -181,7 +181,7 @@ String CodeEditor::get_build_platform_cpp()
         return "windows";
         break;
     case 1:
-        return "linux";
+        return "x11";
         break;
     case 2:
         return "osx";

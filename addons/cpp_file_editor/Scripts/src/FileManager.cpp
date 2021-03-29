@@ -104,9 +104,10 @@ void EditorFile::build_cpp_project(String path)
 {
     OS *cmd;
     PoolStringArray args;
+    String platform = "platform=" + this->current_editor_instance->get_build_platform_cpp();
     args.append("-C");
     args.append(path);
-    args.append("platform=windows");
+    args.append(platform);
     cmd->execute("scons", args);
 }
 
