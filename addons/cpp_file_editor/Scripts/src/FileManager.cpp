@@ -103,15 +103,11 @@ void EditorFile::on_project_pressed(int index)
 void EditorFile::build_cpp_project(String path)
 {
     OS *cmd;
-    Directory *dir = Directory::_new();
     PoolStringArray args;
     args.append("-C");
     args.append(path);
     args.append("platform=windows");
-    dir->change_dir("/editor");
-    Godot::print(dir->get_current_dir());
     cmd->execute("scons", args);
-    dir->free();
 }
 
 void EditorFile::build_rust_project()
@@ -457,6 +453,7 @@ void EditorFile::create_new_project()
                                           "env.Append(CCFLAGS=[\"-EHsc\", \"-D_DEBUG\", \"/MDd\"])\n\t"
                                           "else:\n\t\t"
                                           "env.Append(CCFLAGS=[\"-O2\", \"-EHsc\", \"-DNDEBUG\", \"/MDd\"])\n\n"
+                                          "def add_sources(sources, dir):\n\t"
                                           "for f in os.listdir(dir):\n\t\t"
                                           "if f.endswith(\".cpp\"):\n\t\t\t"
                                           "sources.append(dir + \"/\" + f)\n\n"
@@ -466,7 +463,7 @@ void EditorFile::create_new_project()
                                           "godot_bindings_path + \"/include\",\n\t\t"
                                           "godot_bindings_path + \"/include/gen/\",\n\t\t"
                                           "godot_bindings_path + \"/include/core/\",\n\t"
-                                          "],\n)"
+                                          "],\n)\n\n"
                                           "if target == \"debug\":\n\t"
                                           "env.Append(LIBS=[\"libgodot-cpp." +
                                scons_platform + ".debug.64\"])\n"
@@ -476,7 +473,7 @@ void EditorFile::create_new_project()
                                                 "env.Append(LIBPATH=[godot_bindings_path + \"/bin/\"])\n\n"
                                                 "sources = []\n"
                                                 "add_sources(sources, \"" +
-                               source_folder + ")\n\n"
+                               source_folder + "\")\n\n"
                                                "library = env.SharedLibrary(target=\"bin/libconstructor\", source=sources)\n"
                                                "Default(library)");
             file->close();
