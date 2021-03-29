@@ -67,7 +67,6 @@ text = "Project"
 margin_right = 580.0
 margin_bottom = 250.0
 window_title = "Guardar un Archivo"
-filters = PoolStringArray( "cpp", "hpp", "rs" )
 __meta__ = {
 "_edit_use_anchors_": false
 }
