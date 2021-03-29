@@ -116,11 +116,33 @@ void EditorFile::build_rust_project(String path)
     OS *cmd;
     PoolStringArray args;
     String os_name = cmd->get_name();
-    String platform = "platform=" + this->current_editor_instance->get_build_platform_cpp();
+    
+    String platform = this->current_editor_instance->get_build_platform_cpp();
 
     args.append("build");
-    
-    args.append("--manifest-path="+path+"/Cargo.toml");
+    args.append("--manifest-path=" + path + "/Cargo.toml");
+
+    if (platform == "windows")
+    {
+        if (os_name != "windows")
+        {
+            args.append("--target=x86_64-pc-windows-msvc");
+        }
+    }
+    else if (platform == "x11")
+    {
+        if (os_name != "x11")
+        {
+            args.append("--target=x86_64-unknown-linux-gnu");
+        }
+    }
+    else if (platform == "osx")
+    {
+        if (os_name != "osx")
+        {
+            args.append("--target=x86_64-apple-darwin");
+        }
+    }
     cmd->execute("cargo", args);
 }
 
