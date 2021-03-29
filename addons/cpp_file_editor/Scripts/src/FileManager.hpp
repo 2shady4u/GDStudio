@@ -21,6 +21,7 @@ public:
     void _process();
     void open_file(String);
     void on_file_pressed(int);
+    void on_project_pressed(int);
     void save_file();
     void create_shortcuts();
     void create_new_class();

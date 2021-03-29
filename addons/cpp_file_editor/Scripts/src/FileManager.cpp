@@ -20,6 +20,7 @@
 #include <Directory.hpp>
 #include <OS.hpp>
 #include <PoolArrays.hpp>
+#include <ConfigFile.hpp>
 
 #include "FileManager.hpp"
 using namespace godot;
@@ -41,6 +42,7 @@ void EditorFile::_ready()
 {
     this->tabNode = ((Tabs *)get_node("TabContainer"));
     ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->connect("id_pressed", this, "on_file_pressed");
+    ((MenuButton *)get_node(NodePath("TopBar/Project")))->get_popup()->connect("id_pressed", this, "on_project_pressed");
     create_shortcuts();
 }
 
@@ -65,6 +67,20 @@ void EditorFile::on_file_pressed(int index)
         break;
     case 5:
         Godot::print("Save as");
+        break;
+    }
+}
+
+void EditorFile::on_project_pressed(int index)
+{
+    switch (index)
+    {
+    case 0:
+        ConfigFile *proj_file = ConfigFile::_new();
+        proj_file->load("E:/Work/Godot/Code-Editor/editor/settings.gdnproj");
+        String lang = proj_file->get_value("settings", "language");
+        Godot::print(lang);
+        proj_file->free();
         break;
     }
 }
@@ -426,13 +442,13 @@ void EditorFile::create_new_project()
             file->close();
 
             file->open(path + "/settings.gdnproj", File::WRITE);
-            file->store_string("language=c++\n\n"
-                               "path=" +
-                               path + "\n"
-                                      "sources_folder=" +
-                               source_folder + "\n\n"
-                                               "godot_cpp_folder=" +
-                               cpp_path + "\n"
+            file->store_string("language=\"c++\"\n\n"
+                               "path=\"" +
+                               path + "\"\n"
+                                      "sources_folder=\"" +
+                               source_folder + "\"\n\n"
+                                               "godot_cpp_folder=\"" +
+                               cpp_path + "\"\n"
                                           "include_folders=\"\"\n"
                                           "linker_folders=\"\"");
             file->close();
@@ -478,11 +494,11 @@ void EditorFile::create_new_project()
         file->close();
 
         file->open(path + project_name + "/settings.gdnproj", File::WRITE);
-        file->store_string("language=rust\n\n"
-                           "gnative_version = " +
-                           gdn_version + "\n"
-                                         "path=" +
-                           path + project_name + "\n");
+        file->store_string("language=\"rust\"\n\n"
+                           "gnative_version=\"" +
+                           gdn_version + "\"\n"
+                                         "path=\"" +
+                           path + project_name + "\"\n");
         file->close();
 
         open_file(path + "/" + project_name + "/src/lib.rs");
@@ -496,6 +512,7 @@ void EditorFile::_register_methods()
     register_method((char *)"_init", &EditorFile::_init);
     register_method((char *)"_ready", &EditorFile::_ready);
     register_method((char *)"on_file_pressed", &EditorFile::on_file_pressed);
+    register_method((char *)"on_project_pressed", &EditorFile::on_project_pressed);
     register_method((char *)"open_file", &EditorFile::open_file);
     register_method((char *)"save_file", &EditorFile::save_file);
     register_method((char *)"create_shortcuts", &EditorFile::create_shortcuts);
