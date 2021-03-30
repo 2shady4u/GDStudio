@@ -1,28 +1,12 @@
 #include <Godot.hpp>
 #include <Control.hpp>
-#include <PackedScene.hpp>
-#include <ResourceLoader.hpp>
-#include <String.hpp>
-#include <Tabs.hpp>
-#include <Texture.hpp>
-#include <TextureRect.hpp>
-#include <MenuButton.hpp>
 #include <File.hpp>
 #include <FileDialog.hpp>
 #include <WindowDialog.hpp>
+#include <MenuButton.hpp>
 #include <PopupMenu.hpp>
 #include <InputEventKey.hpp>
-#include <TabContainer.hpp>
-#include <LineEdit.hpp>
-#include <AcceptDialog.hpp>
-#include <MenuButton.hpp>
-#include <OptionButton.hpp>
-#include <Directory.hpp>
-#include <OS.hpp>
-#include <PoolArrays.hpp>
-#include <ConfigFile.hpp>
-#include <Object.hpp>
-#include <thread>
+#include <Texture.hpp>
 
 #include "FileManager.hpp"
 #include "ProjectManager.hpp"
@@ -103,28 +87,31 @@ void EditorFile::open_file(String path)
 {
     File *file = File::_new();
     file->open(path, File::READ);
-    Node *new_instanced_scene = code_scene->instance();
+    this->current_editor_instance = cast_to<CodeEditor>(code_scene->instance());
     String content = file->get_as_text();
     file->close();
     file->free();
-    ((Tabs *)get_node("TabContainer"))->add_child(new_instanced_scene, true);
-    cast_to<CodeEditor>(new_instanced_scene)->set_initial_content(content);
+    ((Tabs *)get_node("TabContainer"))->add_child(this->current_editor_instance, true);
+    this->current_editor_instance->set_initial_content(content);
     this->tab_number = ((Tabs *)get_node("TabContainer"))->get_child_count();
     this->file_path = path;
+
     int name_split_size = path.split("/").size();
     this->file_name = path.split("/")[name_split_size - 1];
+
     int path_split_size = this->file_name.split(".").size();
     String file_extension = this->file_name.split(".")[path_split_size - 1];
+
     Ref<Texture> icon;
 
     if (file_extension == "cpp")
     {
-        cast_to<CodeEditor>(new_instanced_scene)->setup_language("cpp");
+        this->current_editor_instance->setup_language("cpp");
         icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/cplusplus-original.svg", "Texture");
     }
     else if (file_extension == "rs")
     {
-        cast_to<CodeEditor>(new_instanced_scene)->setup_language("rust");
+        this->current_editor_instance->setup_language("rust");
         icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/rust-plain.svg", "Texture");
     }
     else
@@ -132,7 +119,6 @@ void EditorFile::open_file(String path)
         icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/file.svg", "Texture");
     }
 
-    this->current_editor_instance = cast_to<CodeEditor>(((Tabs *)get_node("TabContainer"))->get_child(this->tab_number - 1));
     ((Tabs *)get_node("TabContainer"))->add_tab(this->file_name, icon);
     ((Tabs *)get_node("TabContainer"))->set_current_tab(this->tab_number - 1);
     this->instance_defined = true;
