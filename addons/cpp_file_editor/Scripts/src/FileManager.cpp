@@ -575,7 +575,7 @@ void EditorFile::create_new_project()
                            "gnative_version=\"" +
                            gdn_version + "\"\n"
                                          "path=\"" +
-                           path + project_name + "\"\n");
+                           path + "/" + project_name + "\"\n");
         file->close();
 
         this->project_config = path + "/" + project_name + "/settings.gdnproj";
