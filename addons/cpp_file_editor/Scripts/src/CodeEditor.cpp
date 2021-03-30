@@ -174,7 +174,7 @@ void CodeEditor::_on_CodeEditor_symbol_lookup(String symbol, int row, int column
 
 String CodeEditor::get_build_platform_cpp()
 {
-    int index = ((OptionButton *)get_node(NodePath("BuildContainer/Build/CPP/Platform/Platform")))->get_selected_id();
+    int index = ((OptionButton *)get_node(NodePath("BuildContainer/Build/Platform/Platform")))->get_selected_id();
     
     switch (index)
     {
