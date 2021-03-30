@@ -12,6 +12,10 @@ class ProjectManager : public Control
 public:
     ProjectManager();
     ~ProjectManager();
+    void build_cpp_project(String,String);
+    void build_rust_project(String,String);
+
+    static void register_methods();
 
 private:
 };

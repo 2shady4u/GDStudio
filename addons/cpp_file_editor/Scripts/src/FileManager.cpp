@@ -25,6 +25,7 @@
 #include <thread>
 
 #include "FileManager.hpp"
+#include "ProjectManager.hpp"
 using namespace godot;
 
 EditorFile::EditorFile()
@@ -104,67 +105,20 @@ void EditorFile::on_project_pressed(int index)
             String lang = proj_file->get_value("settings", "language");
             String path = proj_file->get_value("settings", "path");
             this->check_thread();
+            String selected_os = this->current_editor_instance->get_build_platform_cpp();
+
             if (lang == "c++")
             {
-                thread = new std::thread(&EditorFile::build_cpp_project, this, path);
+                thread = new std::thread(&ProjectManager::build_cpp_project, this, path);
             }
             else if (lang == "rust")
             {
-                thread = new std::thread(&EditorFile::build_rust_project, this, path);
+                thread = new std::thread(&ProjectManager::build_rust_project, this, path);
             }
             proj_file->free();
         }
         break;
     }
-}
-
-void EditorFile::build_cpp_project(String path)
-{
-    PoolStringArray args;
-    String platform = "platform=" + this->current_editor_instance->get_build_platform_cpp();
-    Array output;
-    args.append("-C");
-    args.append(path);
-    args.append(platform);
-    OS::get_singleton()->execute("scons", args, true, output);
-    for (int i = 0; i < output.size(); i++)
-    {
-        Godot::print(output[i]);
-    }
-}
-
-void EditorFile::build_rust_project(String path)
-{
-    PoolStringArray args;
-    String os_name = OS::get_singleton()->get_name();
-
-    String platform = this->current_editor_instance->get_build_platform_cpp();
-
-    args.append("build");
-    args.append("--manifest-path=" + path + "/Cargo.toml");
-
-    if (platform == "windows")
-    {
-        if (os_name != "windows")
-        {
-            args.append("--target=x86_64-pc-windows-msvc");
-        }
-    }
-    else if (platform == "x11")
-    {
-        if (os_name != "x11")
-        {
-            args.append("--target=x86_64-unknown-linux-gnu");
-        }
-    }
-    else if (platform == "osx")
-    {
-        if (os_name != "osx")
-        {
-            args.append("--target=x86_64-apple-darwin");
-        }
-    }
-    OS::get_singleton()->execute("cargo", args);
 }
 
 void EditorFile::open_file(String path)
@@ -626,8 +580,6 @@ void EditorFile::_register_methods()
     register_method((char *)"create_shortcuts", &EditorFile::create_shortcuts);
     register_method((char *)"create_new_class", &EditorFile::create_new_class);
     register_method((char *)"create_new_project", &EditorFile::create_new_project);
-    register_method((char *)"build_cpp_project", &EditorFile::build_cpp_project);
-    register_method((char *)"build_rust_project", &EditorFile::build_rust_project);
     register_method((char *)"check_thread", &EditorFile::check_thread);
     register_method((char *)"create_rust_project", &EditorFile::create_rust_project);
 

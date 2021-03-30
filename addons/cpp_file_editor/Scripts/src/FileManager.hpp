@@ -27,8 +27,6 @@ public:
     void create_shortcuts();
     void create_new_class();
     void create_new_project();
-    void build_cpp_project(String);
-    void build_rust_project(String);
     void check_thread();
     void create_rust_project(String);
 
