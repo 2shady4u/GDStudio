@@ -103,20 +103,18 @@ void EditorFile::on_project_pressed(int index)
 
 void EditorFile::build_cpp_project(String path)
 {
-    OS *cmd;
     PoolStringArray args;
     String platform = "platform=" + this->current_editor_instance->get_build_platform_cpp();
     args.append("-C");
     args.append(path);
     args.append(platform);
-    cmd->execute("scons", args);
+    OS::get_singleton()->execute("scons", args);
 }
 
 void EditorFile::build_rust_project(String path)
 {
-    OS *cmd;
     PoolStringArray args;
-    String os_name = cmd->get_name();
+    String os_name = OS::get_singleton()->get_name();
 
     String platform = this->current_editor_instance->get_build_platform_cpp();
 
@@ -144,7 +142,7 @@ void EditorFile::build_rust_project(String path)
             args.append("--target=x86_64-apple-darwin");
         }
     }
-    cmd->execute("cargo", args);
+    OS::get_singleton()->execute("cargo", args);
 }
 
 void EditorFile::open_file(String path)
@@ -423,7 +421,6 @@ void EditorFile::create_new_project()
 {
     String path = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/PathLabel/FilePath")))->get_text();
     String cpp_path = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/CPP/cppPath/cppPath")))->get_text();
-    String source_folder = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/CPP/Source/Source")))->get_text();
 
     switch (((OptionButton *)get_node(NodePath("ProjectManager/TabContainer/NewProject/ProjectType/ProjectType")))->get_selected_id())
     {
@@ -436,7 +433,10 @@ void EditorFile::create_new_project()
         {
             OS *cmd;
             String current_platform = "";
-            String get_platform = cmd->get_name();
+            String get_platform = OS::get_singleton()->get_name();
+            
+            String source_folder = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/CPP/Source/Source")))->get_text();
+            String project_name = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/CPP/Name/Name")))->get_text();
 
             if (get_platform == "Windows")
             {
@@ -450,7 +450,7 @@ void EditorFile::create_new_project()
             {
                 current_platform = "osx";
             }
-            
+
             File *file = File::_new();
             Directory *dir = Directory::_new();
             dir->open(path);
@@ -511,8 +511,9 @@ void EditorFile::create_new_project()
                                                   "sources = []\n"
                                                   "add_sources(sources, \"" +
                                source_folder + "\")\n\n"
-                                               "library = env.SharedLibrary(target=\"bin/libconstructor\", source=sources)\n"
-                                               "Default(library)");
+                                               "library = env.SharedLibrary(target=\"bin/lib" +
+                               project_name + "\", source=sources)\n"
+                                              "Default(library)");
             file->close();
 
             file->open(path + "/settings.gdnproj", File::WRITE);
@@ -535,14 +536,13 @@ void EditorFile::create_new_project()
         }
         break;
     case 1:
-        OS *cmd;
         PoolStringArray args;
         String gdn_version = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/Rust/Version/Version")))->get_text();
         String project_name = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/Rust/Name/Name")))->get_text();
         args.append("init");
         args.append("--lib");
         args.append(path + "/" + project_name);
-        cmd->execute("cargo", args);
+        OS::get_singleton()->execute("cargo", args);
 
         File *file = File::_new();
         file->open(path + "/" + project_name + "/Cargo.toml", File::READ);
