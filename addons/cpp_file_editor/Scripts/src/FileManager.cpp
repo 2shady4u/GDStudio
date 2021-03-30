@@ -455,7 +455,7 @@ void EditorFile::create_new_project()
             Directory *dir = Directory::_new();
             dir->open(path);
             dir->make_dir(source_folder);
-            file->open(path + "/" + source_folder + "/main.cpp", File::WRITE);
+            file->open(path + "/" + project_name + "/" + source_folder + "/main.cpp", File::WRITE);
             file->store_string("#include <Godot.hpp>\n\n"
                                "extern \"C\" void GDN_EXPORT godot_gdnative_init(godot_gdnative_init_options *o) {\n\t"
                                "godot::Godot::gdnative_init(o);\n}\n\n"
@@ -464,7 +464,7 @@ void EditorFile::create_new_project()
                                "extern \"C\" void GDN_EXPORT godot_nativescript_init(void *handle) {\n\t"
                                "godot::Godot::nativescript_init(handle);\n}");
             file->close();
-            file->open(path + "/SConstruct", File::WRITE);
+            file->open(path + "/" + project_name + "/SConstruct", File::WRITE);
             file->store_string("import os\n\n"
                                "platform = ARGUMENTS.get(\"p\", \"linux\")\n"
                                "platform = ARGUMENTS.get(\"platform\", platform)\n"
@@ -516,7 +516,7 @@ void EditorFile::create_new_project()
                                               "Default(library)");
             file->close();
 
-            file->open(path + "/settings.gdnproj", File::WRITE);
+            file->open(path + "/" + project_name + "/settings.gdnproj", File::WRITE);
             file->store_string("[settings]\n"
                                "language=\"c++\"\n\n"
                                "path=\"" +
@@ -529,7 +529,7 @@ void EditorFile::create_new_project()
                                           "linker_folders=\"\"");
             file->close();
 
-            this->project_config = path + "/settings.gdnproj";
+            this->project_config = path + "/" + project_name + "/settings.gdnproj";
             open_file(path + "/" + source_folder + "/main.cpp");
             file->free();
             dir->free();
