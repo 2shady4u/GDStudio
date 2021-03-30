@@ -17,6 +17,7 @@ extern "C" void GDN_EXPORT godot_nativescript_init(void *handle) {
 
 	register_class<EditorFile>();
 	register_class<CodeEditor>();
+	register_class<ProjectManager>();
 
 	//register_tool_class<EditorFile>();
 	//register_tool_class<CodeEditor>();
