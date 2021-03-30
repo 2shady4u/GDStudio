@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://addons/cpp_file_editor/Scripts/native/editor_file.gdns" type="Script" id=1]
 [ext_resource path="res://addons/cpp_file_editor/Fonts/RobotoSlab-VariableFont_wght.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://addons/cpp_file_editor/Icons/rust-plain.svg" type="Texture" id=3]
 [ext_resource path="res://addons/cpp_file_editor/Icons/cplusplus-original.svg" type="Texture" id=4]
+[ext_resource path="res://addons/cpp_file_editor/Themes/godot_theme.tres" type="Theme" id=5]
 
 [sub_resource type="DynamicFont" id=1]
 size = 14
@@ -14,6 +15,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -1.0
 margin_right = -1.0
+theme = ExtResource( 5 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -124,10 +126,10 @@ __meta__ = {
 [node name="NewClass" type="Control" parent="ProjectManager/TabContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
+margin_left = 5.0
+margin_top = 29.0
+margin_right = -5.0
+margin_bottom = -5.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
