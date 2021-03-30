@@ -109,6 +109,7 @@ void EditorFile::build_cpp_project(String path)
     args.append(path);
     args.append(platform);
     cmd->execute("scons", args);
+    delete cmd;
 }
 
 void EditorFile::build_rust_project(String path)
@@ -116,7 +117,7 @@ void EditorFile::build_rust_project(String path)
     OS *cmd;
     PoolStringArray args;
     String os_name = cmd->get_name();
-    
+
     String platform = this->current_editor_instance->get_build_platform_cpp();
 
     args.append("build");
@@ -144,6 +145,7 @@ void EditorFile::build_rust_project(String path)
         }
     }
     cmd->execute("cargo", args);
+    delete cmd;
 }
 
 void EditorFile::open_file(String path)
@@ -423,19 +425,7 @@ void EditorFile::create_new_project()
     String path = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/PathLabel/FilePath")))->get_text();
     String cpp_path = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/CPP/cppPath/cppPath")))->get_text();
     String source_folder = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/CPP/Source/Source")))->get_text();
-    String scons_platform = "";
-    switch (((OptionButton *)get_node(NodePath("ProjectManager/TabContainer/NewProject/CPP/Platform/Platform")))->get_selected_id())
-    {
-    case 0:
-        scons_platform = "windows";
-        break;
-    case 1:
-        scons_platform = "linux";
-        break;
-    case 2:
-        scons_platform = "osx";
-        break;
-    }
+
     switch (((OptionButton *)get_node(NodePath("ProjectManager/TabContainer/NewProject/ProjectType/ProjectType")))->get_selected_id())
     {
     case 0:
@@ -445,6 +435,8 @@ void EditorFile::create_new_project()
         }
         else
         {
+            OS *cmd;
+
             File *file = File::_new();
             Directory *dir = Directory::_new();
             dir->open(path);
@@ -459,6 +451,7 @@ void EditorFile::create_new_project()
                                "godot::Godot::nativescript_init(handle);\n}");
             file->close();
             file->open(path + "/SConstruct", File::WRITE);
+            String current_platform = cmd->get_name();
             file->store_string("import os\n\n"
                                "platform = ARGUMENTS.get(\"p\", \"linux\")\n"
                                "platform = ARGUMENTS.get(\"platform\", platform)\n"
@@ -497,13 +490,13 @@ void EditorFile::create_new_project()
                                           "],\n)\n\n"
                                           "if target == \"debug\":\n\t"
                                           "env.Append(LIBS=[\"libgodot-cpp." +
-                               scons_platform + ".debug.64\"])\n"
-                                                "else:\n\t"
-                                                "env.Append(LIBS=[\"libgodot-cpp." +
-                               scons_platform + ".release.64\"])\n"
-                                                "env.Append(LIBPATH=[godot_bindings_path + \"/bin/\"])\n\n"
-                                                "sources = []\n"
-                                                "add_sources(sources, \"" +
+                               current_platform + ".debug.64\"])\n"
+                                                  "else:\n\t"
+                                                  "env.Append(LIBS=[\"libgodot-cpp." +
+                               current_platform + ".release.64\"])\n"
+                                                  "env.Append(LIBPATH=[godot_bindings_path + \"/bin/\"])\n\n"
+                                                  "sources = []\n"
+                                                  "add_sources(sources, \"" +
                                source_folder + "\")\n\n"
                                                "library = env.SharedLibrary(target=\"bin/libconstructor\", source=sources)\n"
                                                "Default(library)");
