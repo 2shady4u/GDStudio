@@ -68,16 +68,18 @@ text = "Project"
 items = [ "Build", null, 0, false, false, 0, 0, null, "", false ]
 
 [node name="NewFile" type="FileDialog" parent="."]
-margin_right = 580.0
-margin_bottom = 250.0
+margin_right = 650.0
+margin_bottom = 350.0
 window_title = "Guardar un Archivo"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="OpenFile" type="FileDialog" parent="."]
-margin_right = 580.0
-margin_bottom = 250.0
+margin_left = 18.0
+margin_top = 30.0
+margin_right = 668.0
+margin_bottom = 380.0
 window_title = "Abrir un Archivo"
 mode = 0
 access = 2
@@ -111,8 +113,8 @@ margin_bottom = 374.0
 text = "Cancel"
 
 [node name="FolderPath" type="FileDialog" parent="ProjectManager"]
-margin_right = 530.0
-margin_bottom = 286.0
+margin_right = 650.0
+margin_bottom = 350.0
 window_title = "Abrir un Directorio"
 mode = 2
 access = 2
@@ -368,8 +370,8 @@ text = "gdncpp"
 [node name="cppPathSearch" type="FileDialog" parent="ProjectManager/TabContainer/NewProject/CPP"]
 margin_left = 72.0
 margin_top = 79.0
-margin_right = 517.0
-margin_bottom = 293.0
+margin_right = 722.0
+margin_bottom = 429.0
 window_title = "Abrir un Directorio"
 mode = 2
 access = 2
