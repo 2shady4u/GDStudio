@@ -4,7 +4,6 @@
 #include <ResourceLoader.hpp>
 #include <String.hpp>
 #include <Tabs.hpp>
-#include <thread>
 
 #include "CodeEditor.hpp"
 using namespace godot;
@@ -25,24 +24,14 @@ public:
     void on_project_pressed(int);
     void save_file();
     void create_shortcuts();
-    void create_new_class();
-    void create_new_project();
-    void check_thread();
-    void create_rust_project(String);
+    void change_project_path(String);
+    String get_project_path();
+    String get_selected_platform();
 
     void _on_NewFile_file_selected(String);
     void _on_OpenFile_file_selected(String);
     void _on_TabContainer_tab_changed(int);
     void _on_TabContainer_tab_close(int);
-    void _on_CancelButton_pressed();
-    void _on_NewClassButton_pressed();
-    void _on_FolderPath_dir_selected(String);
-    void _on_ClassName_text_changed(String);
-    void _on_OkButton_pressed();
-    void _on_ProjectType_item_selected(int);
-    void _on_PathButton_pressed();
-    void _on_SearchCPPButton_pressed();
-    void _on_cppPathSearch_dir_selected(String);
 
     static void _register_methods();
 
@@ -55,5 +44,4 @@ private:
     int tab_number = 0;
     bool instance_defined = false;
     Tabs *tabNode;
-    std::thread *thread = nullptr;
 };

@@ -1,6 +1,8 @@
 #include <Godot.hpp>
+
 #include "FileManager.hpp"
 #include "CodeEditor.hpp"
+#include "ProjectManager.hpp"
 
 using namespace godot;
 

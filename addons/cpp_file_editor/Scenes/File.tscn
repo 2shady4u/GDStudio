@@ -85,12 +85,6 @@ filters = PoolStringArray( "*.gdnproj", "*.cpp", "*.hpp", "*.rs" )
 current_dir = "/Work/Godot/Code-Editor"
 current_path = "/Work/Godot/Code-Editor/"
 
-[node name="BuildWarning" type="AcceptDialog" parent="."]
-margin_right = 393.0
-margin_bottom = 68.0
-window_title = "¡Alerta!"
-dialog_text = "You need to open a project file to use the build command"
-
 [node name="ProjectManager" type="WindowDialog" parent="."]
 margin_right = 580.0
 margin_bottom = 390.0
@@ -124,6 +118,12 @@ mode = 2
 access = 2
 current_dir = "/Work/Godot/Code-Editor"
 current_path = "/Work/Godot/Code-Editor/"
+
+[node name="BuildWarning" type="AcceptDialog" parent="ProjectManager"]
+margin_right = 393.0
+margin_bottom = 74.0
+window_title = "¡Alerta!"
+dialog_text = "You need to open a project file to use the build command"
 
 [node name="TabContainer" type="TabContainer" parent="ProjectManager"]
 anchor_right = 1.0
@@ -425,12 +425,12 @@ text = "gdnproj"
 [connection signal="tab_close" from="TabContainer" to="." method="_on_TabContainer_tab_close"]
 [connection signal="file_selected" from="NewFile" to="." method="_on_NewFile_file_selected"]
 [connection signal="file_selected" from="OpenFile" to="." method="_on_OpenFile_file_selected"]
-[connection signal="pressed" from="ProjectManager/OkButton" to="." method="_on_OkButton_pressed"]
-[connection signal="pressed" from="ProjectManager/CancelButton" to="." method="_on_CancelButton_pressed"]
-[connection signal="dir_selected" from="ProjectManager/FolderPath" to="." method="_on_FolderPath_dir_selected"]
-[connection signal="text_changed" from="ProjectManager/TabContainer/NewClass/ClassName/ClassName" to="." method="_on_ClassName_text_changed"]
-[connection signal="pressed" from="ProjectManager/TabContainer/NewClass/PathLabel/Button" to="." method="_on_NewClassButton_pressed"]
-[connection signal="item_selected" from="ProjectManager/TabContainer/NewProject/ProjectType/ProjectType" to="." method="_on_ProjectType_item_selected"]
-[connection signal="pressed" from="ProjectManager/TabContainer/NewProject/PathLabel/PathButton" to="." method="_on_PathButton_pressed"]
-[connection signal="pressed" from="ProjectManager/TabContainer/NewProject/CPP/cppPath/SearchButton" to="." method="_on_SearchCPPButton_pressed"]
-[connection signal="dir_selected" from="ProjectManager/TabContainer/NewProject/CPP/cppPathSearch" to="." method="_on_cppPathSearch_dir_selected"]
+[connection signal="pressed" from="ProjectManager/OkButton" to="ProjectManager" method="_on_OkButton_pressed"]
+[connection signal="pressed" from="ProjectManager/CancelButton" to="ProjectManager" method="_on_CancelButton_pressed"]
+[connection signal="dir_selected" from="ProjectManager/FolderPath" to="ProjectManager" method="_on_FolderPath_dir_selected"]
+[connection signal="text_changed" from="ProjectManager/TabContainer/NewClass/ClassName/ClassName" to="ProjectManager" method="_on_ClassName_text_changed"]
+[connection signal="pressed" from="ProjectManager/TabContainer/NewClass/PathLabel/Button" to="ProjectManager" method="_on_NewClassButton_pressed"]
+[connection signal="item_selected" from="ProjectManager/TabContainer/NewProject/ProjectType/ProjectType" to="ProjectManager" method="_on_ProjectType_item_selected"]
+[connection signal="pressed" from="ProjectManager/TabContainer/NewProject/PathLabel/PathButton" to="ProjectManager" method="_on_PathButton_pressed"]
+[connection signal="pressed" from="ProjectManager/TabContainer/NewProject/CPP/cppPath/SearchButton" to="ProjectManager" method="_on_SearchCPPButton_pressed"]
+[connection signal="dir_selected" from="ProjectManager/TabContainer/NewProject/CPP/cppPathSearch" to="ProjectManager" method="_on_cppPathSearch_dir_selected"]
