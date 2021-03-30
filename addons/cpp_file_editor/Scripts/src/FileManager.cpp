@@ -434,7 +434,7 @@ void EditorFile::create_new_project()
             OS *cmd;
             String current_platform = "";
             String get_platform = OS::get_singleton()->get_name();
-            
+
             String source_folder = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/CPP/Source/Source")))->get_text();
             String project_name = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/CPP/Name/Name")))->get_text();
 
@@ -454,6 +454,8 @@ void EditorFile::create_new_project()
             File *file = File::_new();
             Directory *dir = Directory::_new();
             dir->open(path);
+            dir->make_dir(project_name);
+            dir->open(path + "/" + project_name);
             dir->make_dir(source_folder);
             file->open(path + "/" + project_name + "/" + source_folder + "/main.cpp", File::WRITE);
             file->store_string("#include <Godot.hpp>\n\n"
@@ -520,8 +522,8 @@ void EditorFile::create_new_project()
             file->store_string("[settings]\n"
                                "language=\"c++\"\n\n"
                                "path=\"" +
-                               path + "\"\n"
-                                      "sources_folder=\"" +
+                               path + "/" + project_name + "\"\n"
+                                                           "sources_folder=\"" +
                                source_folder + "\"\n\n"
                                                "godot_cpp_folder=\"" +
                                cpp_path + "\"\n"
@@ -530,7 +532,7 @@ void EditorFile::create_new_project()
             file->close();
 
             this->project_config = path + "/" + project_name + "/settings.gdnproj";
-            open_file(path + "/" + source_folder + "/main.cpp");
+            open_file(path + "/" + project_name + "/" + source_folder + "/main.cpp");
             file->free();
             dir->free();
         }
