@@ -4,6 +4,7 @@
 #include <ResourceLoader.hpp>
 #include <String.hpp>
 #include <Tabs.hpp>
+#include <thread>
 
 #include "CodeEditor.hpp"
 using namespace godot;
@@ -54,4 +55,5 @@ private:
     int tab_number = 0;
     bool instance_defined = false;
     Tabs *tabNode;
+    std::thread *thread = nullptr;
 };

@@ -22,6 +22,7 @@
 #include <PoolArrays.hpp>
 #include <ConfigFile.hpp>
 #include <Object.hpp>
+#include <thread>
 
 #include "FileManager.hpp"
 using namespace godot;
@@ -32,6 +33,11 @@ EditorFile::EditorFile()
 
 EditorFile::~EditorFile()
 {
+    if (thread != nullptr)
+    {
+        thread->join();
+        delete thread;
+    }
 }
 
 void EditorFile::_init()
@@ -89,7 +95,17 @@ void EditorFile::on_project_pressed(int index)
             String path = proj_file->get_value("settings", "path");
             if (lang == "c++")
             {
-                build_cpp_project(path);
+                if (thread == nullptr)
+                {
+                    thread = new std::thread(&EditorFile::build_cpp_project, this, path);
+                }
+                else
+                {
+                    thread->join();
+                    delete thread;
+                    thread = nullptr;
+                    thread = new std::thread(&EditorFile::build_cpp_project, this, path);
+                }
             }
             else if (lang == "rust")
             {
@@ -105,10 +121,15 @@ void EditorFile::build_cpp_project(String path)
 {
     PoolStringArray args;
     String platform = "platform=" + this->current_editor_instance->get_build_platform_cpp();
+    Array output;
     args.append("-C");
     args.append(path);
     args.append(platform);
-    OS::get_singleton()->execute("scons", args);
+    OS::get_singleton()->execute("scons", args, true, output);
+    for (int i = 0; i < output.size(); i++)
+    {
+        Godot::print(output[i]);
+    }
 }
 
 void EditorFile::build_rust_project(String path)
