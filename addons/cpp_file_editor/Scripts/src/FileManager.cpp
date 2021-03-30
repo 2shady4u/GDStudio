@@ -21,6 +21,7 @@
 #include <OS.hpp>
 #include <PoolArrays.hpp>
 #include <ConfigFile.hpp>
+#include <Object.hpp>
 
 #include "FileManager.hpp"
 using namespace godot;
@@ -109,7 +110,6 @@ void EditorFile::build_cpp_project(String path)
     args.append(path);
     args.append(platform);
     cmd->execute("scons", args);
-    delete cmd;
 }
 
 void EditorFile::build_rust_project(String path)
@@ -145,7 +145,6 @@ void EditorFile::build_rust_project(String path)
         }
     }
     cmd->execute("cargo", args);
-    delete cmd;
 }
 
 void EditorFile::open_file(String path)
@@ -436,7 +435,22 @@ void EditorFile::create_new_project()
         else
         {
             OS *cmd;
+            String current_platform = "";
+            String get_platform = cmd->get_name();
 
+            if (get_platform == "Windows")
+            {
+                current_platform = "windows";
+            }
+            else if (get_platform == "X11")
+            {
+                current_platform = "linux";
+            }
+            else if (get_platform == "OSX")
+            {
+                current_platform = "osx";
+            }
+            
             File *file = File::_new();
             Directory *dir = Directory::_new();
             dir->open(path);
@@ -451,7 +465,6 @@ void EditorFile::create_new_project()
                                "godot::Godot::nativescript_init(handle);\n}");
             file->close();
             file->open(path + "/SConstruct", File::WRITE);
-            String current_platform = cmd->get_name();
             file->store_string("import os\n\n"
                                "platform = ARGUMENTS.get(\"p\", \"linux\")\n"
                                "platform = ARGUMENTS.get(\"platform\", platform)\n"
