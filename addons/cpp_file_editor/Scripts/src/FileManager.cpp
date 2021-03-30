@@ -53,6 +53,16 @@ void EditorFile::_ready()
     create_shortcuts();
 }
 
+void EditorFile::check_thread()
+{
+    if (thread != nullptr)
+    {
+        thread->join();
+        delete thread;
+        thread = nullptr;
+    }
+}
+
 void EditorFile::on_file_pressed(int index)
 {
     switch (index)
@@ -93,23 +103,14 @@ void EditorFile::on_project_pressed(int index)
             proj_file->load(this->project_config);
             String lang = proj_file->get_value("settings", "language");
             String path = proj_file->get_value("settings", "path");
+            this->check_thread();
             if (lang == "c++")
             {
-                if (thread == nullptr)
-                {
-                    thread = new std::thread(&EditorFile::build_cpp_project, this, path);
-                }
-                else
-                {
-                    thread->join();
-                    delete thread;
-                    thread = nullptr;
-                    thread = new std::thread(&EditorFile::build_cpp_project, this, path);
-                }
+                thread = new std::thread(&EditorFile::build_cpp_project, this, path);
             }
             else if (lang == "rust")
             {
-                build_rust_project(path);
+                thread = new std::thread(&EditorFile::build_rust_project, this, path);
             }
             proj_file->free();
         }
@@ -621,6 +622,7 @@ void EditorFile::_register_methods()
     register_method((char *)"create_new_project", &EditorFile::create_new_project);
     register_method((char *)"build_cpp_project", &EditorFile::build_cpp_project);
     register_method((char *)"build_rust_project", &EditorFile::build_rust_project);
+    register_method((char *)"check_thread", &EditorFile::check_thread);
 
     register_method((char *)"_on_NewFile_file_selected", &EditorFile::_on_NewFile_file_selected);
     register_method((char *)"_on_OpenFile_file_selected", &EditorFile::_on_OpenFile_file_selected);
