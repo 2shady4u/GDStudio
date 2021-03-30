@@ -30,6 +30,7 @@ public:
     void build_cpp_project(String);
     void build_rust_project(String);
     void check_thread();
+    void create_rust_project(String);
 
     void _on_NewFile_file_selected(String);
     void _on_OpenFile_file_selected(String);

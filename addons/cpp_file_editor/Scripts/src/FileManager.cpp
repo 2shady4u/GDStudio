@@ -560,55 +560,61 @@ void EditorFile::create_new_project()
         }
         break;
     case 1:
-        PoolStringArray args;
-        String gdn_version = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/Rust/Version/Version")))->get_text();
-        String project_name = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/Rust/Name/Name")))->get_text();
-        args.append("init");
-        args.append("--lib");
-        args.append(path + "/" + project_name);
-        OS::get_singleton()->execute("cargo", args);
-
-        File *file = File::_new();
-        file->open(path + "/" + project_name + "/Cargo.toml", File::READ);
-        int index = 1;
-        String final_string;
-        while (file->eof_reached() == false)
-        {
-            String line = file->get_line();
-            if (index == 8)
-            {
-                line += "[lib]\ncrate-type = [\"cdylib\"]\n";
-            }
-            if (line == "[dependencies]")
-            {
-                line += "\ngdnative = \"" + gdn_version + "\"";
-            }
-            final_string += line;
-            final_string += "\n";
-            index += 1;
-        }
-        file->close();
-
-        file->open(path + "/" + project_name + "/Cargo.toml", File::WRITE);
-        file->store_string(final_string);
-        file->close();
-
-        file->open(path + "/" + project_name + "/settings.gdnproj", File::WRITE);
-        file->store_string("[settings]\n"
-                           "language=\"rust\"\n\n"
-                           "gnative_version=\"" +
-                           gdn_version + "\"\n"
-                                         "path=\"" +
-                           path + "/" + project_name + "\"\n");
-        file->close();
-
-        this->project_config = path + "/" + project_name + "/settings.gdnproj";
-        open_file(path + "/" + project_name + "/src/lib.rs");
-        file->free();
+        this->check_thread();
+        thread = new std::thread(&EditorFile::create_rust_project, this, path);
         break;
     }
 }
 
+void EditorFile::create_rust_project(String path)
+{
+    PoolStringArray args;
+    String gdn_version = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/Rust/Version/Version")))->get_text();
+    String project_name = ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/Rust/Name/Name")))->get_text();
+
+    args.append("init");
+    args.append("--lib");
+    args.append(path + "/" + project_name);
+    OS::get_singleton()->execute("cargo", args);
+    
+    File *file = File::_new();
+    file->open(path + "/" + project_name + "/Cargo.toml", File::READ);
+    int index = 1;
+    String final_string;
+    while (file->eof_reached() == false)
+    {
+        String line = file->get_line();
+        if (index == 8)
+        {
+            line += "[lib]\ncrate-type = [\"cdylib\"]\n";
+        }
+        if (line == "[dependencies]")
+        {
+            line += "\ngdnative = \"" + gdn_version + "\"";
+        }
+        final_string += line;
+        final_string += "\n";
+        index += 1;
+    }
+    file->close();
+
+    file->open(path + "/" + project_name + "/Cargo.toml", File::WRITE);
+    file->store_string(final_string);
+    file->close();
+
+    file->open(path + "/" + project_name + "/settings.gdnproj", File::WRITE);
+    file->store_string("[settings]\n"
+                       "language=\"rust\"\n\n"
+                       "gnative_version=\"" +
+                       gdn_version + "\"\n"
+                                     "path=\"" +
+                       path + "/" + project_name + "\"\n");
+    file->close();
+
+    this->project_config = path + "/" + project_name + "/settings.gdnproj";
+    open_file(path + "/" + project_name + "/src/lib.rs");
+    file->free();
+}
 void EditorFile::_register_methods()
 {
     register_method((char *)"_init", &EditorFile::_init);
@@ -623,6 +629,7 @@ void EditorFile::_register_methods()
     register_method((char *)"build_cpp_project", &EditorFile::build_cpp_project);
     register_method((char *)"build_rust_project", &EditorFile::build_rust_project);
     register_method((char *)"check_thread", &EditorFile::check_thread);
+    register_method((char *)"create_rust_project", &EditorFile::create_rust_project);
 
     register_method((char *)"_on_NewFile_file_selected", &EditorFile::_on_NewFile_file_selected);
     register_method((char *)"_on_OpenFile_file_selected", &EditorFile::_on_OpenFile_file_selected);
