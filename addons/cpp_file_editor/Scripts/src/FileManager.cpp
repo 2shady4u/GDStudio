@@ -33,6 +33,11 @@ void EditorFile::_ready()
     create_shortcuts();
 }
 
+CodeEditor *EditorFile::get_editor_instance()
+{
+    return this->current_editor_instance;
+}
+
 void EditorFile::change_project_path(String path)
 {
     this->project_config = path;
@@ -251,6 +256,7 @@ void EditorFile::_register_methods()
     register_method((char *)"execute_build", &EditorFile::execute_build);
     register_method((char *)"get_project_path", &EditorFile::get_project_path);
     register_method((char *)"get_selected_platform", &EditorFile::get_selected_platform);
+    register_method((char *)"get_editor_instance", &EditorFile::get_editor_instance);
 
     register_method((char *)"_on_NewFile_file_selected", &EditorFile::_on_NewFile_file_selected);
     register_method((char *)"_on_OpenFile_file_selected", &EditorFile::_on_OpenFile_file_selected);

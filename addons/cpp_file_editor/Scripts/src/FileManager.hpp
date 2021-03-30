@@ -28,6 +28,7 @@ public:
     void execute_build();
     String get_project_path();
     String get_selected_platform();
+    CodeEditor *get_editor_instance();
 
     void _on_NewFile_file_selected(String);
     void _on_OpenFile_file_selected(String);

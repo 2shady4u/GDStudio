@@ -23,6 +23,7 @@ public:
     void setup_language(String);
     String get_content();
     void save_contents();
+    void edit_log(String);
     String get_build_platform_cpp();
 
     void _on_CodeEditor_text_changed();

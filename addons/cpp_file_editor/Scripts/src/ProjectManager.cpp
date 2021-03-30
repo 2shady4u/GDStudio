@@ -11,10 +11,9 @@
 #include <FileDialog.hpp>
 #include <WindowDialog.hpp>
 
-#include <thread>
-
 #include "ProjectManager.hpp"
 #include "FileManager.hpp"
+#include "CodeEditor.hpp"
 
 using namespace godot;
 
@@ -75,9 +74,10 @@ void ProjectManager::build_cpp_project(String path, String selected_platform)
     args.append(path);
     args.append(platform);
     OS::get_singleton()->execute("scons", args, true, output);
+    EditorFile *editor = cast_to<EditorFile>(this->get_parent());
     for (int i = 0; i < output.size(); i++)
     {
-        Godot::print(output[i]);
+        editor->get_editor_instance()->edit_log(output[i]);
     }
 }
 
