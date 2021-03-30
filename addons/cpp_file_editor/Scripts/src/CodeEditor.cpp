@@ -10,6 +10,7 @@
 #include <OptionButton.hpp>
 
 #include "CodeEditor.hpp"
+#include "FileManager.hpp"
 using namespace godot;
 
 CodeEditor::CodeEditor()
@@ -199,6 +200,12 @@ String CodeEditor::get_build_platform_cpp()
     }
 }
 
+void CodeEditor::_on_Build_pressed()
+{
+    EditorFile *editor = cast_to<EditorFile>(this->get_parent()->get_parent());
+    editor->execute_build();
+}
+
 void CodeEditor::_register_methods()
 {
     register_method((char *)"_init", &CodeEditor::_init);
@@ -209,6 +216,8 @@ void CodeEditor::_register_methods()
     register_method((char *)"save_contents", &CodeEditor::save_contents);
     register_method((char *)"get_text_changed", &CodeEditor::get_text_changed);
     register_method((char *)"get_build_platform_cpp", &CodeEditor::get_build_platform_cpp);
+
     register_method((char *)"_on_CodeEditor_text_changed", &CodeEditor::_on_CodeEditor_text_changed);
     register_method((char *)"_on_CodeEditor_gui_input", &CodeEditor::_on_CodeEditor_gui_input);
+    register_method((char *)"_on_Build_pressed", &CodeEditor::_on_Build_pressed);
 }

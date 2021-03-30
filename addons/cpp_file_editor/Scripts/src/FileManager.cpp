@@ -38,6 +38,12 @@ void EditorFile::change_project_path(String path)
     this->project_config = path;
 }
 
+void EditorFile::execute_build()
+{
+    ProjectManager *project_manager = cast_to<ProjectManager>((WindowDialog *)get_node(NodePath("ProjectManager")));
+    project_manager->build_task();
+}
+
 String EditorFile::get_project_path()
 {
     return this->project_config;
@@ -78,7 +84,7 @@ void EditorFile::on_project_pressed(int index)
     switch (index)
     {
     case 0:
-        
+        this->execute_build();
         break;
     }
 }
@@ -242,6 +248,7 @@ void EditorFile::_register_methods()
     register_method((char *)"save_file", &EditorFile::save_file);
     register_method((char *)"create_shortcuts", &EditorFile::create_shortcuts);
     register_method((char *)"change_project_path", &EditorFile::change_project_path);
+    register_method((char *)"execute_build", &EditorFile::execute_build);
     register_method((char *)"get_project_path", &EditorFile::get_project_path);
     register_method((char *)"get_selected_platform", &EditorFile::get_selected_platform);
 

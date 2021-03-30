@@ -25,6 +25,7 @@ public:
     void save_file();
     void create_shortcuts();
     void change_project_path(String);
+    void execute_build();
     String get_project_path();
     String get_selected_platform();
 

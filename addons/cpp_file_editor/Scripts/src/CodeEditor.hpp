@@ -30,6 +30,7 @@ public:
 
     bool get_text_changed();
     void _on_CodeEditor_gui_input(InputEvent*);
+    void _on_Build_pressed();
 
     static void _register_methods();
 
