@@ -1,0 +1,31 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://addons/cpp_file_editor/Scripts/native/settings.gdns" type="Script" id=1]
+
+[node name="WindowDialog" type="WindowDialog"]
+visible = true
+margin_right = 810.0
+margin_bottom = 430.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_right = 810.0
+margin_bottom = 430.0
+
+[node name="Settings" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 810.0
+margin_bottom = 430.0
+
+[node name="Container" type="PanelContainer" parent="VBoxContainer/Settings"]
+margin_right = 160.0
+margin_bottom = 430.0
+rect_min_size = Vector2( 160, 430 )
+
+[node name="SettingsTree" type="Tree" parent="VBoxContainer/Settings/Container"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 153.0
+margin_bottom = 423.0

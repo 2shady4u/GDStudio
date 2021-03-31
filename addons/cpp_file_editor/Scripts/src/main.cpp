@@ -3,6 +3,7 @@
 #include "FileManager.hpp"
 #include "CodeEditor.hpp"
 #include "ProjectManager.hpp"
+#include "Settings.hpp"
 
 using namespace godot;
 
@@ -20,6 +21,7 @@ extern "C" void GDN_EXPORT godot_nativescript_init(void *handle) {
 	register_class<EditorFile>();
 	register_class<CodeEditor>();
 	register_class<ProjectManager>();
+	register_class<Settings>();
 
 	//register_tool_class<EditorFile>();
 	//register_tool_class<CodeEditor>();
