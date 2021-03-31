@@ -65,7 +65,14 @@ margin_left = 80.0
 margin_right = 131.0
 margin_bottom = 30.0
 text = "Project"
-items = [ "Build", null, 0, false, false, 0, 0, null, "", false ]
+items = [ "Build", null, 0, false, false, 0, 0, null, "", false, "Clean", null, 0, false, false, 1, 0, null, "", false ]
+
+[node name="Settings" type="MenuButton" parent="TopBar"]
+margin_left = 135.0
+margin_right = 193.0
+margin_bottom = 30.0
+text = "Settings"
+items = [ "Editor", null, 0, false, false, 0, 0, null, "", false ]
 
 [node name="NewFile" type="FileDialog" parent="."]
 margin_right = 650.0
@@ -257,7 +264,7 @@ visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 5.0
-margin_top = 29.0
+margin_top = 32.0
 margin_right = -5.0
 margin_bottom = -5.0
 
