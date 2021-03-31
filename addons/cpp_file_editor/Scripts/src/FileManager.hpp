@@ -22,6 +22,7 @@ public:
     void open_file(String);
     void on_file_pressed(int);
     void on_project_pressed(int);
+    void on_settings_pressed(int);
     void save_file();
     void create_shortcuts();
     void change_project_path(String);
@@ -42,6 +43,7 @@ private:
     String file_path = "";
     String project_config = "";
     Ref<PackedScene> code_scene;
+    Ref<PackedScene> settings_scene;
     CodeEditor *current_editor_instance;
     int tab_number = 0;
     bool instance_defined = false;

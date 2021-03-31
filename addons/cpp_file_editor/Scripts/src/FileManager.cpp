@@ -10,6 +10,7 @@
 
 #include "FileManager.hpp"
 #include "ProjectManager.hpp"
+#include "Settings.hpp"
 using namespace godot;
 
 EditorFile::EditorFile()
@@ -22,6 +23,7 @@ EditorFile::~EditorFile()
 
 void EditorFile::_init()
 {
+    this->settings_scene = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Scenes/Settings.tscn");
     this->code_scene = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Scenes/CodeEditor.tscn");
 }
 
@@ -30,6 +32,7 @@ void EditorFile::_ready()
     this->tabNode = ((Tabs *)get_node("TabContainer"));
     ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->connect("id_pressed", this, "on_file_pressed");
     ((MenuButton *)get_node(NodePath("TopBar/Project")))->get_popup()->connect("id_pressed", this, "on_project_pressed");
+    ((MenuButton *)get_node(NodePath("TopBar/Settings")))->get_popup()->connect("id_pressed", this, "on_settings_pressed");
     create_shortcuts();
 }
 
@@ -94,11 +97,23 @@ void EditorFile::on_project_pressed(int index)
     }
 }
 
+void EditorFile::on_settings_pressed(int index)
+{
+    switch (index)
+    {
+    case 0:
+        Settings *settings = cast_to<Settings>(this->settings_scene->instance());
+        this->add_child(settings, true);
+        settings->show_window();
+        break;
+    }
+}
+
 void EditorFile::open_file(String path)
 {
     File *file = File::_new();
     file->open(path, File::READ);
-    this->current_editor_instance = cast_to<CodeEditor>(code_scene->instance());
+    this->current_editor_instance = cast_to<CodeEditor>(this->code_scene->instance());
     String content = file->get_as_text();
     file->close();
     file->free();
@@ -249,6 +264,7 @@ void EditorFile::_register_methods()
     register_method((char *)"_ready", &EditorFile::_ready);
     register_method((char *)"on_file_pressed", &EditorFile::on_file_pressed);
     register_method((char *)"on_project_pressed", &EditorFile::on_project_pressed);
+    register_method((char *)"on_settings_pressed", &EditorFile::on_settings_pressed);
     register_method((char *)"open_file", &EditorFile::open_file);
     register_method((char *)"save_file", &EditorFile::save_file);
     register_method((char *)"create_shortcuts", &EditorFile::create_shortcuts);
