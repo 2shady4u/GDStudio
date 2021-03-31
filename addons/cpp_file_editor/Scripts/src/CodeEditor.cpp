@@ -32,7 +32,6 @@ void CodeEditor::_ready()
 
 void CodeEditor::set_initial_content(String content)
 {
-
     ((TextEdit *)get_node("Container/CodeEditor"))->set_text(content);
     this->current_content = content;
     this->setup_syntax();
@@ -166,6 +165,27 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
                     ((TextEdit *)get_node("Container/CodeEditor"))->insert_text_at_cursor("{}");
                 }
                 break;
+            case GlobalConstants::KEY_KP_ENTER:
+            case GlobalConstants::KEY_ENTER:
+                ((TextEdit *)get_node("Container/CodeEditor"))->select(line, column, line, column + 1);
+                text = ((TextEdit *)get_node("Container/CodeEditor"))->get_selection_text();
+                if (text == "}")
+                {
+                    int col = 0;
+                    String line_text = ((TextEdit *)get_node("Container/CodeEditor"))->get_line(line);
+                    String insert_tabs = "\n";
+                    while (line_text[col] == '\t')
+                    {
+                        insert_tabs += "\t";
+                        col += 1;
+                    }
+                    ((TextEdit *)get_node("Container/CodeEditor"))->insert_text_at_cursor("\t");
+                    column = ((TextEdit *)get_node("Container/CodeEditor"))->cursor_get_column();
+                    ((TextEdit *)get_node("Container/CodeEditor"))->insert_text_at_cursor(insert_tabs + "}");
+
+                    ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_line(line);
+                }
+                break;
             }
             ((TextEdit *)get_node("Container/CodeEditor"))->select(line, column, line, column);
             ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_column(column);
@@ -181,7 +201,7 @@ void CodeEditor::_on_CodeEditor_symbol_lookup(String symbol, int row, int column
 String CodeEditor::get_build_platform_cpp()
 {
     int index = ((OptionButton *)get_node(NodePath("BuildContainer/Build/Platform/Platform")))->get_selected_id();
-    
+
     switch (index)
     {
     case 0:
