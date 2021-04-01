@@ -382,15 +382,32 @@ void ProjectManager::_on_CancelButton_pressed()
 
 void ProjectManager::_on_FolderPath_dir_selected(String path)
 {
+    File *file = File::_new();
+    int class_lang = ((OptionButton *)get_node(NodePath("TabContainer/NewClass/ClassType/ClassType")))->get_selected_id();
     switch (((TabContainer *)get_node(NodePath("TabContainer")))->get_current_tab())
     {
     case 0:
         ((LineEdit *)get_node(NodePath("TabContainer/NewClass/PathLabel/FilePath")))->set_text(path);
+        if (class_lang == 0)
+        {
+            if (file->file_exists(path + "/main.cpp"))
+            {
+                ((LineEdit *)get_node(NodePath("TabContainer/NewClass/PathLabel/FilePath")))->set_text(path + "/main.cpp");
+            }
+        }
+        else if (class_lang == 1)
+        {
+            if (file->file_exists(path + "/lib.rs"))
+            {
+                ((LineEdit *)get_node(NodePath("TabContainer/NewClass/PathLabel/FilePath")))->set_text(path + "/lib.rs");
+            }
+        }
         break;
     case 1:
         ((LineEdit *)get_node(NodePath("TabContainer/NewProject/PathLabel/FilePath")))->set_text(path);
         break;
     }
+    file->free();
 }
 
 void ProjectManager::_on_NewClassButton_pressed()

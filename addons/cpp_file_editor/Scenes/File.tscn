@@ -95,7 +95,6 @@ current_dir = "/Work/Godot/Code-Editor"
 current_path = "/Work/Godot/Code-Editor/"
 
 [node name="ProjectManager" type="WindowDialog" parent="."]
-visible = true
 margin_right = 580.0
 margin_bottom = 390.0
 script = ExtResource( 6 )
@@ -203,7 +202,7 @@ text = "Name"
 [node name="ClassName" type="LineEdit" parent="ProjectManager/TabContainer/NewClass/ClassName"]
 margin_left = 60.0
 margin_top = -8.0
-margin_right = 178.0
+margin_right = 208.0
 margin_bottom = 20.0
 placeholder_text = "Class Name"
 caret_blink = true
@@ -241,18 +240,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button" type="Button" parent="ProjectManager/TabContainer/NewClass/MainLib"]
-margin_left = 95.0
-margin_top = -4.0
-margin_right = 119.0
-margin_bottom = 21.0
-text = "..."
-
 [node name="MainPath" type="LineEdit" parent="ProjectManager/TabContainer/NewClass/MainLib"]
-margin_left = 130.0
+margin_left = 105.0
 margin_top = -4.0
-margin_right = 468.0
+margin_right = 469.0
 margin_bottom = 21.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Main" type="LineEdit" parent="ProjectManager/TabContainer/NewClass"]
 margin_left = 60.0
