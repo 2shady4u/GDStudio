@@ -117,6 +117,7 @@ void ProjectManager::create_new_class()
 {
     String class_path = ((LineEdit *)get_node(NodePath("TabContainer/NewClass/PathLabel/FilePath")))->get_text();
     String class_name = ((LineEdit *)get_node(NodePath("TabContainer/NewClass/ClassName/ClassName")))->get_text();
+    String main_class = ((LineEdit *)get_node(NodePath("TabContainer/NewClass/MainLib/MainPath")))->get_text();
     int inherit_item = ((OptionButton *)get_node(NodePath("TabContainer/NewClass/Inherit/Inherits")))->get_selected();
     String class_inherit = ((OptionButton *)get_node(NodePath("TabContainer/NewClass/Inherit/Inherits")))->get_item_text(inherit_item);
     int class_lang = ((OptionButton *)get_node(NodePath("TabContainer/NewClass/ClassType/ClassType")))->get_selected_id();
@@ -142,6 +143,36 @@ void ProjectManager::create_new_class()
                                class_name + "::_process);\n}\n\n" + class_name + "::" + class_name +
                                "() {\n}\n\n" + class_name + "::~" + class_name + "() {\n}");
             file->close();
+            if (main_class != "")
+            {
+                file->open(main_class, File::READ);
+
+                int index = 1;
+                String final_string;
+                while (file->eof_reached() == false)
+                {
+                    String line = file->get_line();
+                    if (line == "#include <Godot.hpp>")
+                    {
+                        line += "\n\n#include \"" + class_name + ".h\"";
+                    }
+                    else if (line == "\tgodot::Godot::nativescript_init(handle);")
+                    {
+                        line += "\n\n\tregister_class<" + class_name + ">()\n";
+                    }
+                    else
+                    {
+                        line += "\n";
+                    }
+                    final_string += line;
+                    index += 1;
+                }
+                file->close();
+
+                file->open(main_class, File::WRITE);
+                file->store_string(final_string);
+                file->close();
+            }
         }
         else
         {
@@ -392,14 +423,22 @@ void ProjectManager::_on_FolderPath_dir_selected(String path)
         {
             if (file->file_exists(path + "/main.cpp"))
             {
-                ((LineEdit *)get_node(NodePath("TabContainer/NewClass/PathLabel/FilePath")))->set_text(path + "/main.cpp");
+                ((LineEdit *)get_node(NodePath("TabContainer/NewClass/MainLib/MainPath")))->set_text(path + "/main.cpp");
+            }
+            else
+            {
+                ((LineEdit *)get_node(NodePath("TabContainer/NewClass/MainLib/MainPath")))->set_text("");
             }
         }
         else if (class_lang == 1)
         {
             if (file->file_exists(path + "/lib.rs"))
             {
-                ((LineEdit *)get_node(NodePath("TabContainer/NewClass/PathLabel/FilePath")))->set_text(path + "/lib.rs");
+                ((LineEdit *)get_node(NodePath("TabContainer/NewClass/MainLib/MainPath")))->set_text(path + "/lib.rs");
+            }
+            else
+            {
+                ((LineEdit *)get_node(NodePath("TabContainer/NewClass/MainLib/MainPath")))->set_text("");
             }
         }
         break;
