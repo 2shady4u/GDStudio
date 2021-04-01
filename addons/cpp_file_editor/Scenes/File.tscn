@@ -95,6 +95,7 @@ current_dir = "/Work/Godot/Code-Editor"
 current_path = "/Work/Godot/Code-Editor/"
 
 [node name="ProjectManager" type="WindowDialog" parent="."]
+visible = true
 margin_right = 580.0
 margin_bottom = 390.0
 script = ExtResource( 6 )
@@ -230,21 +231,44 @@ margin_top = -6.0
 margin_right = 448.0
 margin_bottom = 18.0
 
+[node name="MainLib" type="Label" parent="ProjectManager/TabContainer/NewClass"]
+margin_left = 61.0
+margin_top = 225.0
+margin_right = 145.0
+margin_bottom = 250.0
+text = "Main Library"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="ProjectManager/TabContainer/NewClass/MainLib"]
+margin_left = 95.0
+margin_top = -4.0
+margin_right = 119.0
+margin_bottom = 21.0
+text = "..."
+
+[node name="MainPath" type="LineEdit" parent="ProjectManager/TabContainer/NewClass/MainLib"]
+margin_left = 130.0
+margin_top = -4.0
+margin_right = 468.0
+margin_bottom = 21.0
+
 [node name="Main" type="LineEdit" parent="ProjectManager/TabContainer/NewClass"]
 margin_left = 60.0
-margin_top = 210.0
+margin_top = 270.0
 margin_right = 245.0
-margin_bottom = 234.0
+margin_bottom = 295.0
 editable = false
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Include" type="LineEdit" parent="ProjectManager/TabContainer/NewClass"]
-margin_left = 60.0
-margin_top = 240.0
-margin_right = 245.0
-margin_bottom = 264.0
+margin_left = 345.0
+margin_top = 270.0
+margin_right = 530.0
+margin_bottom = 295.0
 editable = false
 __meta__ = {
 "_edit_use_anchors_": false
