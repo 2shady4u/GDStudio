@@ -131,14 +131,14 @@ void ProjectManager::create_new_class()
         File *file = File::_new();
         if (class_lang == 0)
         {
-            file->open(class_path + "/" + class_name + ".h", File::WRITE);
+            file->open(class_path + "/" + class_name + ".hpp", File::WRITE);
             file->store_string("#include <Godot.hpp>\n#include <" + class_inherit + ".hpp>\n\nclass " + class_name + " : public " + class_inherit +
                                "{\n\tGODOT_CLASS(" + class_name + "," + class_inherit + ")" +
                                "\n\nprivate:\n\npublic:\n\tstatic void _register_methods();\n\t" + class_name + "();\n\t~" +
                                class_name + "();\n\n};");
             file->close();
             file->open(class_path + "/" + class_name + ".cpp", File::WRITE);
-            file->store_string("#include <" + class_name + ".h>\n\nusing namespace godot;\n\nvoid " +
+            file->store_string("#include \"" + class_name + ".hpp\"\n\nusing namespace godot;\n\nvoid " +
                                class_name + "::_register_methods() {\n\tregister_method(\"_process\", &" +
                                class_name + "::_process);\n}\n\n" + class_name + "::" + class_name +
                                "() {\n}\n\n" + class_name + "::~" + class_name + "() {\n}");
@@ -154,7 +154,7 @@ void ProjectManager::create_new_class()
                     String line = file->get_line();
                     if (line == "#include <Godot.hpp>")
                     {
-                        line += "\n\n#include \"" + class_name + ".h\"";
+                        line += "\n\n#include \"" + class_name + ".hpp\"";
                     }
                     else if (line == "\tgodot::Godot::nativescript_init(handle);")
                     {
