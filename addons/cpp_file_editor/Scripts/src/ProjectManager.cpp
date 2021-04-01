@@ -318,6 +318,26 @@ void ProjectManager::create_rust_project(String path)
     file->store_string(final_string);
     file->close();
 
+    file->open(path + "/" + project_name + "/src/lib.rs", File::WRITE);
+    file->store_string("use gdnative::prelude::*;\n\n"
+                       "#[derive(NativeClass)]\n"
+                       "#[inherit(Node)]\n"
+                       "struct HelloWorld;\n\n"
+                       "#[gdnative::methods]\n"
+                       "impl HelloWorld {\n\t"
+                       "fn new(_owner: &Node) -> Self {\n\t\t"
+                       "HelloWorld\n\t"
+                       "}\n\n\t"
+                       "#[export]\n\t"
+                       "fn _ready(&self, _owner: &Node) {\n\t\t"
+                       "godot_print!(\"hello, world.\")\n\t"
+                       "}\n"
+                       "}\n\n"
+                       "fn init(handle: InitHandle) {\n\t"
+                       "handle.add_class::<HelloWorld>();\n"
+                       "}\n\n");
+    file->close();
+
     file->open(path + "/" + project_name + "/settings.gdnproj", File::WRITE);
     file->store_string("[settings]\n"
                        "language=\"rust\"\n\n"
@@ -326,7 +346,6 @@ void ProjectManager::create_rust_project(String path)
                                      "path=\"" +
                        path + "/" + project_name + "\"\n");
     file->close();
-
     cast_to<EditorFile>(this->get_parent())->change_project_path(path + "/" + project_name + "/settings.gdnproj");
     cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/src/lib.rs");
     file->free();

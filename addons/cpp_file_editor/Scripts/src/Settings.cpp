@@ -22,7 +22,9 @@ void Settings::_ready()
 {
     tree = ((Tree *)get_node(NodePath("VBoxContainer/Settings/Container/SettingsTree")));
     TreeItem *general = tree->create_item();
+    TreeItem *editor = tree->create_item();
     general->set_text(0, "General");
+    editor->set_text(0, "Editor");
 }
 
 void Settings::show_window()
