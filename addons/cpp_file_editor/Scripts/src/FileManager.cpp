@@ -34,7 +34,7 @@ void EditorFile::_ready()
     ((MenuButton *)get_node(NodePath("TopBar/Project")))->get_popup()->connect("id_pressed", this, "on_project_pressed");
     ((MenuButton *)get_node(NodePath("TopBar/Settings")))->get_popup()->connect("id_pressed", this, "on_settings_pressed");
     create_shortcuts();
-    load_user_data();
+    create_user_data();
 }
 
 CodeEditor *EditorFile::get_editor_instance()
@@ -53,7 +53,7 @@ void EditorFile::execute_build()
     project_manager->build_task();
 }
 
-void EditorFile::load_user_data()
+void EditorFile::create_user_data()
 {
     File *file = File::_new();
     if (file->file_exists("user://editor.cfg") == false)
@@ -281,7 +281,7 @@ void EditorFile::_register_methods()
     register_method((char *)"create_shortcuts", &EditorFile::create_shortcuts);
     register_method((char *)"change_project_path", &EditorFile::change_project_path);
     register_method((char *)"execute_build", &EditorFile::execute_build);
-    register_method((char *)"load_user_data", &EditorFile::load_user_data);
+    register_method((char *)"create_user_data", &EditorFile::create_user_data);
     register_method((char *)"get_project_path", &EditorFile::get_project_path);
     register_method((char *)"get_selected_platform", &EditorFile::get_selected_platform);
     register_method((char *)"get_editor_instance", &EditorFile::get_editor_instance);

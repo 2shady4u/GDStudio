@@ -14,6 +14,7 @@ public:
     void _init();
     void _ready();
     void show_window();
+    void set_editor_data();
 
     static void _register_methods();
 
