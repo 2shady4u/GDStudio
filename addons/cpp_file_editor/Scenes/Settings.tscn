@@ -2,8 +2,7 @@
 
 [ext_resource path="res://addons/cpp_file_editor/Scripts/native/settings.gdns" type="Script" id=1]
 
-[node name="WindowDialog" type="WindowDialog"]
-visible = true
+[node name="Settings" type="WindowDialog"]
 margin_right = 810.0
 margin_bottom = 430.0
 script = ExtResource( 1 )
@@ -19,13 +18,30 @@ margin_bottom = 430.0
 margin_right = 810.0
 margin_bottom = 430.0
 
-[node name="Container" type="PanelContainer" parent="VBoxContainer/Settings"]
+[node name="CategoryContainer" type="PanelContainer" parent="VBoxContainer/Settings"]
 margin_right = 160.0
 margin_bottom = 430.0
 rect_min_size = Vector2( 160, 430 )
 
-[node name="SettingsTree" type="Tree" parent="VBoxContainer/Settings/Container"]
+[node name="CategoryTree" type="Tree" parent="VBoxContainer/Settings/CategoryContainer"]
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 153.0
 margin_bottom = 423.0
+
+[node name="SettingsContainer" type="PanelContainer" parent="VBoxContainer/Settings"]
+margin_left = 164.0
+margin_right = 806.0
+margin_bottom = 430.0
+rect_min_size = Vector2( 642, 0 )
+
+[node name="EditorTree" type="Tree" parent="VBoxContainer/Settings/SettingsContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 635.0
+margin_bottom = 423.0
+columns = 2
+hide_root = true
+__meta__ = {
+"_edit_use_anchors_": false
+}

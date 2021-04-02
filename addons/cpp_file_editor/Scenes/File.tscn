@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://addons/cpp_file_editor/Scripts/native/editor_file.gdns" type="Script" id=1]
 [ext_resource path="res://addons/cpp_file_editor/Fonts/RobotoSlab-VariableFont_wght.ttf" type="DynamicFontData" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://addons/cpp_file_editor/Icons/cplusplus-original.svg" type="Texture" id=4]
 [ext_resource path="res://addons/cpp_file_editor/Themes/godot_theme.tres" type="Theme" id=5]
 [ext_resource path="res://addons/cpp_file_editor/Scripts/native/project_manager.gdns" type="Script" id=6]
+[ext_resource path="res://addons/cpp_file_editor/Scenes/Settings.tscn" type="PackedScene" id=7]
 
 [sub_resource type="DynamicFont" id=1]
 size = 14
@@ -448,6 +449,10 @@ margin_top = -6.0
 margin_right = 227.0
 margin_bottom = 20.0
 text = "gdnproj"
+
+[node name="Settings" parent="." instance=ExtResource( 7 )]
+margin_left = -3.0
+margin_right = 807.0
 
 [connection signal="tab_changed" from="TabContainer" to="." method="_on_TabContainer_tab_changed"]
 [connection signal="tab_close" from="TabContainer" to="." method="_on_TabContainer_tab_close"]

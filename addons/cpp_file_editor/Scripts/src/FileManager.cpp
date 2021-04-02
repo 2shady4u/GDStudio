@@ -102,9 +102,7 @@ void EditorFile::on_settings_pressed(int index)
     switch (index)
     {
     case 0:
-        Settings *settings = cast_to<Settings>(this->settings_scene->instance());
-        this->add_child(settings, true);
-        settings->show_window();
+        ((WindowDialog *)get_node("Settings"))->popup_centered();;
         break;
     }
 }
