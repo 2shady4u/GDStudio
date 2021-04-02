@@ -27,6 +27,7 @@ public:
     void create_shortcuts();
     void change_project_path(String);
     void execute_build();
+    void load_user_data();
     String get_project_path();
     String get_selected_platform();
     CodeEditor *get_editor_instance();
