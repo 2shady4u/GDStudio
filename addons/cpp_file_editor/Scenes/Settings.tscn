@@ -15,25 +15,25 @@ __meta__ = {
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 810.0
-margin_bottom = 431.0
+margin_bottom = 400.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Settings" type="HBoxContainer" parent="VBoxContainer"]
 margin_right = 803.0
-margin_bottom = 424.0
-rect_min_size = Vector2( 0, 424 )
+margin_bottom = 395.0
+rect_min_size = Vector2( 0, 395 )
 
 [node name="CategoryTree" type="Tree" parent="VBoxContainer/Settings"]
 margin_right = 146.0
-margin_bottom = 417.0
+margin_bottom = 395.0
 rect_min_size = Vector2( 146, 0 )
 
 [node name="EditorTree" type="Tree" parent="VBoxContainer/Settings"]
 margin_left = 150.0
 margin_right = 798.0
-margin_bottom = 417.0
+margin_bottom = 395.0
 rect_min_size = Vector2( 648, 0 )
 columns = 2
 hide_folding = true
@@ -42,3 +42,22 @@ drop_mode_flags = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="CenterConfig" type="CenterContainer" parent="VBoxContainer"]
+margin_top = 399.0
+margin_right = 803.0
+margin_bottom = 419.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ConfirmSettings" type="Button" parent="VBoxContainer/CenterConfig"]
+margin_left = 370.0
+margin_right = 432.0
+margin_bottom = 20.0
+text = "Confirm"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="VBoxContainer/CenterConfig/ConfirmSettings" to="." method="_on_ConfirmSettings_pressed"]

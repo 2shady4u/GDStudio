@@ -15,6 +15,9 @@ public:
     void _ready();
     void show_window();
     void set_editor_data();
+    void save_editor_data();
+
+    void _on_ConfirmSettings_pressed();
 
     static void _register_methods();
 

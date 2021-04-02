@@ -70,10 +70,41 @@ void Settings::set_editor_data()
 
     config_file->free();
 }
+
+void Settings::_on_ConfirmSettings_pressed()
+{
+    this->save_editor_data();
+
+    this->hide();
+}
+
+void Settings::save_editor_data()
+{
+    ConfigFile *config_file = ConfigFile::_new();
+    config_file->load("user://editor.cfg");
+    
+    TreeItem *root = tree->get_root();
+    
+    TreeItem *child = root->get_children();
+    config_file->set_value("Editor", "custom_font", child->get_text(1));
+
+    child = child->get_next();
+    config_file->set_value("Editor", "font_size", child->get_range(1));
+
+    child = child->get_next();
+    config_file->set_value("Editor", "custom_theme", child->get_text(1));
+
+    config_file->save("user://editor.cfg");
+    config_file->free();
+}
+
 void Settings::_register_methods()
 {
     register_method((char *)"_init", &Settings::_init);
     register_method((char *)"_ready", &Settings::_ready);
     register_method((char *)"show", &Settings::show_window);
     register_method((char *)"set_editor_data", &Settings::set_editor_data);
+    register_method((char *)"save_editor_data", &Settings::save_editor_data);
+
+    register_method((char *)"_on_ConfirmSettings_pressed", &Settings::_on_ConfirmSettings_pressed);
 }
