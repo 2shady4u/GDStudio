@@ -3,7 +3,6 @@
 [ext_resource path="res://addons/cpp_file_editor/Scripts/native/settings.gdns" type="Script" id=1]
 
 [node name="Settings" type="WindowDialog"]
-visible = true
 margin_right = 810.0
 margin_bottom = 430.0
 window_title = "Settings"

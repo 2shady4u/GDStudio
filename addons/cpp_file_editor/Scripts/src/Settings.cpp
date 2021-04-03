@@ -113,16 +113,29 @@ void Settings::set_cpp_data()
     TreeItem *cpp_version = tree->create_item(root);
     cpp_version->set_text(0, "C++ Version");
 
-    cpp_version->set_cell_mode(1, 4);
+    //cpp_version->set_cell_mode(1, 4);
     cpp_version->set_editable(1, true);
-    cpp_version->set_text(1, "c++14");
+    cpp_version->set_text(1, config_file->get_value("C++", "cpp_version"));
 
     config_file->free();
 }
 
 void Settings::_on_ConfirmSettings_pressed()
 {
-    this->save_editor_data();
+    String selected = ((Tree *)get_node(NodePath("VBoxContainer/Settings/CategoryTree")))->get_selected()->get_text(0);
+
+    if (selected == "Editor")
+    {
+        this->save_editor_data();
+    }
+    else if (selected == "C++")
+    {
+        this->save_cpp_data();
+    }
+    else if (selected == "Rust")
+    {
+        //save rust data
+    }
 
     this->hide();
 }
@@ -131,6 +144,8 @@ void Settings::save_editor_data()
 {
     ConfigFile *config_file = ConfigFile::_new();
     config_file->load("user://editor.cfg");
+
+    tree = ((Tree *)get_node(NodePath("VBoxContainer/Settings/EditorTree")));
 
     TreeItem *root = tree->get_root();
 
@@ -147,6 +162,22 @@ void Settings::save_editor_data()
     config_file->free();
 
     cast_to<EditorFile>(this->get_parent())->load_editor_settings();
+}
+
+void Settings::save_cpp_data()
+{
+    ConfigFile *config_file = ConfigFile::_new();
+    config_file->load("user://editor.cfg");
+
+    tree = ((Tree *)get_node(NodePath("VBoxContainer/Settings/CPPTree")));
+    TreeItem *root = tree->get_root();
+
+    TreeItem *child = root->get_children();
+    config_file->set_value("C++", "cpp_version", child->get_text(1));
+
+    config_file->save("user://editor.cfg");
+    config_file->free();
+
 }
 
 void Settings::_on_EditorTree_button_pressed(TreeItem *item, int column, int id)
