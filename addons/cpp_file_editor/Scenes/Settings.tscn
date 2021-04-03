@@ -71,3 +71,4 @@ current_path = "/Work/Godot/Code-Editor/"
 
 [connection signal="button_pressed" from="VBoxContainer/Settings/EditorTree" to="." method="_on_EditorTree_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/CenterConfig/ConfirmSettings" to="." method="_on_ConfirmSettings_pressed"]
+[connection signal="file_selected" from="OpenFile" to="." method="_on_OpenFile_file_selected"]

@@ -8,6 +8,7 @@
 #include <InputEventKey.hpp>
 #include <Texture.hpp>
 #include <ConfigFile.hpp>
+#include <Theme.hpp>
 
 #include "FileManager.hpp"
 #include "ProjectManager.hpp"
@@ -83,10 +84,11 @@ void EditorFile::load_editor_settings()
         {
             cast_to<CodeEditor>(((Tabs *)get_node("TabContainer"))->get_children()[i])->set_custom_font(this->custom_font);
             cast_to<CodeEditor>(((Tabs *)get_node("TabContainer"))->get_children()[i])->set_font_size(this->font_size);
-            cast_to<CodeEditor>(((Tabs *)get_node("TabContainer"))->get_children()[i])->set_custom_theme(this->custom_theme);
         }
     }
 
+    Ref<Theme> theme = ResourceLoader::get_singleton()->load(this->custom_theme);
+    cast_to<Control>(this)->set_theme(theme);
     config_file->free();
 }
 

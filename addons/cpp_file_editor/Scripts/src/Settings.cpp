@@ -85,9 +85,9 @@ void Settings::save_editor_data()
 {
     ConfigFile *config_file = ConfigFile::_new();
     config_file->load("user://editor.cfg");
-    
+
     TreeItem *root = tree->get_root();
-    
+
     TreeItem *child = root->get_children();
     config_file->set_value("Editor", "custom_font", child->get_text(1));
 
@@ -108,6 +108,7 @@ void Settings::_on_EditorTree_button_pressed(TreeItem *item, int column, int id)
     String text = item->get_text(0);
     if (text == "Custom Font")
     {
+        selected_id = 0;
         PoolStringArray filter;
         filter.append("*.ttf");
         filter.append("*.otf");
@@ -116,10 +117,29 @@ void Settings::_on_EditorTree_button_pressed(TreeItem *item, int column, int id)
     }
     else if (text == "Custom Theme")
     {
+        selected_id = 1;
         PoolStringArray filter;
         filter.append("*.tres");
         ((FileDialog *)get_node(NodePath("OpenFile")))->set_filters(filter);
         ((FileDialog *)get_node(NodePath("OpenFile")))->popup_centered();
+    }
+}
+
+void Settings::_on_OpenFile_file_selected(String path)
+{
+    TreeItem *root = tree->get_root();
+    TreeItem *child = root->get_children();
+    switch (selected_id)
+    {
+    case 0:
+        child->set_text(1, path);
+        break;
+    case 1:
+        child = child->get_next();
+        child = child->get_next();
+        
+        child->set_text(1, path);
+        break;
     }
 }
 
@@ -133,4 +153,5 @@ void Settings::_register_methods()
 
     register_method((char *)"_on_ConfirmSettings_pressed", &Settings::_on_ConfirmSettings_pressed);
     register_method((char *)"_on_EditorTree_button_pressed", &Settings::_on_EditorTree_button_pressed);
+    register_method((char *)"_on_OpenFile_file_selected", &Settings::_on_OpenFile_file_selected);
 }

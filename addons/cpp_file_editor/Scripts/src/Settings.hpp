@@ -19,10 +19,12 @@ public:
 
     void _on_ConfirmSettings_pressed();
     void _on_EditorTree_button_pressed(TreeItem*, int, int);
+    void _on_OpenFile_file_selected(String);
 
     static void _register_methods();
 
 private:
     Tree *tree;
+    int selected_id = -1;
 
 };
