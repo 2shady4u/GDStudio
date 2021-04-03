@@ -74,6 +74,15 @@ void EditorFile::load_editor_settings()
     config_file->load("user://editor.cfg");
     
     this->font_size = config_file->get_value("Editor", "font_size");
+
+    if (this->tab_number > 0)
+    {
+        for (int i = 0; i < this->tab_number; i++)
+        {
+            cast_to<CodeEditor>(((Tabs *)get_node("TabContainer"))->get_children()[i])->set_font_size(this->font_size);
+        }
+    }
+
     config_file->free();
 }
 
