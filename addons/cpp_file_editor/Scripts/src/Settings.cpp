@@ -8,6 +8,7 @@
 #include <ResourceLoader.hpp>
 
 #include "Settings.hpp"
+#include "FileManager.hpp"
 using namespace godot;
 
 Settings::Settings()
@@ -96,6 +97,8 @@ void Settings::save_editor_data()
 
     config_file->save("user://editor.cfg");
     config_file->free();
+
+    cast_to<EditorFile>(this->get_parent())->load_editor_settings();
 }
 
 void Settings::_register_methods()

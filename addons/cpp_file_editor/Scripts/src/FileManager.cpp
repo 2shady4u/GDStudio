@@ -7,6 +7,7 @@
 #include <PopupMenu.hpp>
 #include <InputEventKey.hpp>
 #include <Texture.hpp>
+#include <ConfigFile.hpp>
 
 #include "FileManager.hpp"
 #include "ProjectManager.hpp"
@@ -59,10 +60,21 @@ void EditorFile::create_user_data()
     if (file->file_exists("user://editor.cfg") == false)
     {
         file->open("user://editor.cfg", File::WRITE);
-        file->store_string("[Editor]\ncustom_font=\"\"\nfont_size=16\ncustom_theme=\"\"");
+        file->store_string("[Editor]\ncustom_font=\"\"\nfont_size=14\ncustom_theme=\"\"");
         file->close();
     }
     file->free();
+
+    this->load_editor_settings();
+}
+
+void EditorFile::load_editor_settings()
+{
+    ConfigFile *config_file = ConfigFile::_new();
+    config_file->load("user://editor.cfg");
+    
+    this->font_size = config_file->get_value("Editor", "font_size");
+    config_file->free();
 }
 
 String EditorFile::get_project_path()
@@ -130,6 +142,7 @@ void EditorFile::open_file(String path)
     file->free();
     ((Tabs *)get_node("TabContainer"))->add_child(this->current_editor_instance, true);
     this->current_editor_instance->set_initial_content(content);
+    this->current_editor_instance->set_font_size(this->font_size);
     this->tab_number = ((Tabs *)get_node("TabContainer"))->get_child_count();
     this->file_path = path;
 
@@ -282,6 +295,7 @@ void EditorFile::_register_methods()
     register_method((char *)"change_project_path", &EditorFile::change_project_path);
     register_method((char *)"execute_build", &EditorFile::execute_build);
     register_method((char *)"create_user_data", &EditorFile::create_user_data);
+    register_method((char *)"load_editor_settings", &EditorFile::load_editor_settings);
     register_method((char *)"get_project_path", &EditorFile::get_project_path);
     register_method((char *)"get_selected_platform", &EditorFile::get_selected_platform);
     register_method((char *)"get_editor_instance", &EditorFile::get_editor_instance);

@@ -28,6 +28,7 @@ public:
     void change_project_path(String);
     void execute_build();
     void create_user_data();
+    void load_editor_settings();
     String get_project_path();
     String get_selected_platform();
     CodeEditor *get_editor_instance();
@@ -49,4 +50,5 @@ private:
     int tab_number = 0;
     bool instance_defined = false;
     Tabs *tabNode;
+    int font_size = 0;
 };
