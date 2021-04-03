@@ -15,11 +15,13 @@ public:
     void _ready();
     void show_window();
     void set_editor_data();
+    void set_cpp_data();
     void save_editor_data();
 
     void _on_ConfirmSettings_pressed();
     void _on_EditorTree_button_pressed(TreeItem*, int, int);
     void _on_OpenFile_file_selected(String);
+    void _on_CategoryTree_item_selected();
 
     static void _register_methods();
 

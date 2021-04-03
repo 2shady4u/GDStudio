@@ -52,6 +52,7 @@ void Settings::_ready()
 
     tree->set_hide_root(true);
     this->set_editor_data();
+    this->set_cpp_data();
 }
 
 void Settings::show_window()
@@ -90,6 +91,31 @@ void Settings::set_editor_data()
     theme->set_text(1, custom_theme);
     theme->set_editable(1, true);
     theme->add_button(1, icon, 1);
+
+    config_file->free();
+}
+
+void Settings::set_cpp_data()
+{
+    ConfigFile *config_file = ConfigFile::_new();
+    config_file->load("user://editor.cfg");
+
+    if (config_file->has_section_key("C++", "cpp_version") == false)
+    {
+        config_file->set_value("C++", "cpp_version", "c++14");
+        config_file->save("user://editor.cfg");
+    }
+    String cpp_version_value = config_file->get_value("C++", "cpp_version");
+
+    tree = ((Tree *)get_node(NodePath("VBoxContainer/Settings/CPPTree")));
+
+    TreeItem *root = tree->create_item();
+    TreeItem *cpp_version = tree->create_item(root);
+    cpp_version->set_text(0, "C++ Version");
+
+    cpp_version->set_cell_mode(1, 4);
+    cpp_version->set_editable(1, true);
+    cpp_version->set_text(1, "c++14");
 
     config_file->free();
 }
@@ -163,15 +189,41 @@ void Settings::_on_OpenFile_file_selected(String path)
     }
 }
 
+void Settings::_on_CategoryTree_item_selected()
+{
+    String selected = ((Tree *)get_node(NodePath("VBoxContainer/Settings/CategoryTree")))->get_selected()->get_text(0);
+
+    if (selected == "Editor")
+    {
+        ((Tree *)get_node(NodePath("VBoxContainer/Settings/CPPTree")))->hide();
+        ((Tree *)get_node(NodePath("VBoxContainer/Settings/RustTree")))->hide();
+        ((Tree *)get_node(NodePath("VBoxContainer/Settings/EditorTree")))->show();
+    }
+    else if (selected == "C++")
+    {
+        ((Tree *)get_node(NodePath("VBoxContainer/Settings/RustTree")))->hide();
+        ((Tree *)get_node(NodePath("VBoxContainer/Settings/EditorTree")))->hide();
+        ((Tree *)get_node(NodePath("VBoxContainer/Settings/CPPTree")))->show();
+    }
+    else if (selected == "Rust")
+    {
+        ((Tree *)get_node(NodePath("VBoxContainer/Settings/EditorTree")))->hide();
+        ((Tree *)get_node(NodePath("VBoxContainer/Settings/CPPTree")))->hide();
+        ((Tree *)get_node(NodePath("VBoxContainer/Settings/RustTree")))->show();
+    }
+}
+
 void Settings::_register_methods()
 {
     register_method((char *)"_init", &Settings::_init);
     register_method((char *)"_ready", &Settings::_ready);
     register_method((char *)"show", &Settings::show_window);
     register_method((char *)"set_editor_data", &Settings::set_editor_data);
+    register_method((char *)"set_cpp_data", &Settings::set_cpp_data);
     register_method((char *)"save_editor_data", &Settings::save_editor_data);
 
     register_method((char *)"_on_ConfirmSettings_pressed", &Settings::_on_ConfirmSettings_pressed);
     register_method((char *)"_on_EditorTree_button_pressed", &Settings::_on_EditorTree_button_pressed);
     register_method((char *)"_on_OpenFile_file_selected", &Settings::_on_OpenFile_file_selected);
+    register_method((char *)"_on_CategoryTree_item_selected", &Settings::_on_CategoryTree_item_selected);
 }

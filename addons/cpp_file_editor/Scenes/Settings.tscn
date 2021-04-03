@@ -3,6 +3,7 @@
 [ext_resource path="res://addons/cpp_file_editor/Scripts/native/settings.gdns" type="Script" id=1]
 
 [node name="Settings" type="WindowDialog"]
+visible = true
 margin_right = 810.0
 margin_bottom = 430.0
 window_title = "Settings"
@@ -21,7 +22,7 @@ __meta__ = {
 }
 
 [node name="Settings" type="HBoxContainer" parent="VBoxContainer"]
-margin_right = 803.0
+margin_right = 1450.0
 margin_bottom = 395.0
 rect_min_size = Vector2( 0, 395 )
 
@@ -43,17 +44,37 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="CPPTree" type="Tree" parent="VBoxContainer/Settings"]
+visible = false
+margin_left = 802.0
+margin_right = 1450.0
+margin_bottom = 395.0
+rect_min_size = Vector2( 648, 0 )
+columns = 2
+hide_folding = true
+hide_root = true
+
+[node name="RustTree" type="Tree" parent="VBoxContainer/Settings"]
+visible = false
+margin_left = 150.0
+margin_right = 151.0
+margin_bottom = 395.0
+rect_min_size = Vector2( 648, 0 )
+columns = 2
+hide_folding = true
+hide_root = true
+
 [node name="CenterConfig" type="CenterContainer" parent="VBoxContainer"]
 margin_top = 399.0
-margin_right = 803.0
+margin_right = 1450.0
 margin_bottom = 419.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ConfirmSettings" type="Button" parent="VBoxContainer/CenterConfig"]
-margin_left = 370.0
-margin_right = 432.0
+margin_left = 694.0
+margin_right = 756.0
 margin_bottom = 20.0
 text = "Confirm"
 __meta__ = {
@@ -69,6 +90,7 @@ access = 2
 current_dir = "/Work/Godot/Code-Editor"
 current_path = "/Work/Godot/Code-Editor/"
 
+[connection signal="item_selected" from="VBoxContainer/Settings/CategoryTree" to="." method="_on_CategoryTree_item_selected"]
 [connection signal="button_pressed" from="VBoxContainer/Settings/EditorTree" to="." method="_on_EditorTree_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/CenterConfig/ConfirmSettings" to="." method="_on_ConfirmSettings_pressed"]
 [connection signal="file_selected" from="OpenFile" to="." method="_on_OpenFile_file_selected"]
