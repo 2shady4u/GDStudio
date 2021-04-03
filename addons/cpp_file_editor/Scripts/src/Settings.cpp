@@ -53,6 +53,7 @@ void Settings::_ready()
     tree->set_hide_root(true);
     this->set_editor_data();
     this->set_cpp_data();
+    this->set_rust_data();
 }
 
 void Settings::show_window()
@@ -120,24 +121,8 @@ void Settings::set_cpp_data()
     config_file->free();
 }
 
-void Settings::_on_ConfirmSettings_pressed()
+void Settings::set_rust_data()
 {
-    String selected = ((Tree *)get_node(NodePath("VBoxContainer/Settings/CategoryTree")))->get_selected()->get_text(0);
-
-    if (selected == "Editor")
-    {
-        this->save_editor_data();
-    }
-    else if (selected == "C++")
-    {
-        this->save_cpp_data();
-    }
-    else if (selected == "Rust")
-    {
-        //save rust data
-    }
-
-    this->hide();
 }
 
 void Settings::save_editor_data()
@@ -178,6 +163,31 @@ void Settings::save_cpp_data()
     config_file->save("user://editor.cfg");
     config_file->free();
 
+}
+
+void Settings::save_rust_data()
+{
+
+}
+
+void Settings::_on_ConfirmSettings_pressed()
+{
+    String selected = ((Tree *)get_node(NodePath("VBoxContainer/Settings/CategoryTree")))->get_selected()->get_text(0);
+
+    if (selected == "Editor")
+    {
+        this->save_editor_data();
+    }
+    else if (selected == "C++")
+    {
+        this->save_cpp_data();
+    }
+    else if (selected == "Rust")
+    {
+        this->save_rust_data();
+    }
+
+    this->hide();
 }
 
 void Settings::_on_EditorTree_button_pressed(TreeItem *item, int column, int id)
@@ -251,7 +261,10 @@ void Settings::_register_methods()
     register_method((char *)"show", &Settings::show_window);
     register_method((char *)"set_editor_data", &Settings::set_editor_data);
     register_method((char *)"set_cpp_data", &Settings::set_cpp_data);
+    register_method((char *)"set_rust_data", &Settings::set_rust_data);
     register_method((char *)"save_editor_data", &Settings::save_editor_data);
+    register_method((char *)"save_cpp_data", &Settings::save_cpp_data);
+    register_method((char *)"save_rust_data", &Settings::save_rust_data);
 
     register_method((char *)"_on_ConfirmSettings_pressed", &Settings::_on_ConfirmSettings_pressed);
     register_method((char *)"_on_EditorTree_button_pressed", &Settings::_on_EditorTree_button_pressed);
