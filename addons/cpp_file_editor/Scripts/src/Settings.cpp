@@ -28,9 +28,29 @@ void Settings::_init()
 void Settings::_ready()
 {
     tree = ((Tree *)get_node(NodePath("VBoxContainer/Settings/CategoryTree")));
-    TreeItem *editor = tree->create_item();
-    editor->set_text(0, "Editor");
 
+    TreeItem *root = tree->create_item();
+    TreeItem *general = tree->create_item(root);
+    general->set_text(0, "General");
+    general->set_selectable(0, false);
+    TreeItem *editor = tree->create_item(general);
+    editor->set_text(0, "Editor");
+    editor->select(0);
+
+    TreeItem *languages = tree->create_item(root);
+    languages->set_text(0, "Languages");
+    languages->set_selectable(0, false);
+    TreeItem *cpp = tree->create_item(languages);
+    Ref<Texture> icon;
+    icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/cplusplus-original.svg", "Texture");
+    cpp->set_icon(0, icon);
+    cpp->set_text(0, "C++");
+    TreeItem *rust = tree->create_item(languages);
+    icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/rust-plain.svg", "Texture");
+    rust->set_icon(0, icon);
+    rust->set_text(0, "Rust");
+
+    tree->set_hide_root(true);
     this->set_editor_data();
 }
 
@@ -137,7 +157,7 @@ void Settings::_on_OpenFile_file_selected(String path)
     case 1:
         child = child->get_next();
         child = child->get_next();
-        
+
         child->set_text(1, path);
         break;
     }
