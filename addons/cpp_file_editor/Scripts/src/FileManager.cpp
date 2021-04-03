@@ -73,13 +73,17 @@ void EditorFile::load_editor_settings()
     ConfigFile *config_file = ConfigFile::_new();
     config_file->load("user://editor.cfg");
     
+    this->custom_font = config_file->get_value("Editor", "custom_font");
     this->font_size = config_file->get_value("Editor", "font_size");
+    this->custom_theme = config_file->get_value("Editor", "custom_theme");
 
     if (this->tab_number > 0)
     {
         for (int i = 0; i < this->tab_number; i++)
         {
+            cast_to<CodeEditor>(((Tabs *)get_node("TabContainer"))->get_children()[i])->set_custom_font(this->custom_font);
             cast_to<CodeEditor>(((Tabs *)get_node("TabContainer"))->get_children()[i])->set_font_size(this->font_size);
+            cast_to<CodeEditor>(((Tabs *)get_node("TabContainer"))->get_children()[i])->set_custom_theme(this->custom_theme);
         }
     }
 
@@ -151,7 +155,9 @@ void EditorFile::open_file(String path)
     file->free();
     ((Tabs *)get_node("TabContainer"))->add_child(this->current_editor_instance, true);
     this->current_editor_instance->set_initial_content(content);
+    this->current_editor_instance->set_custom_font(this->custom_font);
     this->current_editor_instance->set_font_size(this->font_size);
+    this->current_editor_instance->set_custom_theme(this->custom_theme);
     this->tab_number = ((Tabs *)get_node("TabContainer"))->get_child_count();
     this->file_path = path;
 

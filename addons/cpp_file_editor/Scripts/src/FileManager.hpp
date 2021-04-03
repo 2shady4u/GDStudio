@@ -50,5 +50,7 @@ private:
     int tab_number = 0;
     bool instance_defined = false;
     Tabs *tabNode;
+    String custom_font = "";
     int font_size = 0;
+    String custom_theme = "";
 };

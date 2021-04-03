@@ -25,7 +25,9 @@ public:
     void save_contents();
     void edit_log(String);
     String get_build_platform_cpp();
+    void set_custom_font(String);
     void set_font_size(int);
+    void set_custom_theme(String);
 
     void _on_CodeEditor_text_changed();
     void _on_CodeEditor_symbol_lookup(String, int, int);

@@ -10,6 +10,7 @@
 #include <OptionButton.hpp>
 #include <Font.hpp>
 #include <DynamicFont.hpp>
+#include <Theme.hpp>
 
 #include "CodeEditor.hpp"
 #include "FileManager.hpp"
@@ -105,9 +106,21 @@ void CodeEditor::save_contents()
     this->text_changed = false;
 }
 
+void CodeEditor::set_custom_font(String path)
+{
+    Ref<DynamicFont> font = ResourceLoader::get_singleton()->load(path);
+    cast_to<DynamicFont>(*((TextEdit *)get_node("Container/CodeEditor"))->get_font("font"))->set_font_data(font);
+}
+
 void CodeEditor::set_font_size(int size)
 {
     cast_to<DynamicFont>(*((TextEdit *)get_node("Container/CodeEditor"))->get_font("font"))->set_size(size);
+}
+
+void CodeEditor::set_custom_theme(String path)
+{
+    Ref<Theme> theme = ResourceLoader::get_singleton()->load(path);
+    cast_to<Control>(this->get_parent()->get_parent())->set_theme(theme);
 }
 
 void CodeEditor::_on_CodeEditor_text_changed()
@@ -249,7 +262,9 @@ void CodeEditor::_register_methods()
     register_method((char *)"get_text_changed", &CodeEditor::get_text_changed);
     register_method((char *)"edit_log", &CodeEditor::edit_log);
     register_method((char *)"get_build_platform_cpp", &CodeEditor::get_build_platform_cpp);
+    register_method((char *)"set_custom_font", &CodeEditor::set_custom_font);
     register_method((char *)"set_font_size", &CodeEditor::set_font_size);
+    register_method((char *)"set_custom_theme", &CodeEditor::set_custom_theme);
 
     register_method((char *)"_on_CodeEditor_text_changed", &CodeEditor::_on_CodeEditor_text_changed);
     register_method((char *)"_on_CodeEditor_gui_input", &CodeEditor::_on_CodeEditor_gui_input);
