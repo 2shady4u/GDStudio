@@ -18,6 +18,7 @@ public:
     void save_editor_data();
 
     void _on_ConfirmSettings_pressed();
+    void _on_EditorTree_button_pressed(TreeItem*, int, int);
 
     static void _register_methods();
 

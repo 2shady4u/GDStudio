@@ -10,6 +10,7 @@
 #include <OptionButton.hpp>
 #include <Font.hpp>
 #include <DynamicFont.hpp>
+#include <DynamicFontData.hpp>
 #include <Theme.hpp>
 
 #include "CodeEditor.hpp"
@@ -108,7 +109,7 @@ void CodeEditor::save_contents()
 
 void CodeEditor::set_custom_font(String path)
 {
-    Ref<DynamicFont> font = ResourceLoader::get_singleton()->load(path);
+    Ref<DynamicFontData> font = ResourceLoader::get_singleton()->load(path);
     cast_to<DynamicFont>(*((TextEdit *)get_node("Container/CodeEditor"))->get_font("font"))->set_font_data(font);
 }
 

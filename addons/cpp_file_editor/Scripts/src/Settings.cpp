@@ -2,7 +2,9 @@
 #include <Control.hpp>
 #include <ConfigFile.hpp>
 #include <TreeItem.hpp>
+#include <FileDialog.hpp>
 #include <WindowDialog.hpp>
+#include <PoolArrays.hpp>
 #include <Texture.hpp>
 #include <Reference.hpp>
 #include <ResourceLoader.hpp>
@@ -101,6 +103,26 @@ void Settings::save_editor_data()
     cast_to<EditorFile>(this->get_parent())->load_editor_settings();
 }
 
+void Settings::_on_EditorTree_button_pressed(TreeItem *item, int column, int id)
+{
+    String text = item->get_text(0);
+    if (text == "Custom Font")
+    {
+        PoolStringArray filter;
+        filter.append("*.ttf");
+        filter.append("*.otf");
+        ((FileDialog *)get_node(NodePath("OpenFile")))->set_filters(filter);
+        ((FileDialog *)get_node(NodePath("OpenFile")))->popup_centered();
+    }
+    else if (text == "Custom Theme")
+    {
+        PoolStringArray filter;
+        filter.append("*.tres");
+        ((FileDialog *)get_node(NodePath("OpenFile")))->set_filters(filter);
+        ((FileDialog *)get_node(NodePath("OpenFile")))->popup_centered();
+    }
+}
+
 void Settings::_register_methods()
 {
     register_method((char *)"_init", &Settings::_init);
@@ -110,4 +132,5 @@ void Settings::_register_methods()
     register_method((char *)"save_editor_data", &Settings::save_editor_data);
 
     register_method((char *)"_on_ConfirmSettings_pressed", &Settings::_on_ConfirmSettings_pressed);
+    register_method((char *)"_on_EditorTree_button_pressed", &Settings::_on_EditorTree_button_pressed);
 }

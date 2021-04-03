@@ -60,7 +60,7 @@ void EditorFile::create_user_data()
     if (file->file_exists("user://editor.cfg") == false)
     {
         file->open("user://editor.cfg", File::WRITE);
-        file->store_string("[Editor]\ncustom_font=\"\"\nfont_size=14\ncustom_theme=\"\"");
+        file->store_string("[Editor]\ncustom_font=\"res://addons/cpp_file_editor/Fonts/RobotoSlab-VariableFont_wght.ttf\"\nfont_size=12\ncustom_theme=\"res://addons/cpp_file_editor/Themes/godot_theme.tres\"");
         file->close();
     }
     file->free();
@@ -72,7 +72,7 @@ void EditorFile::load_editor_settings()
 {
     ConfigFile *config_file = ConfigFile::_new();
     config_file->load("user://editor.cfg");
-    
+
     this->custom_font = config_file->get_value("Editor", "custom_font");
     this->font_size = config_file->get_value("Editor", "font_size");
     this->custom_theme = config_file->get_value("Editor", "custom_theme");
@@ -140,7 +140,8 @@ void EditorFile::on_settings_pressed(int index)
     switch (index)
     {
     case 0:
-        ((WindowDialog *)get_node("Settings"))->popup_centered();;
+        ((WindowDialog *)get_node("Settings"))->popup_centered();
+        ;
         break;
     }
 }

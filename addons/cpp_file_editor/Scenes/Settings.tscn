@@ -60,4 +60,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="OpenFile" type="FileDialog" parent="."]
+margin_right = 682.0
+margin_bottom = 310.0
+window_title = "Abrir un Archivo"
+mode = 0
+access = 2
+current_dir = "/Work/Godot/Code-Editor"
+current_path = "/Work/Godot/Code-Editor/"
+
+[connection signal="button_pressed" from="VBoxContainer/Settings/EditorTree" to="." method="_on_EditorTree_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/CenterConfig/ConfirmSettings" to="." method="_on_ConfirmSettings_pressed"]
