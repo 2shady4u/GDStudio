@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://addons/cpp_file_editor/Scripts/native/editor_file.gdns" type="Script" id=1]
 [ext_resource path="res://addons/cpp_file_editor/Fonts/RobotoSlab-VariableFont_wght.ttf" type="DynamicFontData" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://addons/cpp_file_editor/Themes/godot_theme.tres" type="Theme" id=5]
 [ext_resource path="res://addons/cpp_file_editor/Scripts/native/project_manager.gdns" type="Script" id=6]
 [ext_resource path="res://addons/cpp_file_editor/Scenes/Settings.tscn" type="PackedScene" id=7]
+[ext_resource path="res://addons/cpp_file_editor/Scenes/ProjectSettings.tscn" type="PackedScene" id=8]
 
 [sub_resource type="DynamicFont" id=1]
 size = 14
@@ -73,7 +74,7 @@ margin_left = 135.0
 margin_right = 193.0
 margin_bottom = 30.0
 text = "Settings"
-items = [ "Editor", null, 0, false, false, 0, 0, null, "", false ]
+items = [ "General", null, 0, false, false, 0, 0, null, "", false ]
 
 [node name="NewFile" type="FileDialog" parent="."]
 margin_right = 650.0
@@ -453,6 +454,9 @@ text = "gdnproj"
 [node name="Settings" parent="." instance=ExtResource( 7 )]
 margin_left = -3.0
 margin_right = 807.0
+
+[node name="ProjectSettings" parent="." instance=ExtResource( 8 )]
+visible = false
 
 [connection signal="tab_changed" from="TabContainer" to="." method="_on_TabContainer_tab_changed"]
 [connection signal="tab_close" from="TabContainer" to="." method="_on_TabContainer_tab_close"]

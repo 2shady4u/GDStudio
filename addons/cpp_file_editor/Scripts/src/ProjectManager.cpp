@@ -78,7 +78,7 @@ void ProjectManager::build_cpp_project(String path, String selected_platform)
     {
         args.append("--release");
     }
-    
+
     this->execute_os("scons", args, true);
 }
 
@@ -383,10 +383,10 @@ void ProjectManager::create_rust_project(String path)
     file->open(path + "/" + project_name + "/settings.gdnproj", File::WRITE);
     file->store_string("[settings]\n"
                        "language=\"rust\"\n\n"
-                       "gnative_version=\"" +
-                       gdn_version + "\"\n"
-                                     "path=\"" +
-                       path + "/" + project_name + "\"\n");
+                       "path=\"" +
+                       path + "/" + project_name + "\"\n"
+                                                   "gnative_version=\"" +
+                       gdn_version + "\"\n");
     file->close();
     cast_to<EditorFile>(this->get_parent())->change_project_path(path + "/" + project_name + "/settings.gdnproj");
     cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/src/lib.rs");
