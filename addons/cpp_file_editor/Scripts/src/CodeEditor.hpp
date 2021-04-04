@@ -29,6 +29,7 @@ public:
     void set_font_size(int);
     void set_custom_theme(String);
     bool get_release_flag();
+    void list_directories(String);
 
     void _on_CodeEditor_text_changed();
     void _on_CodeEditor_symbol_lookup(String, int, int);

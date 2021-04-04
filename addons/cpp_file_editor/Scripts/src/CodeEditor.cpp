@@ -14,6 +14,12 @@
 #include <Theme.hpp>
 #include <OS.hpp>
 #include <LineEdit.hpp>
+#include <Directory.hpp>
+#include <Tree.hpp>
+#include <TreeItem.hpp>
+#include <Texture.hpp>
+#include <Reference.hpp>
+#include <ResourceLoader.hpp>
 
 #include "CodeEditor.hpp"
 #include "FileManager.hpp"
@@ -137,6 +143,42 @@ bool CodeEditor::get_release_flag()
     {
         return false;
     }
+}
+
+void CodeEditor::list_directories(String path)
+{
+    ((LineEdit *)get_node(NodePath("BuildContainer/Explorer/VBoxContainer/Root")))->set_text(path);
+    
+    Tree *tree = ((Tree *)get_node(NodePath("BuildContainer/Explorer/VBoxContainer/Tree")));
+
+    TreeItem *root = tree->create_item();
+    TreeItem *item;
+
+    Ref<Texture> folder_icon;
+    folder_icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/default_folder.svg", "Texture");
+    Ref<Texture> file_icon;
+    file_icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/file.svg", "Texture");
+    
+    Directory *dir = Directory::_new();
+    dir->open(path);
+    dir->list_dir_begin();
+    String name = dir->get_next();
+    while (name != "")
+    {
+        item = tree->create_item(root);
+        item->set_text(0, name);
+        if (dir->current_is_dir() == true)
+        {
+            item->set_icon(0, folder_icon);
+        }
+        else
+        {
+            item->set_icon(0, file_icon);
+        }
+        name = dir->get_next();
+    }
+    
+    dir->free();
 }
 
 void CodeEditor::_on_CodeEditor_text_changed()
@@ -298,6 +340,7 @@ void CodeEditor::_register_methods()
     register_method((char *)"set_font_size", &CodeEditor::set_font_size);
     register_method((char *)"set_custom_theme", &CodeEditor::set_custom_theme);
     register_method((char *)"get_release_flag", &CodeEditor::get_release_flag);
+    register_method((char *)"list_directories", &CodeEditor::list_directories);
 
     register_method((char *)"_on_CodeEditor_text_changed", &CodeEditor::_on_CodeEditor_text_changed);
     register_method((char *)"_on_CodeEditor_gui_input", &CodeEditor::_on_CodeEditor_gui_input);

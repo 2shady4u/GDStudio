@@ -46,6 +46,7 @@ CodeEditor *EditorFile::get_editor_instance()
 
 void EditorFile::change_project_path(String path)
 {
+    this->current_editor_instance->list_directories(path);
     this->project_config = path;
 }
 
@@ -186,6 +187,15 @@ void EditorFile::open_file(String path)
     {
         this->current_editor_instance->setup_language("rust");
         icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/rust-plain.svg", "Texture");
+    }
+    else if (file_extension == "gdnproj")
+    {
+        ConfigFile *config_file = ConfigFile::_new();
+        config_file->load(path);
+
+        this->change_project_path(config_file->get_value("settings", "path"));
+        config_file->free();
+        icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/file.svg", "Texture");
     }
     else
     {
