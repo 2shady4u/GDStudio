@@ -102,6 +102,11 @@ String EditorFile::get_selected_platform()
     return this->current_editor_instance->get_build_platform_cpp();
 }
 
+bool EditorFile::get_selected_profile()
+{
+    return this->current_editor_instance->get_release_flag();
+}
+
 void EditorFile::on_file_pressed(int index)
 {
     switch (index)
@@ -316,6 +321,7 @@ void EditorFile::_register_methods()
     register_method((char *)"load_editor_settings", &EditorFile::load_editor_settings);
     register_method((char *)"get_project_path", &EditorFile::get_project_path);
     register_method((char *)"get_selected_platform", &EditorFile::get_selected_platform);
+    register_method((char *)"get_selected_profile", &EditorFile::get_selected_profile);
     register_method((char *)"get_editor_instance", &EditorFile::get_editor_instance);
 
     register_method((char *)"_on_NewFile_file_selected", &EditorFile::_on_NewFile_file_selected);

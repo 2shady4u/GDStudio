@@ -31,6 +31,7 @@ public:
     void load_editor_settings();
     String get_project_path();
     String get_selected_platform();
+    bool get_selected_profile();
     CodeEditor *get_editor_instance();
 
     void _on_NewFile_file_selected(String);

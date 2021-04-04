@@ -124,6 +124,20 @@ void CodeEditor::set_custom_theme(String path)
     cast_to<Control>(this->get_parent()->get_parent())->set_theme(theme);
 }
 
+bool CodeEditor::get_release_flag()
+{
+    int button = ((OptionButton *)get_node(NodePath("BuildContainer/Build/CenterContainer/Release")))->get_selected();
+    if (button == 1)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+    
+}
+
 void CodeEditor::_on_CodeEditor_text_changed()
 {
     if (((TextEdit *)get_node("Container/CodeEditor"))->get_text() == this->current_content)
@@ -266,6 +280,7 @@ void CodeEditor::_register_methods()
     register_method((char *)"set_custom_font", &CodeEditor::set_custom_font);
     register_method((char *)"set_font_size", &CodeEditor::set_font_size);
     register_method((char *)"set_custom_theme", &CodeEditor::set_custom_theme);
+    register_method((char *)"get_release_flag", &CodeEditor::get_release_flag);
 
     register_method((char *)"_on_CodeEditor_text_changed", &CodeEditor::_on_CodeEditor_text_changed);
     register_method((char *)"_on_CodeEditor_gui_input", &CodeEditor::_on_CodeEditor_gui_input);

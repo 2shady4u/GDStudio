@@ -73,6 +73,12 @@ void ProjectManager::build_cpp_project(String path, String selected_platform)
     args.append("-C");
     args.append(path);
     args.append(platform);
+
+    if (cast_to<EditorFile>(this->get_parent())->get_selected_profile() == true)
+    {
+        args.append("--release");
+    }
+    
     this->execute_os("scons", args, true);
 }
 
@@ -105,6 +111,11 @@ void ProjectManager::build_rust_project(String path, String selected_platform)
             args.append("--target=x86_64-apple-darwin");
         }
     }
+    if (cast_to<EditorFile>(this->get_parent())->get_selected_profile() == true)
+    {
+        args.append("--release");
+    }
+
     this->execute_os("cargo", args, false);
 }
 
