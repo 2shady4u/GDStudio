@@ -191,6 +191,9 @@ void ProjectManager::create_new_project()
     String path = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/PathLabel/FilePath")))->get_text();
     String cpp_path = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/CPP/cppPath/cppPath")))->get_text();
 
+    EditorFile *editor = cast_to<EditorFile>(this->get_parent());
+    PoolStringArray args;
+    Array output;
     switch (((OptionButton *)get_node(NodePath("TabContainer/NewProject/ProjectType/ProjectType")))->get_selected_id())
     {
     case 0:
@@ -305,6 +308,12 @@ void ProjectManager::create_new_project()
             file->free();
             dir->free();
         }
+        args.append("--version");
+        OS::get_singleton()->execute("python", args, true, output);
+        editor->get_editor_instance()->edit_log(output[0]);
+        output.clear();
+        OS::get_singleton()->execute("scons", args, true, output);
+        editor->get_editor_instance()->edit_log(output[0]);
         break;
     case 1:
         this->check_thread();
@@ -380,6 +389,15 @@ void ProjectManager::create_rust_project(String path)
     cast_to<EditorFile>(this->get_parent())->change_project_path(path + "/" + project_name + "/settings.gdnproj");
     cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/src/lib.rs");
     file->free();
+
+    Array output;
+    args.remove(2);
+    args.remove(1);
+    args.remove(0);
+    args.append("--version");
+    OS::get_singleton()->execute("cargo", args, true, output);
+    EditorFile *editor = cast_to<EditorFile>(this->get_parent());
+    editor->get_editor_instance()->edit_log(output[0]);
 }
 
 void ProjectManager::check_thread()

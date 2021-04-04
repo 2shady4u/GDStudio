@@ -172,7 +172,7 @@ void EditorFile::open_file(String path)
 
     Ref<Texture> icon;
 
-    if (file_extension == "cpp")
+    if (file_extension == "cpp" || file_extension == "hpp")
     {
         this->current_editor_instance->setup_language("cpp");
         icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/cplusplus-original.svg", "Texture");
