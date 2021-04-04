@@ -33,6 +33,7 @@ void Settings::_ready()
     TreeItem *general = tree->create_item(root);
     general->set_text(0, "General");
     general->set_selectable(0, false);
+    
     TreeItem *editor = tree->create_item(general);
     editor->set_text(0, "Editor");
     editor->select(0);
@@ -40,11 +41,13 @@ void Settings::_ready()
     TreeItem *languages = tree->create_item(root);
     languages->set_text(0, "Languages");
     languages->set_selectable(0, false);
+    
     TreeItem *cpp = tree->create_item(languages);
     Ref<Texture> icon;
     icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/cplusplus-original.svg", "Texture");
     cpp->set_icon(0, icon);
     cpp->set_text(0, "C++");
+    
     TreeItem *rust = tree->create_item(languages);
     icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/rust-plain.svg", "Texture");
     rust->set_icon(0, icon);
