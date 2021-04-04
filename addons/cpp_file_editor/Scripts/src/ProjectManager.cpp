@@ -73,12 +73,7 @@ void ProjectManager::build_cpp_project(String path, String selected_platform)
     args.append("-C");
     args.append(path);
     args.append(platform);
-    OS::get_singleton()->execute("scons", args, true, output);
-    EditorFile *editor = cast_to<EditorFile>(this->get_parent());
-    for (int i = 0; i < output.size(); i++)
-    {
-        editor->get_editor_instance()->edit_log(output[i]);
-    }
+    this->execute_os("scons", args, true);
 }
 
 void ProjectManager::build_rust_project(String path, String selected_platform)
@@ -110,7 +105,7 @@ void ProjectManager::build_rust_project(String path, String selected_platform)
             args.append("--target=x86_64-apple-darwin");
         }
     }
-    OS::get_singleton()->execute("cargo", args);
+    this->execute_os("cargo", args, false);
 }
 
 void ProjectManager::create_new_class()
@@ -193,7 +188,6 @@ void ProjectManager::create_new_project()
 
     EditorFile *editor = cast_to<EditorFile>(this->get_parent());
     PoolStringArray args;
-    Array output;
     switch (((OptionButton *)get_node(NodePath("TabContainer/NewProject/ProjectType/ProjectType")))->get_selected_id())
     {
     case 0:
@@ -309,11 +303,8 @@ void ProjectManager::create_new_project()
             dir->free();
         }
         args.append("--version");
-        OS::get_singleton()->execute("python", args, true, output);
-        editor->get_editor_instance()->edit_log(output[0]);
-        output.clear();
-        OS::get_singleton()->execute("scons", args, true, output);
-        editor->get_editor_instance()->edit_log(output[0]);
+        this->execute_os("python", args, true);
+        this->execute_os("scons", args, true);
         break;
     case 1:
         this->check_thread();
@@ -331,7 +322,7 @@ void ProjectManager::create_rust_project(String path)
     args.append("init");
     args.append("--lib");
     args.append(path + "/" + project_name);
-    OS::get_singleton()->execute("cargo", args);
+    this->execute_os("cargo", args, false);
 
     File *file = File::_new();
     file->open(path + "/" + project_name + "/Cargo.toml", File::READ);
@@ -390,14 +381,9 @@ void ProjectManager::create_rust_project(String path)
     cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/src/lib.rs");
     file->free();
 
-    Array output;
-    args.remove(2);
-    args.remove(1);
-    args.remove(0);
-    args.append("--version");
-    OS::get_singleton()->execute("cargo", args, true, output);
-    EditorFile *editor = cast_to<EditorFile>(this->get_parent());
-    editor->get_editor_instance()->edit_log(output[0]);
+    PoolStringArray ver_args;
+    ver_args.append("--version");
+    this->execute_os("cargo", ver_args, true);
 }
 
 void ProjectManager::check_thread()
@@ -407,6 +393,20 @@ void ProjectManager::check_thread()
         thread->join();
         delete thread;
         thread = nullptr;
+    }
+}
+
+void ProjectManager::execute_os(String command, PoolStringArray args, bool show_log)
+{
+    Array output;
+    OS::get_singleton()->execute(command, args, true, output);
+    if (show_log == true)
+    {
+        EditorFile *editor = cast_to<EditorFile>(this->get_parent());
+        for (int i = 0; i < args.size(); i++)
+        {
+            editor->get_editor_instance()->edit_log(output[i]);
+        }
     }
 }
 
@@ -528,6 +528,7 @@ void ProjectManager::_register_methods()
     register_method((char *)"create_new_project", &ProjectManager::create_new_project);
     register_method((char *)"create_rust_project", &ProjectManager::create_rust_project);
     register_method((char *)"check_thread", &ProjectManager::check_thread);
+    register_method((char *)"execute_os", &ProjectManager::execute_os);
 
     register_method((char *)"_on_OkButton_pressed", &ProjectManager::_on_OkButton_pressed);
     register_method((char *)"_on_CancelButton_pressed", &ProjectManager::_on_CancelButton_pressed);
