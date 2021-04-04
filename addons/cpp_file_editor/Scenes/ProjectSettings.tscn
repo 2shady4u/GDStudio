@@ -4,7 +4,6 @@
 [ext_resource path="res://addons/cpp_file_editor/Icons/cplusplus-original.svg" type="Texture" id=2]
 
 [node name="ProjectSettings" type="WindowDialog"]
-visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -320.0
@@ -113,8 +112,7 @@ margin_top = 84.0
 margin_right = 626.0
 margin_bottom = 88.0
 
-[node name="CPP" type="Control" parent="PanelContainer/VBoxContainer"]
-visible = false
+[node name="CPP" type="ScrollContainer" parent="PanelContainer/VBoxContainer"]
 margin_top = 92.0
 margin_right = 626.0
 margin_bottom = 346.0
@@ -123,8 +121,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/CPP"]
-margin_right = 629.0
-margin_bottom = 254.0
+margin_right = 626.0
+margin_bottom = 270.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
@@ -132,59 +130,59 @@ __meta__ = {
 }
 
 [node name="Sources" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
-margin_right = 629.0
+margin_right = 614.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Sources"]
-margin_right = 312.0
+margin_right = 305.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Sources/CenterContainer"]
-margin_left = 109.0
+margin_left = 105.0
 margin_top = 5.0
-margin_right = 203.0
+margin_right = 199.0
 margin_bottom = 19.0
 text = "Sources Folder"
 
 [node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Sources"]
-margin_left = 316.0
-margin_right = 629.0
+margin_left = 309.0
+margin_right = 614.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="Bindings" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
 margin_top = 28.0
-margin_right = 629.0
+margin_right = 614.0
 margin_bottom = 52.0
 
 [node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Bindings"]
-margin_right = 312.0
+margin_right = 305.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Bindings/CenterContainer"]
-margin_left = 78.0
+margin_left = 74.0
 margin_top = 5.0
-margin_right = 234.0
+margin_right = 230.0
 margin_bottom = 19.0
 text = "godot_cpp Bindings Path"
 
 [node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Bindings"]
-margin_left = 316.0
-margin_right = 629.0
+margin_left = 309.0
+margin_right = 614.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="LabelsContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
 margin_top = 56.0
-margin_right = 629.0
+margin_right = 614.0
 margin_bottom = 70.0
 size_flags_horizontal = 3
 
 [node name="IncludePaths" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LabelsContainer"]
-margin_right = 312.0
+margin_right = 305.0
 margin_bottom = 14.0
 size_flags_horizontal = 3
 __meta__ = {
@@ -192,30 +190,30 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LabelsContainer/IncludePaths"]
-margin_left = 112.0
-margin_right = 199.0
+margin_left = 109.0
+margin_right = 196.0
 margin_bottom = 14.0
 text = "Include Paths"
 
 [node name="LinkerPaths" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LabelsContainer"]
-margin_left = 316.0
-margin_right = 629.0
+margin_left = 309.0
+margin_right = 614.0
 margin_bottom = 14.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LabelsContainer/LinkerPaths"]
-margin_left = 117.0
-margin_right = 195.0
+margin_left = 113.0
+margin_right = 191.0
 margin_bottom = 14.0
 text = "Linker Paths"
 
 [node name="PanelsContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
 margin_top = 74.0
-margin_right = 629.0
+margin_right = 614.0
 margin_bottom = 214.0
 
 [node name="Include" type="PanelContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer"]
-margin_right = 312.0
+margin_right = 305.0
 margin_bottom = 140.0
 rect_min_size = Vector2( 0, 140 )
 size_flags_horizontal = 3
@@ -223,79 +221,127 @@ size_flags_horizontal = 3
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 305.0
+margin_right = 298.0
 margin_bottom = 133.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ItemList" type="ItemList" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer"]
-margin_right = 298.0
+margin_right = 291.0
 margin_bottom = 102.0
 size_flags_vertical = 3
 
 [node name="Buttons" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer"]
 margin_top = 106.0
-margin_right = 298.0
+margin_right = 291.0
 margin_bottom = 126.0
 size_flags_horizontal = 3
 
 [node name="AddPath" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/Buttons"]
-margin_right = 147.0
+margin_right = 143.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 text = "Add Path"
 
 [node name="RemovePath" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/Buttons"]
-margin_left = 151.0
-margin_right = 298.0
+margin_left = 147.0
+margin_right = 291.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 text = "Remove Path"
 
 [node name="Linker" type="PanelContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer"]
-margin_left = 316.0
-margin_right = 629.0
+margin_left = 309.0
+margin_right = 614.0
 margin_bottom = 140.0
 size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 306.0
+margin_right = 298.0
 margin_bottom = 133.0
 size_flags_vertical = 3
 
 [node name="ItemList" type="ItemList" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer"]
-margin_right = 299.0
+margin_right = 291.0
 margin_bottom = 102.0
 size_flags_vertical = 3
 
 [node name="Buttons" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer"]
 margin_top = 106.0
-margin_right = 299.0
+margin_right = 291.0
 margin_bottom = 126.0
 
 [node name="AddPath" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer/Buttons"]
-margin_right = 147.0
+margin_right = 143.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 text = "Add Path"
 
 [node name="RemovePath" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer/Buttons"]
-margin_left = 151.0
-margin_right = 299.0
+margin_left = 147.0
+margin_right = 291.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 text = "Remove Path"
 
-[node name="Rust" type="Control" parent="PanelContainer/VBoxContainer"]
+[node name="Build" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
+margin_top = 218.0
+margin_right = 614.0
+margin_bottom = 242.0
+
+[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Build"]
+margin_right = 305.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Build/CenterContainer"]
+margin_left = 101.0
+margin_top = 5.0
+margin_right = 203.0
+margin_bottom = 19.0
+text = "Build Command"
+
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Build"]
+margin_left = 309.0
+margin_right = 614.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Clean" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
+margin_top = 246.0
+margin_right = 614.0
+margin_bottom = 270.0
+
+[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Clean"]
+margin_right = 305.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Clean/CenterContainer"]
+margin_left = 100.0
+margin_top = 5.0
+margin_right = 204.0
+margin_bottom = 19.0
+text = "Clean Command"
+
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Clean"]
+margin_left = 309.0
+margin_right = 614.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Rust" type="ScrollContainer" parent="PanelContainer/VBoxContainer"]
 visible = false
 margin_top = 92.0
 margin_right = 626.0
-margin_bottom = 92.0
+margin_bottom = 346.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/Rust"]
-margin_right = 629.0
+margin_right = 626.0
 margin_bottom = 254.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -304,11 +350,11 @@ __meta__ = {
 }
 
 [node name="CargoVersion" type="HBoxContainer" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer"]
-margin_right = 629.0
+margin_right = 626.0
 margin_bottom = 24.0
 
 [node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer/CargoVersion"]
-margin_right = 312.0
+margin_right = 311.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
@@ -320,19 +366,19 @@ margin_bottom = 19.0
 text = "Cargo Version"
 
 [node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer/CargoVersion"]
-margin_left = 316.0
-margin_right = 629.0
+margin_left = 315.0
+margin_right = 626.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 editable = false
 
 [node name="GDNativeVersion" type="HBoxContainer" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer"]
 margin_top = 28.0
-margin_right = 629.0
+margin_right = 626.0
 margin_bottom = 52.0
 
 [node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer/GDNativeVersion"]
-margin_right = 312.0
+margin_right = 311.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
@@ -344,7 +390,53 @@ margin_bottom = 19.0
 text = "GDNative Version"
 
 [node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer/GDNativeVersion"]
-margin_left = 316.0
-margin_right = 629.0
+margin_left = 315.0
+margin_right = 626.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Build" type="HBoxContainer" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer"]
+margin_top = 56.0
+margin_right = 626.0
+margin_bottom = 80.0
+
+[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer/Build"]
+margin_right = 311.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer/Build/CenterContainer"]
+margin_left = 104.0
+margin_top = 5.0
+margin_right = 206.0
+margin_bottom = 19.0
+text = "Build Command"
+
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer/Build"]
+margin_left = 315.0
+margin_right = 626.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Clean" type="HBoxContainer" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer"]
+margin_top = 84.0
+margin_right = 626.0
+margin_bottom = 108.0
+
+[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer/Clean"]
+margin_right = 311.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer/Clean/CenterContainer"]
+margin_left = 103.0
+margin_top = 5.0
+margin_right = 207.0
+margin_bottom = 19.0
+text = "Clean Command"
+
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer/Clean"]
+margin_left = 315.0
+margin_right = 626.0
 margin_bottom = 24.0
 size_flags_horizontal = 3

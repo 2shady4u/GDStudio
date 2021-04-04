@@ -149,7 +149,9 @@ void EditorFile::on_settings_pressed(int index)
     {
     case 0:
         ((WindowDialog *)get_node("Settings"))->popup_centered();
-        ;
+        break;
+    case 1:
+        ((WindowDialog *)get_node("ProjectSettings"))->popup_centered();
         break;
     }
 }
