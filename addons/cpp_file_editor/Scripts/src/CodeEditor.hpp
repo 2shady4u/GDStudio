@@ -32,6 +32,7 @@ public:
 
     void _on_CodeEditor_text_changed();
     void _on_CodeEditor_symbol_lookup(String, int, int);
+    void _on_ExecuteCustomCommandButton_pressed();
 
     bool get_text_changed();
     void _on_CodeEditor_gui_input(InputEvent*);

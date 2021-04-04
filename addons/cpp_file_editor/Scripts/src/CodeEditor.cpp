@@ -12,6 +12,8 @@
 #include <DynamicFont.hpp>
 #include <DynamicFontData.hpp>
 #include <Theme.hpp>
+#include <OS.hpp>
+#include <LineEdit.hpp>
 
 #include "CodeEditor.hpp"
 #include "FileManager.hpp"
@@ -135,7 +137,6 @@ bool CodeEditor::get_release_flag()
     {
         return false;
     }
-    
 }
 
 void CodeEditor::_on_CodeEditor_text_changed()
@@ -266,6 +267,22 @@ void CodeEditor::_on_Build_pressed()
     editor->execute_build();
 }
 
+void CodeEditor::_on_ExecuteCustomCommandButton_pressed()
+{
+    Array output;
+    PoolStringArray args;
+    String command = ((LineEdit *)get_node(NodePath("BuildContainer/Build/CustomCommand/Command")))->get_text();
+
+    args.append(((LineEdit *)get_node(NodePath("BuildContainer/Build/Arguments/LineEdit")))->get_text());
+    OS::get_singleton()->execute(command, args, true, output);
+
+    EditorFile *editor = cast_to<EditorFile>(this->get_parent()->get_parent());
+    for (int i = 0; i < args.size(); i++)
+    {
+        editor->get_editor_instance()->edit_log(output[i]);
+    }
+}
+
 void CodeEditor::_register_methods()
 {
     register_method((char *)"_init", &CodeEditor::_init);
@@ -285,4 +302,5 @@ void CodeEditor::_register_methods()
     register_method((char *)"_on_CodeEditor_text_changed", &CodeEditor::_on_CodeEditor_text_changed);
     register_method((char *)"_on_CodeEditor_gui_input", &CodeEditor::_on_CodeEditor_gui_input);
     register_method((char *)"_on_Build_pressed", &CodeEditor::_on_Build_pressed);
+    register_method((char *)"_on_ExecuteCustomCommandButton_pressed", &CodeEditor::_on_ExecuteCustomCommandButton_pressed);
 }
