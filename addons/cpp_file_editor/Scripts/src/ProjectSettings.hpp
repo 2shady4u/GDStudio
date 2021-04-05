@@ -13,6 +13,15 @@ class ProjectSettings : public Control
 public:
     ProjectSettings();
     ~ProjectSettings();
+    void _init();
+    void _ready();
+    void setup();
+    void load_settings(String);
+
+    static void _register_methods();
+
+private:
+    String project_lang;
 };
 
 #endif

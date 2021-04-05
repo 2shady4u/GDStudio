@@ -13,6 +13,7 @@
 #include "FileManager.hpp"
 #include "ProjectManager.hpp"
 #include "Settings.hpp"
+#include "ProjectSettings.hpp"
 using namespace godot;
 
 EditorFile::EditorFile()
@@ -108,6 +109,25 @@ bool EditorFile::get_selected_profile()
     return this->current_editor_instance->get_release_flag();
 }
 
+String EditorFile::get_project_lang()
+{
+    if (this->project_config != "")
+    {
+        ConfigFile *config_file = ConfigFile::_new();
+        config_file->load(this->project_config+"/settings.gdnproj");
+        String lang = config_file->get_value("settings", "language");
+
+        config_file->free();
+
+        return lang;
+    }
+    else
+    {
+        return "none";
+    }
+    
+}
+
 void EditorFile::on_file_pressed(int index)
 {
     switch (index)
@@ -151,6 +171,7 @@ void EditorFile::on_settings_pressed(int index)
         ((WindowDialog *)get_node("Settings"))->popup_centered();
         break;
     case 1:
+        cast_to<ProjectSettings>((WindowDialog *)get_node("ProjectSettings"))->setup();
         ((WindowDialog *)get_node("ProjectSettings"))->popup_centered();
         break;
     }
@@ -335,6 +356,7 @@ void EditorFile::_register_methods()
     register_method((char *)"get_selected_platform", &EditorFile::get_selected_platform);
     register_method((char *)"get_selected_profile", &EditorFile::get_selected_profile);
     register_method((char *)"get_editor_instance", &EditorFile::get_editor_instance);
+    register_method((char *)"get_project_lang", &EditorFile::get_project_lang);
 
     register_method((char *)"_on_NewFile_file_selected", &EditorFile::_on_NewFile_file_selected);
     register_method((char *)"_on_OpenFile_file_selected", &EditorFile::_on_OpenFile_file_selected);

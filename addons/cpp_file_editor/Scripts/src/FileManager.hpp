@@ -33,6 +33,7 @@ public:
     String get_selected_platform();
     bool get_selected_profile();
     CodeEditor *get_editor_instance();
+    String get_project_lang();
 
     void _on_NewFile_file_selected(String);
     void _on_OpenFile_file_selected(String);
