@@ -5,6 +5,8 @@
 #include <LineEdit.hpp>
 #include <PoolArrays.hpp>
 #include <OptionButton.hpp>
+#include <OS.hpp>
+#include <Array.hpp>
 
 #include "ProjectSettings.hpp"
 #include "FileManager.hpp"
@@ -71,6 +73,13 @@ void ProjectSettings::load_settings(String language)
     else if (language == "rust")
     {
         ((OptionButton *)get_node(NodePath("PanelContainer/VBoxContainer/ProjectLang/OptionButton")))->select(1);
+        PoolStringArray args;
+        args.append("--version");
+        Array output;
+        String cargo_version = OS::get_singleton()->execute("cargo", args, true, output);
+        String gdn_version = config_file->get_value("settings", "gnative_version");
+        ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/Rust/VBoxContainer/CargoVersion/LineEdit")))->set_text(output[0]);
+        ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/Rust/VBoxContainer/GDNativeVersion/LineEdit")))->set_text(gdn_version);
     }
     config_file->free();
 }
