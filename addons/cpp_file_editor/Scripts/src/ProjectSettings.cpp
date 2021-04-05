@@ -7,6 +7,9 @@
 #include <OptionButton.hpp>
 #include <OS.hpp>
 #include <Array.hpp>
+#include <ItemList.hpp>
+#include <Reference.hpp>
+#include <Texture.hpp>
 
 #include "ProjectSettings.hpp"
 #include "FileManager.hpp"
@@ -69,6 +72,22 @@ void ProjectSettings::load_settings(String language)
     if (language == "c++")
     {
         ((OptionButton *)get_node(NodePath("PanelContainer/VBoxContainer/ProjectLang/OptionButton")))->select(0);
+        String sources = config_file->get_value("settings", "sources_folder");
+        ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/Sources/LineEdit")))->set_text(sources);
+        String bindings = config_file->get_value("settings", "godot_cpp_folder");
+        ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/Bindings/LineEdit")))->set_text(bindings);
+        String include_string = config_file->get_value("settings", "include_folders");
+        PoolStringArray include_array = include_string.split(',');
+        for (int i = 0; i < include_array.size(); i++)
+        {
+            ((ItemList *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/ItemList")))->add_item(include_array[i]);
+        }
+        String linker_string = config_file->get_value("settings", "linker_folders");
+        PoolStringArray linker_array = linker_string.split(',');
+        for (int i = 0; i < linker_array.size(); i++)
+        {
+            ((ItemList *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/ItemList")))->add_item(linker_array[i]);
+        }
     }
     else if (language == "rust")
     {
