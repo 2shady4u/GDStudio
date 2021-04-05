@@ -47,7 +47,7 @@ void ProjectManager::build_task()
     }
     else
     {
-        proj_file->load(cast_to<EditorFile>(this->get_parent())->get_project_path());
+        proj_file->load(cast_to<EditorFile>(this->get_parent())->get_project_path() + "/settings.gdnproj");
         String lang = proj_file->get_value("settings", "language");
         String path = proj_file->get_value("settings", "path");
         this->check_thread();
@@ -387,7 +387,7 @@ void ProjectManager::create_rust_project(String path)
                                                    "gnative_version=\"" +
                        gdn_version + "\"\n");
     file->close();
-    cast_to<EditorFile>(this->get_parent())->change_project_path(path + "/" + project_name + "/settings.gdnproj");
+    cast_to<EditorFile>(this->get_parent())->change_project_path(path + "/" + project_name);
     cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/src/lib.rs");
     file->free();
 
@@ -413,7 +413,7 @@ void ProjectManager::execute_os(String command, PoolStringArray args, bool show_
     if (show_log == true)
     {
         EditorFile *editor = cast_to<EditorFile>(this->get_parent());
-        for (int i = 0; i < args.size(); i++)
+        for (int i = 0; i < output.size(); i++)
         {
             editor->get_editor_instance()->edit_log(output[i]);
         }
