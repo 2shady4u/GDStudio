@@ -113,7 +113,7 @@ void ProjectManager::build_rust_project(String path, String selected_platform)
     }
     if (cast_to<EditorFile>(this->get_parent())->get_selected_profile() == true)
     {
-        args.append("--release");
+        args.append("target=release");
     }
 
     this->execute_os("cargo", args, false);

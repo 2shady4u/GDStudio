@@ -115,7 +115,7 @@ margin_bottom = 88.0
 [node name="CPP" type="ScrollContainer" parent="PanelContainer/VBoxContainer"]
 margin_top = 92.0
 margin_right = 626.0
-margin_bottom = 346.0
+margin_bottom = 322.0
 rect_min_size = Vector2( 0, 128 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -440,3 +440,17 @@ margin_left = 315.0
 margin_right = 626.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
+
+[node name="Confirm" type="CenterContainer" parent="PanelContainer/VBoxContainer"]
+margin_top = 326.0
+margin_right = 626.0
+margin_bottom = 346.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ConfirmSettings" type="Button" parent="PanelContainer/VBoxContainer/Confirm"]
+margin_left = 282.0
+margin_right = 344.0
+margin_bottom = 20.0
+text = "Confirm"
