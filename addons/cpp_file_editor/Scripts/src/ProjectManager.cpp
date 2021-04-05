@@ -208,7 +208,6 @@ void ProjectManager::create_new_project()
         }
         else
         {
-            OS *cmd;
             String current_platform = "";
             String get_platform = OS::get_singleton()->get_name();
 
@@ -308,8 +307,8 @@ void ProjectManager::create_new_project()
                                           "linker_folders=\"\"");
             file->close();
 
-            cast_to<EditorFile>(this->get_parent())->change_project_path(path + "/" + project_name + "/settings.gdnproj");
             cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/" + source_folder + "/main.cpp");
+            cast_to<EditorFile>(this->get_parent())->change_project_path(path + "/" + project_name);
             file->free();
             dir->free();
         }

@@ -47,8 +47,11 @@ CodeEditor *EditorFile::get_editor_instance()
 
 void EditorFile::change_project_path(String path)
 {
-    this->current_editor_instance->list_directories(path);
     this->project_config = path;
+    if (this->instance_defined == true)
+    {
+        this->current_editor_instance->list_directories(path);
+    }
 }
 
 void EditorFile::execute_build()
