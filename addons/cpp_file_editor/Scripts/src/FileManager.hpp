@@ -33,6 +33,7 @@ public:
     void change_project_path(String);
     void execute_build();
     void execute_clean();
+    void execute_command();
     void on_file_pressed(int);
     void on_project_pressed(int);
     void on_settings_pressed(int);

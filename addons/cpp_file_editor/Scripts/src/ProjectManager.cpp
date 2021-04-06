@@ -3,7 +3,6 @@
 #include <File.hpp>
 #include <Directory.hpp>
 #include <OS.hpp>
-#include <ConfigFile.hpp>
 #include <TabContainer.hpp>
 #include <LineEdit.hpp>
 #include <OptionButton.hpp>
@@ -40,34 +39,32 @@ void ProjectManager::_ready()
 
 void ProjectManager::build_task(int task=0)
 {
-    ConfigFile *proj_file = ConfigFile::_new();
     if (cast_to<EditorFile>(this->get_parent())->get_project_path() == "")
     {
         ((WindowDialog *)get_node(NodePath("BuildWarning")))->popup_centered();
     }
     else
     {
-        proj_file->load(cast_to<EditorFile>(this->get_parent())->get_project_path() + "/settings.gdnproj");
-        String lang = proj_file->get_value("settings", "language");
-        String path = proj_file->get_value("settings", "path");
-        String command = proj_file->get_value("settings", "build_command");
+        PoolStringArray keys = Array::make("language", "path", "build_command", "clean_command");
+        String load_file = cast_to<EditorFile>(this->get_parent())->get_project_path() + "/settings.gdnproj";
+        PoolStringArray settings = cast_to<EditorFile>(this->get_parent())->load_config(load_file, "settings", keys);
+        String command = settings[2];
         if (task == 1)
         {
-            command = proj_file->get_value("settings", "clean_command");
+            command = settings[3];
         }
         
         this->check_thread();
         String selected_os = cast_to<EditorFile>(this->get_parent())->get_selected_platform();
 
-        if (lang == "c++")
+        if (settings[0] == "c++")
         {
-            thread = new std::thread(&ProjectManager::build_cpp_project, this, path, selected_os, command);
+            thread = new std::thread(&ProjectManager::build_cpp_project, this, settings[1], selected_os, command);
         }
-        else if (lang == "rust")
+        else if (settings[0] == "rust")
         {
-            thread = new std::thread(&ProjectManager::build_rust_project, this, path, selected_os, command);
+            thread = new std::thread(&ProjectManager::build_rust_project, this, settings[1], selected_os, command);
         }
-        proj_file->free();
     }
 }
 

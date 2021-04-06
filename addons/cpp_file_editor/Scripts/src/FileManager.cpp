@@ -1,5 +1,6 @@
 #include <Godot.hpp>
 #include <Control.hpp>
+#include <stdio.h>
 #include <File.hpp>
 #include <FileDialog.hpp>
 #include <WindowDialog.hpp>
@@ -237,6 +238,11 @@ void EditorFile::execute_clean()
     project_manager->build_task(1);
 }
 
+void EditorFile::execute_command()
+{
+
+}
+
 void EditorFile::on_file_pressed(int index)
 {
     switch (index)
@@ -366,6 +372,7 @@ void EditorFile::_register_methods()
     register_method((char *)"change_project_path", &EditorFile::change_project_path);
     register_method((char *)"execute_build", &EditorFile::execute_build);
     register_method((char *)"execute_clean", &EditorFile::execute_clean);
+    register_method((char *)"execute_command", &EditorFile::execute_command);
     register_method((char *)"create_user_data", &EditorFile::create_user_data);
     register_method((char *)"load_editor_settings", &EditorFile::load_editor_settings);
     register_method((char *)"get_project_path", &EditorFile::get_project_path);
