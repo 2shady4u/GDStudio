@@ -395,7 +395,7 @@ void ProjectManager::create_rust_project(String path)
                        "language=\"rust\"\n\n"
                        "path=\"" +
                        path + "/" + project_name + "\"\n"
-                                                   "gnative_version=\"" +
+                                                   "gdnative_version=\"" +
                        gdn_version + "\"\n"
                        "build_command=\"cargo build --manifest-path={path}\"\n"
                        "clean_command=\"cargo clean --manifest-path={path}\"");
