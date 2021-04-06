@@ -50,10 +50,10 @@ void ProjectManager::build_task(int task=0)
         proj_file->load(cast_to<EditorFile>(this->get_parent())->get_project_path() + "/settings.gdnproj");
         String lang = proj_file->get_value("settings", "language");
         String path = proj_file->get_value("settings", "path");
-        String build_command = proj_file->get_value("settings", "build_command");
+        String command = proj_file->get_value("settings", "build_command");
         if (task == 1)
         {
-            build_command = proj_file->get_value("settings", "clean_command");
+            command = proj_file->get_value("settings", "clean_command");
         }
         
         this->check_thread();
@@ -61,19 +61,19 @@ void ProjectManager::build_task(int task=0)
 
         if (lang == "c++")
         {
-            thread = new std::thread(&ProjectManager::build_cpp_project, this, path, selected_os, build_command);
+            thread = new std::thread(&ProjectManager::build_cpp_project, this, path, selected_os, command);
         }
         else if (lang == "rust")
         {
-            thread = new std::thread(&ProjectManager::build_rust_project, this, path, selected_os);
+            thread = new std::thread(&ProjectManager::build_rust_project, this, path, selected_os, command);
         }
         proj_file->free();
     }
 }
 
-void ProjectManager::build_cpp_project(String path, String selected_platform, String build_command)
+void ProjectManager::build_cpp_project(String path, String selected_platform, String command_line)
 {
-    String command = build_command;
+    String command = command_line;
     command = command.replace("{platform}", selected_platform);
     command = command.replace("{path}", path);
     PoolStringArray args = command.split(" ");
@@ -82,47 +82,50 @@ void ProjectManager::build_cpp_project(String path, String selected_platform, St
 
     if (cast_to<EditorFile>(this->get_parent())->get_selected_profile() == true)
     {
-        args.append("--release");
+        args.append("target=release");
     }
 
     this->execute_os(command, args, true);
 }
 
-void ProjectManager::build_rust_project(String path, String selected_platform)
+void ProjectManager::build_rust_project(String path, String selected_platform, String command_line)
 {
+    String command = command_line;
+    command = command.replace("{path}", path+"/Cargo.toml");
     PoolStringArray args;
     String os_name = OS::get_singleton()->get_name();
-
-    args.append("build");
-    args.append("--manifest-path=" + path + "/Cargo.toml");
 
     if (selected_platform == "windows")
     {
         if (os_name != "windows")
         {
-            args.append("--target=x86_64-pc-windows-msvc");
+            command = command.replace("{platform}", "x86_64-pc-windows-msvc");
         }
     }
     else if (selected_platform == "x11")
     {
         if (os_name != "x11")
         {
-            args.append("--target=x86_64-unknown-linux-gnu");
+            command = command.replace("{platform}", "x86_64-unknown-linux-gnu");
         }
     }
     else if (selected_platform == "osx")
     {
         if (os_name != "osx")
         {
-            args.append("--target=x86_64-apple-darwin");
+            command = command.replace("{platform}", "x86_64-apple-darwin");
         }
     }
+    
+    args = command.split(" ");
+    command = args[0];
+    args.remove(0);
     if (cast_to<EditorFile>(this->get_parent())->get_selected_profile() == true)
     {
-        args.append("target=release");
+        args.append("--release");
     }
 
-    this->execute_os("cargo", args, false);
+    this->execute_os(command, args, false);
 }
 
 void ProjectManager::create_new_class()
@@ -311,7 +314,7 @@ void ProjectManager::create_new_project()
                                cpp_path + "\"\n"
                                           "include_folders=\"\"\n"
                                           "linker_folders=\"\""
-                                "build_command=\"scons -C {path} platform={platform}\""
+                                "build_command=\"scons -C {path} platform={platform}\"\n"
                                 "clean_command=\"scons -C {path} --clean\"");
             file->close();
 
@@ -393,7 +396,9 @@ void ProjectManager::create_rust_project(String path)
                        "path=\"" +
                        path + "/" + project_name + "\"\n"
                                                    "gnative_version=\"" +
-                       gdn_version + "\"\n");
+                       gdn_version + "\"\n"
+                       "build_command=\"cargo build --manifest-path={path}\"\n"
+                       "clean_command=\"cargo clean --manifest-path={path}\"");
     file->close();
     cast_to<EditorFile>(this->get_parent())->change_project_path(path + "/" + project_name);
     cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/src/lib.rs");
