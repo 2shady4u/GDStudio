@@ -57,7 +57,13 @@ void EditorFile::change_project_path(String path)
 void EditorFile::execute_build()
 {
     ProjectManager *project_manager = cast_to<ProjectManager>((WindowDialog *)get_node(NodePath("ProjectManager")));
-    project_manager->build_task();
+    project_manager->build_task(0);
+}
+
+void EditorFile::execute_clean()
+{
+    ProjectManager *project_manager = cast_to<ProjectManager>((WindowDialog *)get_node(NodePath("ProjectManager")));
+    project_manager->build_task(1);
 }
 
 void EditorFile::create_user_data()
@@ -353,6 +359,7 @@ void EditorFile::_register_methods()
     register_method((char *)"create_shortcuts", &EditorFile::create_shortcuts);
     register_method((char *)"change_project_path", &EditorFile::change_project_path);
     register_method((char *)"execute_build", &EditorFile::execute_build);
+    register_method((char *)"execute_clean", &EditorFile::execute_clean);
     register_method((char *)"create_user_data", &EditorFile::create_user_data);
     register_method((char *)"load_editor_settings", &EditorFile::load_editor_settings);
     register_method((char *)"get_project_path", &EditorFile::get_project_path);

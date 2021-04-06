@@ -27,6 +27,7 @@ public:
     void create_shortcuts();
     void change_project_path(String);
     void execute_build();
+    void execute_clean();
     void create_user_data();
     void load_editor_settings();
     String get_project_path();

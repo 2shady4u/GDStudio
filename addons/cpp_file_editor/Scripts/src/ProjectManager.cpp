@@ -38,7 +38,7 @@ void ProjectManager::_ready()
 {
 }
 
-void ProjectManager::build_task()
+void ProjectManager::build_task(int task=0)
 {
     ConfigFile *proj_file = ConfigFile::_new();
     if (cast_to<EditorFile>(this->get_parent())->get_project_path() == "")
@@ -51,6 +51,11 @@ void ProjectManager::build_task()
         String lang = proj_file->get_value("settings", "language");
         String path = proj_file->get_value("settings", "path");
         String build_command = proj_file->get_value("settings", "build_command");
+        if (task == 1)
+        {
+            build_command = proj_file->get_value("settings", "clean_command");
+        }
+        
         this->check_thread();
         String selected_os = cast_to<EditorFile>(this->get_parent())->get_selected_platform();
 
@@ -306,7 +311,7 @@ void ProjectManager::create_new_project()
                                cpp_path + "\"\n"
                                           "include_folders=\"\"\n"
                                           "linker_folders=\"\""
-                                "build_command=\"scons -C {path} platform=platform\""
+                                "build_command=\"scons -C {path} platform={platform}\""
                                 "clean_command=\"scons -C {path} --clean\"");
             file->close();
 
@@ -535,6 +540,7 @@ void ProjectManager::_register_methods()
 {
     register_method((char *)"_init", &ProjectManager::_init);
     register_method((char *)"_ready", &ProjectManager::_ready);
+    register_method((char *)"build_task", &ProjectManager::build_task);
     register_method((char *)"build_cpp_project", &ProjectManager::build_cpp_project);
     register_method((char *)"build_rust_project", &ProjectManager::build_rust_project);
     register_method((char *)"create_new_class", &ProjectManager::create_new_class);

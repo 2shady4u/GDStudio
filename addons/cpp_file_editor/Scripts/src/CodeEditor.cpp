@@ -411,6 +411,12 @@ void CodeEditor::_on_Build_pressed()
     editor->execute_build();
 }
 
+void CodeEditor::_on_Clean_pressed()
+{
+    EditorFile *editor = cast_to<EditorFile>(this->get_parent()->get_parent());
+    editor->execute_clean();
+}
+
 void CodeEditor::_on_ExecuteCustomCommandButton_pressed()
 {
     Array output;
@@ -448,5 +454,6 @@ void CodeEditor::_register_methods()
     register_method((char *)"_on_CodeEditor_text_changed", &CodeEditor::_on_CodeEditor_text_changed);
     register_method((char *)"_on_CodeEditor_gui_input", &CodeEditor::_on_CodeEditor_gui_input);
     register_method((char *)"_on_Build_pressed", &CodeEditor::_on_Build_pressed);
+    register_method((char *)"_on_Clean_pressed", &CodeEditor::_on_Clean_pressed);
     register_method((char *)"_on_ExecuteCustomCommandButton_pressed", &CodeEditor::_on_ExecuteCustomCommandButton_pressed);
 }
