@@ -88,6 +88,11 @@ void ProjectSettings::load_settings(String language)
         {
             ((ItemList *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer/ItemList")))->add_item(linker_array[i]);
         }
+        String build_command = config_file->get_value("settings", "build_command");
+        ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/Build/LineEdit")))->set_text(build_command);
+        
+        String clean_command = config_file->get_value("settings", "clean_command");
+        ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/Clean/LineEdit")))->set_text(clean_command);
     }
     else if (language == "rust")
     {
@@ -138,6 +143,8 @@ void ProjectSettings::_on_ConfirmSettings_pressed()
             }
         }
         config_file->set_value("settings", "linker_folders", linker_paths);
+        config_file->set_value("settings", "build_command", ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/Build/LineEdit")))->get_text());
+        config_file->set_value("settings", "clean_command", ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/Clean/LineEdit")))->get_text());
     }
     else if (this->project_lang == "rust")
     {

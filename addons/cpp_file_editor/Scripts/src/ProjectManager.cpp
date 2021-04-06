@@ -68,17 +68,12 @@ void ProjectManager::build_task()
 
 void ProjectManager::build_cpp_project(String path, String selected_platform, String build_command)
 {
-    String command = "scons -C {path} platform={platform}";
+    String command = build_command;
     command = command.replace("{platform}", selected_platform);
     command = command.replace("{path}", path);
     PoolStringArray args = command.split(" ");
     command = args[0];
     args.remove(0);
-    /*String platform = "platform=" + selected_platform;
-    Array output;
-    args.append("-C");
-    args.append(path);
-    args.append(platform);*/
 
     if (cast_to<EditorFile>(this->get_parent())->get_selected_profile() == true)
     {
@@ -312,7 +307,7 @@ void ProjectManager::create_new_project()
                                           "include_folders=\"\"\n"
                                           "linker_folders=\"\""
                                 "build_command=\"scons -C {path} platform=platform\""
-                                "clean_command=\"scons --clean\"");
+                                "clean_command=\"scons -C {path} --clean\"");
             file->close();
 
             cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/" + source_folder + "/main.cpp");
