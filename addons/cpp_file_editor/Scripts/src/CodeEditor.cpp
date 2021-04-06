@@ -12,7 +12,6 @@
 #include <DynamicFont.hpp>
 #include <DynamicFontData.hpp>
 #include <Theme.hpp>
-#include <OS.hpp>
 #include <LineEdit.hpp>
 #include <Directory.hpp>
 #include <Tree.hpp>
@@ -22,6 +21,8 @@
 #include <ResourceLoader.hpp>
 #include <String.hpp>
 #include <PoolArrays.hpp>
+#include <thread>
+#include <future>
 
 #include "CodeEditor.hpp"
 #include "FileManager.hpp"
@@ -420,17 +421,11 @@ void CodeEditor::_on_Clean_pressed()
 void CodeEditor::_on_ExecuteCustomCommandButton_pressed()
 {
     Array output;
-    PoolStringArray args;
+    String args;
     String command = ((LineEdit *)get_node(NodePath("BuildContainer/Build/CustomCommand/Command")))->get_text();
 
-    args.append(((LineEdit *)get_node(NodePath("BuildContainer/Build/Arguments/LineEdit")))->get_text());
-    OS::get_singleton()->execute(command, args, true, output);
-
-    EditorFile *editor = cast_to<EditorFile>(this->get_parent()->get_parent());
-    for (int i = 0; i < args.size(); i++)
-    {
-        editor->get_editor_instance()->edit_log(output[i]);
-    }
+    args = ((LineEdit *)get_node(NodePath("BuildContainer/Build/Arguments/LineEdit")))->get_text();
+    std::future<void> th = std::async(std::launch::async, &EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()->get_parent()), command+args);
 }
 
 void CodeEditor::_register_methods()

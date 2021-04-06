@@ -195,8 +195,6 @@ void ProjectManager::create_new_project()
     String path = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/PathLabel/FilePath")))->get_text();
     String cpp_path = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/CPP/cppPath/cppPath")))->get_text();
 
-    EditorFile *editor = cast_to<EditorFile>(this->get_parent());
-    PoolStringArray args;
     switch (((OptionButton *)get_node(NodePath("TabContainer/NewProject/ProjectType/ProjectType")))->get_selected_id())
     {
     case 0:
