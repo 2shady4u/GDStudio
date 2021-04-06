@@ -185,6 +185,7 @@ void EditorFile::open_file(String path)
     File *file = File::_new();
     file->open(path, File::READ);
     this->current_editor_instance = cast_to<CodeEditor>(this->code_scene->instance());
+    this->instance_defined = true;
     String content = file->get_as_text();
     file->close();
     file->free();
@@ -230,7 +231,6 @@ void EditorFile::open_file(String path)
 
     ((Tabs *)get_node("TabContainer"))->add_tab(this->file_name, icon);
     ((Tabs *)get_node("TabContainer"))->set_current_tab(this->tab_number - 1);
-    this->instance_defined = true;
 }
 
 void EditorFile::save_file()
