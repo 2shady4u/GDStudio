@@ -267,7 +267,6 @@ void CodeEditor::list_subdirectories(String path, TreeItem *root)
     {
         item = tree->create_item(root);
         item->set_text(0, files[i]);
-        Godot::print(files[i].get_extension());
         if (files[i].get_extension() == "cpp" || files[i].get_extension() == "hpp")
         {
             item->set_icon(0, cpp_icon);

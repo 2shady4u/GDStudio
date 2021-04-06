@@ -50,12 +50,13 @@ void ProjectManager::build_task()
         proj_file->load(cast_to<EditorFile>(this->get_parent())->get_project_path() + "/settings.gdnproj");
         String lang = proj_file->get_value("settings", "language");
         String path = proj_file->get_value("settings", "path");
+        String build_command = proj_file->get_value("settings", "build_command");
         this->check_thread();
         String selected_os = cast_to<EditorFile>(this->get_parent())->get_selected_platform();
 
         if (lang == "c++")
         {
-            thread = new std::thread(&ProjectManager::build_cpp_project, this, path, selected_os);
+            thread = new std::thread(&ProjectManager::build_cpp_project, this, path, selected_os, build_command);
         }
         else if (lang == "rust")
         {
@@ -65,21 +66,26 @@ void ProjectManager::build_task()
     }
 }
 
-void ProjectManager::build_cpp_project(String path, String selected_platform)
+void ProjectManager::build_cpp_project(String path, String selected_platform, String build_command)
 {
-    PoolStringArray args;
-    String platform = "platform=" + selected_platform;
+    String command = "scons -C {path} platform={platform}";
+    command = command.replace("{platform}", selected_platform);
+    command = command.replace("{path}", path);
+    PoolStringArray args = command.split(" ");
+    command = args[0];
+    args.remove(0);
+    /*String platform = "platform=" + selected_platform;
     Array output;
     args.append("-C");
     args.append(path);
-    args.append(platform);
+    args.append(platform);*/
 
     if (cast_to<EditorFile>(this->get_parent())->get_selected_profile() == true)
     {
         args.append("--release");
     }
 
-    this->execute_os("scons", args, true);
+    this->execute_os(command, args, true);
 }
 
 void ProjectManager::build_rust_project(String path, String selected_platform)
@@ -304,7 +310,9 @@ void ProjectManager::create_new_project()
                                                "godot_cpp_folder=\"" +
                                cpp_path + "\"\n"
                                           "include_folders=\"\"\n"
-                                          "linker_folders=\"\"");
+                                          "linker_folders=\"\""
+                                "build_command=\"scons -C {path} platform=platform\""
+                                "clean_command=\"scons --clean\"");
             file->close();
 
             cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/" + source_folder + "/main.cpp");

@@ -16,7 +16,7 @@ public:
     void _init();
     void _ready();
     void build_task();
-    void build_cpp_project(String,String);
+    void build_cpp_project(String,String,String);
     void build_rust_project(String,String);
     void create_new_class();
     void create_new_project();
