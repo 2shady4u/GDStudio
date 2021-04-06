@@ -21,6 +21,7 @@
 #include <Reference.hpp>
 #include <ResourceLoader.hpp>
 #include <String.hpp>
+#include <PoolArrays.hpp>
 
 #include "CodeEditor.hpp"
 #include "FileManager.hpp"
@@ -159,7 +160,13 @@ void CodeEditor::list_directories(String path)
     folder_icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/default_folder.svg", "Texture");
     Ref<Texture> file_icon;
     file_icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/file.svg", "Texture");
+    Ref<Texture> cpp_icon;
+    cpp_icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/cplusplus-original.svg", "Texture");
+    Ref<Texture> rs_icon;
+    rs_icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/rust-plain.svg", "Texture");
 
+    PoolStringArray dirs;
+    PoolStringArray files;
     Directory *dir = Directory::_new();
     dir->open(path);
     dir->list_dir_begin();
@@ -169,22 +176,44 @@ void CodeEditor::list_directories(String path)
     {
         if (name.begins_with(dot) == false)
         {
-            item = tree->create_item(root);
-            item->set_text(0, name);
             if (dir->current_is_dir() == true)
             {
-                list_subdirectories(path+"/"+name, item);
-                item->set_icon(0, folder_icon);
+                dirs.append(name);
             }
             else
             {
-                item->set_icon(0, file_icon);
+                files.append(name);
             }
         }
 
         name = dir->get_next();
     }
 
+    for (int i = 0; i < dirs.size(); i++)
+    {
+        item = tree->create_item(root);
+        item->set_text(0, dirs[i]);
+        list_subdirectories(path+"/"+dirs[i], item);
+        item->set_icon(0, folder_icon);
+    }
+    
+    for (int i = 0; i < files.size(); i++)
+    {
+        item = tree->create_item(root);
+        item->set_text(0, files[i]);
+        if (files[i].get_extension() == "cpp" || files[i].get_extension() == "hpp")
+        {
+            item->set_icon(0, cpp_icon);
+        }
+        else if (files[i].get_extension() == "rs")
+        {
+            item->set_icon(0, rs_icon);
+        }
+        else
+        {
+            item->set_icon(0, file_icon);
+        }
+    }
     dir->free();
 }
 
@@ -197,7 +226,13 @@ void CodeEditor::list_subdirectories(String path, TreeItem *root)
     folder_icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/default_folder.svg", "Texture");
     Ref<Texture> file_icon;
     file_icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/file.svg", "Texture");
+    Ref<Texture> cpp_icon;
+    cpp_icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/cplusplus-original.svg", "Texture");
+    Ref<Texture> rs_icon;
+    rs_icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/rust-plain.svg", "Texture");
 
+    PoolStringArray dirs;
+    PoolStringArray files;
     Directory *dir = Directory::_new();
     dir->open(path);
     dir->list_dir_begin();
@@ -207,22 +242,45 @@ void CodeEditor::list_subdirectories(String path, TreeItem *root)
     {
         if (name.begins_with(dot) == false)
         {
-            item = tree->create_item(root);
-            item->set_text(0, name);
             if (dir->current_is_dir() == true)
             {
-                list_subdirectories(path+"/"+name, item);
-                item->set_icon(0, folder_icon);
+                dirs.append(name);
             }
             else
             {
-                item->set_icon(0, file_icon);
+                files.append(name);
             }
         }
 
         name = dir->get_next();
     }
-
+    
+    for (int i = 0; i < dirs.size(); i++)
+    {
+        item = tree->create_item(root);
+        item->set_text(0, dirs[i]);
+        list_subdirectories(path+"/"+dirs[i], item);
+        item->set_icon(0, folder_icon);
+    }
+    
+    for (int i = 0; i < files.size(); i++)
+    {
+        item = tree->create_item(root);
+        item->set_text(0, files[i]);
+        Godot::print(files[i].get_extension());
+        if (files[i].get_extension() == "cpp" || files[i].get_extension() == "hpp")
+        {
+            item->set_icon(0, cpp_icon);
+        }
+        else if (files[i].get_extension() == "rs")
+        {
+            item->set_icon(0, rs_icon);
+        }
+        else
+        {
+            item->set_icon(0, file_icon);
+        }
+    }
     dir->free();
 }
 
