@@ -4,6 +4,7 @@
 #include <Array.hpp>
 #include <Variant.hpp>
 #include <InputEvent.hpp>
+#include <TreeItem.hpp>
 
 using namespace godot;
 
@@ -30,6 +31,7 @@ public:
     void set_custom_theme(String);
     bool get_release_flag();
     void list_directories(String);
+    void list_subdirectories(String, TreeItem*);
 
     void _on_CodeEditor_text_changed();
     void _on_CodeEditor_symbol_lookup(String, int, int);

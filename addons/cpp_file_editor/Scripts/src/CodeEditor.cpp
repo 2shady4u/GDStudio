@@ -20,6 +20,7 @@
 #include <Texture.hpp>
 #include <Reference.hpp>
 #include <ResourceLoader.hpp>
+#include <String.hpp>
 
 #include "CodeEditor.hpp"
 #include "FileManager.hpp"
@@ -148,7 +149,7 @@ bool CodeEditor::get_release_flag()
 void CodeEditor::list_directories(String path)
 {
     ((LineEdit *)get_node(NodePath("BuildContainer/Explorer/VBoxContainer/Root")))->set_text(path);
-    
+
     Tree *tree = ((Tree *)get_node(NodePath("BuildContainer/Explorer/VBoxContainer/Tree")));
 
     TreeItem *root = tree->create_item();
@@ -158,26 +159,70 @@ void CodeEditor::list_directories(String path)
     folder_icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/default_folder.svg", "Texture");
     Ref<Texture> file_icon;
     file_icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/file.svg", "Texture");
-    
+
     Directory *dir = Directory::_new();
     dir->open(path);
     dir->list_dir_begin();
     String name = dir->get_next();
+    String dot = ".";
     while (name != "")
     {
-        item = tree->create_item(root);
-        item->set_text(0, name);
-        if (dir->current_is_dir() == true)
+        if (name.begins_with(dot) == false)
         {
-            item->set_icon(0, folder_icon);
+            item = tree->create_item(root);
+            item->set_text(0, name);
+            if (dir->current_is_dir() == true)
+            {
+                list_subdirectories(path+"/"+name, item);
+                item->set_icon(0, folder_icon);
+            }
+            else
+            {
+                item->set_icon(0, file_icon);
+            }
         }
-        else
-        {
-            item->set_icon(0, file_icon);
-        }
+
         name = dir->get_next();
     }
-    
+
+    dir->free();
+}
+
+void CodeEditor::list_subdirectories(String path, TreeItem *root)
+{
+    Tree *tree = ((Tree *)get_node(NodePath("BuildContainer/Explorer/VBoxContainer/Tree")));
+
+    TreeItem *item;
+    Ref<Texture> folder_icon;
+    folder_icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/default_folder.svg", "Texture");
+    Ref<Texture> file_icon;
+    file_icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/file.svg", "Texture");
+
+    Directory *dir = Directory::_new();
+    dir->open(path);
+    dir->list_dir_begin();
+    String name = dir->get_next();
+    String dot = ".";
+    while (name != "")
+    {
+        if (name.begins_with(dot) == false)
+        {
+            item = tree->create_item(root);
+            item->set_text(0, name);
+            if (dir->current_is_dir() == true)
+            {
+                list_subdirectories(path+"/"+name, item);
+                item->set_icon(0, folder_icon);
+            }
+            else
+            {
+                item->set_icon(0, file_icon);
+            }
+        }
+
+        name = dir->get_next();
+    }
+
     dir->free();
 }
 
@@ -341,6 +386,7 @@ void CodeEditor::_register_methods()
     register_method((char *)"set_custom_theme", &CodeEditor::set_custom_theme);
     register_method((char *)"get_release_flag", &CodeEditor::get_release_flag);
     register_method((char *)"list_directories", &CodeEditor::list_directories);
+    register_method((char *)"list_subdirectories", &CodeEditor::list_subdirectories);
 
     register_method((char *)"_on_CodeEditor_text_changed", &CodeEditor::_on_CodeEditor_text_changed);
     register_method((char *)"_on_CodeEditor_gui_input", &CodeEditor::_on_CodeEditor_gui_input);
