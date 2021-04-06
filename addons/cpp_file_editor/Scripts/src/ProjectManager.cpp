@@ -330,6 +330,10 @@ void ProjectManager::create_new_project()
     case 1:
         this->check_thread();
         thread = new std::thread(&ProjectManager::create_rust_project, this, path);
+
+        this->check_thread();
+        String project_name = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/Rust/Name/Name")))->get_text();
+        cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/src/lib.rs");
         break;
     }
 }
@@ -401,12 +405,12 @@ void ProjectManager::create_rust_project(String path)
                        "clean_command=\"cargo clean --manifest-path={path}\"");
     file->close();
     cast_to<EditorFile>(this->get_parent())->change_project_path(path + "/" + project_name);
-    cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/src/lib.rs");
+    //cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/src/lib.rs");
     file->free();
-
+    
     PoolStringArray ver_args;
-    ver_args.append("--version");
-    this->execute_os("cargo", ver_args, true);
+    //ver_args.append("--version");
+    //this->execute_os("cargo", ver_args, true);
 }
 
 void ProjectManager::check_thread()
