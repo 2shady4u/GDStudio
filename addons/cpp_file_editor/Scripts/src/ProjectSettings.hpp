@@ -18,6 +18,8 @@ public:
     void setup();
     void load_settings(String);
 
+    void _on_ConfirmSettings_pressed();
+    
     static void _register_methods();
 
 private:

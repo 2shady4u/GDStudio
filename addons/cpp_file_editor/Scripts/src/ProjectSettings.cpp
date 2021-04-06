@@ -86,7 +86,7 @@ void ProjectSettings::load_settings(String language)
         PoolStringArray linker_array = linker_string.split(',');
         for (int i = 0; i < linker_array.size(); i++)
         {
-            ((ItemList *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/ItemList")))->add_item(linker_array[i]);
+            ((ItemList *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer/ItemList")))->add_item(linker_array[i]);
         }
     }
     else if (language == "rust")
@@ -103,10 +103,58 @@ void ProjectSettings::load_settings(String language)
     config_file->free();
 }
 
+void ProjectSettings::_on_ConfirmSettings_pressed()
+{
+    ConfigFile *config_file = ConfigFile::_new();
+    config_file->load(cast_to<EditorFile>(this->get_parent())->get_project_path()+"/settings.gdnproj");
+    
+    config_file->set_value("settings", "path", ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/ProjectPath/LineEdit")))->get_text());
+    
+    if (this->project_lang == "c++")
+    {
+        config_file->set_value("settings", "sources_folder", ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/Sources/LineEdit")))->get_text());
+        config_file->set_value("settings", "godot_cpp_folder", ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/Bindings/LineEdit")))->get_text());
+        int include_size = ((ItemList *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/ItemList")))->get_item_count();
+        String include_paths = "";
+        for (int i = 0; i < include_size; i++)
+        {
+            String name = ((ItemList *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/ItemList")))->get_item_text(i);
+            include_paths += name;
+            if (i != include_size - 1)
+            {
+                include_paths += ",";
+            }
+        }
+        config_file->set_value("settings", "include_folders", include_paths);
+        int linker_size = ((ItemList *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer/ItemList")))->get_item_count();
+        String linker_paths = "";
+        for (int i = 0; i < linker_size; i++)
+        {
+            String name = ((ItemList *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer/ItemList")))->get_item_text(i);
+            linker_paths += name;
+            if (i != linker_size - 1)
+            {
+                linker_paths += ",";
+            }
+        }
+        config_file->set_value("settings", "linker_folders", linker_paths);
+    }
+    else if (this->project_lang == "rust")
+    {
+        config_file->set_value("settings", "gdnative_version", ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/Rust/VBoxContainer/GDNativeVersion/LineEdit")))->get_text());
+    }
+    
+    config_file->save(cast_to<EditorFile>(this->get_parent())->get_project_path()+"/settings.gdnproj");
+    config_file->free();
+    this->hide();
+}
+
 void ProjectSettings::_register_methods()
 {
     register_method((char *)"_init", &ProjectSettings::_init);
     register_method((char *)"_ready", &ProjectSettings::_ready);
     register_method((char *)"setup", &ProjectSettings::setup);
     register_method((char *)"load_settings", &ProjectSettings::load_settings);
+    
+    register_method((char *)"_on_ConfirmSettings_pressed", &ProjectSettings::_on_ConfirmSettings_pressed);
 }

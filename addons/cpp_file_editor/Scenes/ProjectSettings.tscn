@@ -457,3 +457,5 @@ margin_left = 282.0
 margin_right = 344.0
 margin_bottom = 20.0
 text = "Confirm"
+
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Confirm/ConfirmSettings" to="." method="_on_ConfirmSettings_pressed"]
