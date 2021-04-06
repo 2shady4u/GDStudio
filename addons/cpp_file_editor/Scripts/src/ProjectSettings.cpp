@@ -104,6 +104,12 @@ void ProjectSettings::load_settings(String language)
         String gdn_version = config_file->get_value("settings", "gnative_version");
         ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/Rust/VBoxContainer/CargoVersion/LineEdit")))->set_text(output[0]);
         ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/Rust/VBoxContainer/GDNativeVersion/LineEdit")))->set_text(gdn_version);
+        
+        String build_command = config_file->get_value("settings", "build_command");
+        ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/Rust/VBoxContainer/Build/LineEdit")))->set_text(build_command);
+        
+        String clean_command = config_file->get_value("settings", "clean_command");
+        ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/Rust/VBoxContainer/Clean/LineEdit")))->set_text(clean_command);
     }
     config_file->free();
 }
@@ -149,6 +155,8 @@ void ProjectSettings::_on_ConfirmSettings_pressed()
     else if (this->project_lang == "rust")
     {
         config_file->set_value("settings", "gdnative_version", ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/Rust/VBoxContainer/GDNativeVersion/LineEdit")))->get_text());
+        config_file->set_value("settings", "build_command", ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/Rust/VBoxContainer/Build/LineEdit")))->get_text());
+        config_file->set_value("settings", "clean_command", ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/Rust/VBoxContainer/Clean/LineEdit")))->get_text());
     }
     
     config_file->save(cast_to<EditorFile>(this->get_parent())->get_project_path()+"/settings.gdnproj");
