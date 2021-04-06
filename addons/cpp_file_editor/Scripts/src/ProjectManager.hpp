@@ -1,6 +1,8 @@
 #include <Godot.hpp>
 #include <Control.hpp>
 #include <thread>
+#include <future>
+#include <chrono>
 
 using namespace godot;
 
@@ -22,7 +24,6 @@ public:
     void create_new_project();
     void create_rust_project(String);
     void check_thread();
-    void execute_os(String, PoolStringArray, bool);
 
     void _on_OkButton_pressed();
     void _on_CancelButton_pressed();

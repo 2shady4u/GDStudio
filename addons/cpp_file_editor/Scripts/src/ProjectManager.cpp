@@ -37,7 +37,7 @@ void ProjectManager::_ready()
 {
 }
 
-void ProjectManager::build_task(int task=0)
+void ProjectManager::build_task(int task = 0)
 {
     if (cast_to<EditorFile>(this->get_parent())->get_project_path() == "")
     {
@@ -53,7 +53,7 @@ void ProjectManager::build_task(int task=0)
         {
             command = settings[3];
         }
-        
+
         this->check_thread();
         String selected_os = cast_to<EditorFile>(this->get_parent())->get_selected_platform();
 
@@ -73,23 +73,18 @@ void ProjectManager::build_cpp_project(String path, String selected_platform, St
     String command = command_line;
     command = command.replace("{platform}", selected_platform);
     command = command.replace("{path}", path);
-    PoolStringArray args = command.split(" ");
-    command = args[0];
-    args.remove(0);
-
     if (cast_to<EditorFile>(this->get_parent())->get_selected_profile() == true)
     {
-        args.append("target=release");
+        command += "target=release";
     }
 
-    this->execute_os(command, args, true);
+    std::future<void> th = std::async(std::launch::async, &EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()), command);
 }
 
 void ProjectManager::build_rust_project(String path, String selected_platform, String command_line)
 {
     String command = command_line;
-    command = command.replace("{path}", path+"/Cargo.toml");
-    PoolStringArray args;
+    command = command.replace("{path}", path + "/Cargo.toml");
     String os_name = OS::get_singleton()->get_name();
 
     if (selected_platform == "windows")
@@ -113,16 +108,13 @@ void ProjectManager::build_rust_project(String path, String selected_platform, S
             command = command.replace("{platform}", "x86_64-apple-darwin");
         }
     }
-    
-    args = command.split(" ");
-    command = args[0];
-    args.remove(0);
+
     if (cast_to<EditorFile>(this->get_parent())->get_selected_profile() == true)
     {
-        args.append("--release");
+        command += "--release";
     }
 
-    this->execute_os(command, args, false);
+    std::future<void> th = std::async(std::launch::async, &EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()), command);
 }
 
 void ProjectManager::create_new_class()
@@ -311,8 +303,8 @@ void ProjectManager::create_new_project()
                                cpp_path + "\"\n"
                                           "include_folders=\"\"\n"
                                           "linker_folders=\"\""
-                                "build_command=\"scons -C {path} platform={platform}\"\n"
-                                "clean_command=\"scons -C {path} --clean\"");
+                                          "build_command=\"scons -C {path} platform={platform}\"\n"
+                                          "clean_command=\"scons -C {path} --clean\"");
             file->close();
 
             cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/" + source_folder + "/main.cpp");
@@ -320,32 +312,34 @@ void ProjectManager::create_new_project()
             file->free();
             dir->free();
         }
-        args.append("--version");
-        this->execute_os("python", args, true);
-        this->execute_os("scons", args, true);
+        cast_to<EditorFile>(this->get_parent())->execute_command("python --version");
+        cast_to<EditorFile>(this->get_parent())->execute_command("scons --version");
         break;
     case 1:
         this->check_thread();
-        thread = new std::thread(&ProjectManager::create_rust_project, this, path);
-
-        this->check_thread();
         String project_name = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/Rust/Name/Name")))->get_text();
-        cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/src/lib.rs");
-        cast_to<EditorFile>(this->get_parent())->change_project_path(path + "/" + project_name);
+        
+        std::future<void> th = std::async(std::launch::async, &EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()), "cargo init --lib " + path + "/" + project_name);
+        while (true)
+        {
+            if (th.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+            {
+                this->check_thread();
+                this->create_rust_project(path);
+                cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/src/lib.rs");
+                cast_to<EditorFile>(this->get_parent())->change_project_path(path + "/" + project_name);
+                break;
+            }
+        }
+        cast_to<EditorFile>(this->get_parent())->execute_command("cargo --version");
         break;
     }
 }
 
 void ProjectManager::create_rust_project(String path)
 {
-    PoolStringArray args;
     String gdn_version = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/Rust/Version/Version")))->get_text();
     String project_name = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/Rust/Name/Name")))->get_text();
-
-    args.append("init");
-    args.append("--lib");
-    args.append(path + "/" + project_name);
-    this->execute_os("cargo", args, false);
 
     File *file = File::_new();
     file->open(path + "/" + project_name + "/Cargo.toml", File::READ);
@@ -399,14 +393,11 @@ void ProjectManager::create_rust_project(String path)
                        path + "/" + project_name + "\"\n"
                                                    "gdnative_version=\"" +
                        gdn_version + "\"\n"
-                       "build_command=\"cargo build --manifest-path={path}\"\n"
-                       "clean_command=\"cargo clean --manifest-path={path}\"");
+                                     "build_command=\"cargo build --manifest-path={path}\"\n"
+                                     "clean_command=\"cargo clean --manifest-path={path}\"");
     file->close();
     file->free();
-    
-    PoolStringArray ver_args;
-    ver_args.append("--version");
-    this->execute_os("cargo", ver_args, true);
+
 }
 
 void ProjectManager::check_thread()
@@ -416,20 +407,6 @@ void ProjectManager::check_thread()
         thread->join();
         delete thread;
         thread = nullptr;
-    }
-}
-
-void ProjectManager::execute_os(String command, PoolStringArray args, bool show_log)
-{
-    Array output;
-    OS::get_singleton()->execute(command, args, true, output);
-    if (show_log == true)
-    {
-        EditorFile *editor = cast_to<EditorFile>(this->get_parent());
-        for (int i = 0; i < output.size(); i++)
-        {
-            editor->get_editor_instance()->edit_log(output[i]);
-        }
     }
 }
 
@@ -552,7 +529,6 @@ void ProjectManager::_register_methods()
     register_method((char *)"create_new_project", &ProjectManager::create_new_project);
     register_method((char *)"create_rust_project", &ProjectManager::create_rust_project);
     register_method((char *)"check_thread", &ProjectManager::check_thread);
-    register_method((char *)"execute_os", &ProjectManager::execute_os);
 
     register_method((char *)"_on_OkButton_pressed", &ProjectManager::_on_OkButton_pressed);
     register_method((char *)"_on_CancelButton_pressed", &ProjectManager::_on_CancelButton_pressed);
