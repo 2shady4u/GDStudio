@@ -309,6 +309,7 @@ void ProjectManager::create_new_project()
                                cpp_path + "\"\n"
                                           "include_folders=\"\"\n"
                                           "linker_folders=\"\"\n"
+                                          "linker_settings=\"\"\n"
                                           "build_command=\"scons -C {path} platform={platform} cpp_path={bindings_path}\"\n"
                                           "clean_command=\"scons -C {path} --clean\"");
             file->close();

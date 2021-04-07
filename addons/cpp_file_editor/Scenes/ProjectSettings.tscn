@@ -125,7 +125,7 @@ size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/CPP"]
 margin_right = 946.0
-margin_bottom = 410.0
+margin_bottom = 432.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
@@ -133,59 +133,59 @@ __meta__ = {
 }
 
 [node name="Sources" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
-margin_right = 946.0
+margin_right = 934.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Sources"]
-margin_right = 471.0
+margin_right = 465.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Sources/CenterContainer"]
-margin_left = 188.0
+margin_left = 185.0
 margin_top = 5.0
-margin_right = 282.0
+margin_right = 279.0
 margin_bottom = 19.0
 text = "Sources Folder"
 
 [node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Sources"]
-margin_left = 475.0
-margin_right = 946.0
+margin_left = 469.0
+margin_right = 934.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="Bindings" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
 margin_top = 28.0
-margin_right = 946.0
+margin_right = 934.0
 margin_bottom = 52.0
 
 [node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Bindings"]
-margin_right = 471.0
+margin_right = 465.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Bindings/CenterContainer"]
-margin_left = 157.0
+margin_left = 154.0
 margin_top = 5.0
-margin_right = 313.0
+margin_right = 310.0
 margin_bottom = 19.0
 text = "godot_cpp Bindings Path"
 
 [node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Bindings"]
-margin_left = 475.0
-margin_right = 946.0
+margin_left = 469.0
+margin_right = 934.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="LabelsContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
 margin_top = 56.0
-margin_right = 946.0
+margin_right = 934.0
 margin_bottom = 70.0
 size_flags_horizontal = 3
 
 [node name="IncludePaths" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LabelsContainer"]
-margin_right = 471.0
+margin_right = 465.0
 margin_bottom = 14.0
 size_flags_horizontal = 3
 __meta__ = {
@@ -193,30 +193,30 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LabelsContainer/IncludePaths"]
-margin_left = 192.0
-margin_right = 279.0
+margin_left = 189.0
+margin_right = 276.0
 margin_bottom = 14.0
 text = "Include Paths"
 
 [node name="LinkerPaths" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LabelsContainer"]
-margin_left = 475.0
-margin_right = 946.0
+margin_left = 469.0
+margin_right = 934.0
 margin_bottom = 14.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LabelsContainer/LinkerPaths"]
-margin_left = 196.0
-margin_right = 274.0
+margin_left = 193.0
+margin_right = 271.0
 margin_bottom = 14.0
 text = "Linker Paths"
 
 [node name="PanelsContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
 margin_top = 74.0
-margin_right = 946.0
+margin_right = 934.0
 margin_bottom = 214.0
 
 [node name="Include" type="PanelContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer"]
-margin_right = 471.0
+margin_right = 465.0
 margin_bottom = 140.0
 rect_min_size = Vector2( 0, 140 )
 size_flags_horizontal = 3
@@ -224,114 +224,202 @@ size_flags_horizontal = 3
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 464.0
+margin_right = 458.0
 margin_bottom = 133.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ItemList" type="ItemList" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer"]
-margin_right = 457.0
+margin_right = 451.0
 margin_bottom = 102.0
 size_flags_vertical = 3
 
 [node name="Buttons" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer"]
 margin_top = 106.0
-margin_right = 457.0
+margin_right = 451.0
 margin_bottom = 126.0
 size_flags_horizontal = 3
 
 [node name="AddPath" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/Buttons"]
-margin_right = 226.0
+margin_right = 109.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
-text = "Add Path"
+text = "Add"
+
+[node name="Button" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/Buttons"]
+margin_left = 113.0
+margin_right = 223.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Edit"
 
 [node name="RemovePath" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/Buttons"]
-margin_left = 230.0
-margin_right = 457.0
+margin_left = 227.0
+margin_right = 337.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
-text = "Remove Path"
+text = "Remove"
+
+[node name="Clear" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/Buttons"]
+margin_left = 341.0
+margin_right = 451.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Clear All"
 
 [node name="Linker" type="PanelContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer"]
-margin_left = 475.0
-margin_right = 946.0
+margin_left = 469.0
+margin_right = 934.0
 margin_bottom = 140.0
 size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 464.0
+margin_right = 458.0
 margin_bottom = 133.0
 size_flags_vertical = 3
 
 [node name="ItemList" type="ItemList" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer"]
-margin_right = 457.0
+margin_right = 451.0
 margin_bottom = 102.0
 size_flags_vertical = 3
 
 [node name="Buttons" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer"]
 margin_top = 106.0
-margin_right = 457.0
+margin_right = 451.0
 margin_bottom = 126.0
 
 [node name="AddPath" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer/Buttons"]
-margin_right = 226.0
+margin_right = 109.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
-text = "Add Path"
+text = "Add"
+
+[node name="EditPath" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer/Buttons"]
+margin_left = 113.0
+margin_right = 223.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Edit"
 
 [node name="RemovePath" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer/Buttons"]
-margin_left = 230.0
-margin_right = 457.0
+margin_left = 227.0
+margin_right = 337.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
-text = "Remove Path"
+text = "Remove"
+
+[node name="Clear" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer/Buttons"]
+margin_left = 341.0
+margin_right = 451.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Clear"
+
+[node name="LinkerLabel" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
+margin_top = 218.0
+margin_right = 934.0
+margin_bottom = 232.0
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LinkerLabel"]
+margin_left = 420.0
+margin_right = 514.0
+margin_bottom = 14.0
+text = "Linker Settings"
+
+[node name="LinkerList" type="PanelContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
+margin_top = 236.0
+margin_right = 934.0
+margin_bottom = 376.0
+rect_min_size = Vector2( 0, 140 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LinkerList"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 927.0
+margin_bottom = 133.0
+
+[node name="ItemList" type="ItemList" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LinkerList/VBoxContainer"]
+margin_right = 920.0
+margin_bottom = 102.0
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LinkerList/VBoxContainer"]
+margin_top = 106.0
+margin_right = 920.0
+margin_bottom = 126.0
+
+[node name="AddButton" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LinkerList/VBoxContainer/HBoxContainer"]
+margin_right = 90.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 90, 0 )
+text = "Add"
+
+[node name="EditButton" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LinkerList/VBoxContainer/HBoxContainer"]
+margin_left = 94.0
+margin_right = 184.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 90, 0 )
+text = "Edit"
+
+[node name="RemoveButton" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LinkerList/VBoxContainer/HBoxContainer"]
+margin_left = 188.0
+margin_right = 278.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 90, 0 )
+text = "Remove"
+
+[node name="ClearButton" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LinkerList/VBoxContainer/HBoxContainer"]
+margin_left = 282.0
+margin_right = 372.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 90, 0 )
+text = "Clear"
 
 [node name="Build" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
-margin_top = 218.0
-margin_right = 946.0
-margin_bottom = 242.0
+margin_top = 380.0
+margin_right = 934.0
+margin_bottom = 404.0
 
 [node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Build"]
-margin_right = 471.0
+margin_right = 465.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Build/CenterContainer"]
-margin_left = 184.0
+margin_left = 181.0
 margin_top = 5.0
-margin_right = 286.0
+margin_right = 283.0
 margin_bottom = 19.0
 text = "Build Command"
 
 [node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Build"]
-margin_left = 475.0
-margin_right = 946.0
+margin_left = 469.0
+margin_right = 934.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="Clean" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
-margin_top = 246.0
-margin_right = 946.0
-margin_bottom = 270.0
+margin_top = 408.0
+margin_right = 934.0
+margin_bottom = 432.0
 
 [node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Clean"]
-margin_right = 471.0
+margin_right = 465.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Clean/CenterContainer"]
-margin_left = 183.0
+margin_left = 180.0
 margin_top = 5.0
-margin_right = 287.0
+margin_right = 284.0
 margin_bottom = 19.0
 text = "Clean Command"
 
 [node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Clean"]
-margin_left = 475.0
-margin_right = 946.0
+margin_left = 469.0
+margin_right = 934.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
@@ -445,9 +533,9 @@ margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="Confirm" type="CenterContainer" parent="PanelContainer/VBoxContainer"]
-margin_top = 506.0
+margin_top = 92.0
 margin_right = 946.0
-margin_bottom = 526.0
+margin_bottom = 112.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -457,5 +545,23 @@ margin_left = 442.0
 margin_right = 504.0
 margin_bottom = 20.0
 text = "Confirm"
+
+[node name="OpenFolder" type="FileDialog" parent="."]
+margin_right = 315.0
+margin_bottom = 130.0
+window_title = "Abrir un Directorio"
+mode = 2
+access = 2
+current_dir = "/Work/Godot/Code-Editor"
+current_path = "/Work/Godot/Code-Editor/"
+
+[node name="OpenFile" type="FileDialog" parent="."]
+margin_right = 315.0
+margin_bottom = 130.0
+window_title = "Abrir un Archivo"
+mode = 0
+access = 2
+current_dir = "/Work/Godot/Code-Editor"
+current_path = "/Work/Godot/Code-Editor/"
 
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Confirm/ConfirmSettings" to="." method="_on_ConfirmSettings_pressed"]
