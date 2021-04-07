@@ -21,7 +21,7 @@ public:
     void _process();
     void open_file(String);
     void save_file();
-    Array load_config(String,String,PoolStringArray);
+    Array load_config(String, String, PoolStringArray);
     void load_editor_settings();
     String get_project_path();
     String get_selected_platform();

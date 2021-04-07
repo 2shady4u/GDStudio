@@ -62,7 +62,7 @@ void EditorFile::open_file(String path)
 
     this->file_name = path.get_file();
     String file_extension = this->file_name.get_extension();
-    
+
     Ref<Texture> icon;
 
     if (file_extension == "cpp" || file_extension == "hpp")
@@ -104,7 +104,7 @@ Array EditorFile::load_config(String file, String section, PoolStringArray key)
 {
     ConfigFile *config_file = ConfigFile::_new();
     config_file->load(file);
-    
+
     Array output;
     for (int i = 0; i < key.size(); i++)
     {
@@ -162,14 +162,13 @@ String EditorFile::get_project_lang()
     if (this->project_config != "")
     {
         PoolStringArray keys = Array::make("language");
-        String lang = this->load_config(this->project_config+"/settings.gdnproj", "settings", keys)[0];
+        String lang = this->load_config(this->project_config + "/settings.gdnproj", "settings", keys)[0];
         return lang;
     }
     else
     {
         return "none";
     }
-    
 }
 
 void EditorFile::create_shortcuts()
@@ -375,19 +374,19 @@ void EditorFile::_register_methods()
     register_method((char *)"on_settings_pressed", &EditorFile::on_settings_pressed);
     register_method((char *)"open_file", &EditorFile::open_file);
     register_method((char *)"save_file", &EditorFile::save_file);
+    register_method((char *)"load_config", &EditorFile::load_config);
+    register_method((char *)"load_editor_settings", &EditorFile::load_editor_settings);
     register_method((char *)"create_shortcuts", &EditorFile::create_shortcuts);
     register_method((char *)"change_project_path", &EditorFile::change_project_path);
     register_method((char *)"execute_build", &EditorFile::execute_build);
     register_method((char *)"execute_clean", &EditorFile::execute_clean);
     register_method((char *)"execute_command", &EditorFile::execute_command);
     register_method((char *)"create_user_data", &EditorFile::create_user_data);
-    register_method((char *)"load_editor_settings", &EditorFile::load_editor_settings);
     register_method((char *)"get_project_path", &EditorFile::get_project_path);
     register_method((char *)"get_selected_platform", &EditorFile::get_selected_platform);
     register_method((char *)"get_selected_profile", &EditorFile::get_selected_profile);
     register_method((char *)"get_editor_instance", &EditorFile::get_editor_instance);
     register_method((char *)"get_project_lang", &EditorFile::get_project_lang);
-    register_method((char *)"load_config", &EditorFile::load_config);
 
     register_method((char *)"_on_NewFile_file_selected", &EditorFile::_on_NewFile_file_selected);
     register_method((char *)"_on_OpenFile_file_selected", &EditorFile::_on_OpenFile_file_selected);
