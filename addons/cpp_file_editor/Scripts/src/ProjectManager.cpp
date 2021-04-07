@@ -239,9 +239,15 @@ void ProjectManager::create_new_project()
                                "godot::Godot::nativescript_init(handle);\n}");
             file->close();
             file->open(path + "/" + project_name + "/SConstruct", File::WRITE);
-            file->store_string("import os\n\n"
+            file->store_string("import os\n"
+                               "import platform as pl\n\n"
+                               "current_platform = \"windows\"\n"
+                               "if pl.system() == \"Linux\":\n\t"
+                               "current_platform = \"linux\"\n"
+                               "elif pl.system() == \"Darwin\":\n\t"
+                               "current_platform = \"osx\"\n\n"
                                "platform = ARGUMENTS.get(\"p\", \"linux\")\n"
-                               "platform = ARGUMENTS.get(\"platform\", platform)\n"
+                               "platform = ARGUMENTS.get(\"platform\", platform)\n\n"
                                "env = Environment()\n"
                                "if platform == \"windows\":\n\t"
                                "env = Environment(ENV=os.environ)\n\n"
@@ -276,14 +282,12 @@ void ProjectManager::create_new_project()
                                           "godot_bindings_path + \"/include/core/\",\n\t"
                                           "],\n)\n\n"
                                           "if target == \"debug\":\n\t"
-                                          "env.Append(LIBS=[\"libgodot-cpp." +
-                               current_platform + ".debug.64\"])\n"
-                                                  "else:\n\t"
-                                                  "env.Append(LIBS=[\"libgodot-cpp." +
-                               current_platform + ".release.64\"])\n"
-                                                  "env.Append(LIBPATH=[godot_bindings_path + \"/bin/\"])\n\n"
-                                                  "sources = []\n"
-                                                  "add_sources(sources, \"" +
+                                          "env.Append(LIBS=[\"libgodot-cpp.\"+current_platform+\".debug.64\"])\n"
+                                          "else:\n\t"
+                                          "env.Append(LIBS=[\"libgodot-cpp.\"+current_platform+\".release.64\"])\n"
+                                          "env.Append(LIBPATH=[godot_bindings_path + \"/bin/\"])\n\n"
+                                          "sources = []\n"
+                                          "add_sources(sources, \"" +
                                source_folder + "\")\n\n"
                                                "library = env.SharedLibrary(target=\"bin/lib" +
                                project_name + "\", source=sources)\n"
@@ -300,7 +304,7 @@ void ProjectManager::create_new_project()
                                                "godot_cpp_folder=\"" +
                                cpp_path + "\"\n"
                                           "include_folders=\"\"\n"
-                                          "linker_folders=\"\""
+                                          "linker_folders=\"\"\n"
                                           "build_command=\"scons -C {path} platform={platform}\"\n"
                                           "clean_command=\"scons -C {path} --clean\"");
             file->close();
@@ -316,7 +320,7 @@ void ProjectManager::create_new_project()
     case 1:
         this->check_thread();
         String project_name = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/Rust/Name/Name")))->get_text();
-        
+
         std::future<void> th = std::async(std::launch::async, &EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()), "cargo init --lib " + path + "/" + project_name);
         while (true)
         {
@@ -395,7 +399,6 @@ void ProjectManager::create_rust_project(String path)
                                      "clean_command=\"cargo clean --manifest-path={path}\"");
     file->close();
     file->free();
-
 }
 
 void ProjectManager::check_thread()
