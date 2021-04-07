@@ -35,7 +35,7 @@ void EditorFile::_init()
 
 void EditorFile::_ready()
 {
-    this->tabNode = ((Tabs *)get_node("TabContainer"));
+    this->tabNode = ((Tabs *)get_node("VBoxContainer/TabContainer"));
     ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->connect("id_pressed", this, "on_file_pressed");
     ((MenuButton *)get_node(NodePath("TopBar/Project")))->get_popup()->connect("id_pressed", this, "on_project_pressed");
     ((MenuButton *)get_node(NodePath("TopBar/Settings")))->get_popup()->connect("id_pressed", this, "on_settings_pressed");
@@ -52,12 +52,12 @@ void EditorFile::open_file(String path)
     String content = file->get_as_text();
     file->close();
     file->free();
-    ((Tabs *)get_node("TabContainer"))->add_child(this->current_editor_instance, true);
+    ((Tabs *)get_node("VBoxContainer/Editor"))->add_child(this->current_editor_instance, true);
     this->current_editor_instance->set_initial_content(content);
     this->current_editor_instance->set_custom_font(this->custom_font);
     this->current_editor_instance->set_font_size(this->font_size);
     this->current_editor_instance->set_custom_theme(this->custom_theme);
-    this->tab_number = ((Tabs *)get_node("TabContainer"))->get_child_count();
+    this->tab_number = ((Tabs *)get_node("VBoxContainer/Editor"))->get_child_count();
     this->file_path = path;
 
     this->file_name = path.get_file();
@@ -86,8 +86,8 @@ void EditorFile::open_file(String path)
         icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/file.svg", "Texture");
     }
 
-    ((Tabs *)get_node("TabContainer"))->add_tab(this->file_name, icon);
-    ((Tabs *)get_node("TabContainer"))->set_current_tab(this->tab_number - 1);
+    ((Tabs *)get_node("VBoxContainer/TabContainer"))->add_tab(this->file_name, icon);
+    ((Tabs *)get_node("VBoxContainer/TabContainer"))->set_current_tab(this->tab_number - 1);
 }
 
 void EditorFile::save_file()
@@ -128,8 +128,8 @@ void EditorFile::load_editor_settings()
     {
         for (int i = 0; i < this->tab_number; i++)
         {
-            cast_to<CodeEditor>(((Tabs *)get_node("TabContainer"))->get_children()[i])->set_custom_font(this->custom_font);
-            cast_to<CodeEditor>(((Tabs *)get_node("TabContainer"))->get_children()[i])->set_font_size(this->font_size);
+            cast_to<CodeEditor>(((Tabs *)get_node("VBoxContainer/Editor"))->get_children()[i])->set_custom_font(this->custom_font);
+            cast_to<CodeEditor>(((Tabs *)get_node("VBoxContainer/Editor"))->get_children()[i])->set_font_size(this->font_size);
         }
     }
 
@@ -263,7 +263,7 @@ void EditorFile::on_file_pressed(int index)
         ((FileDialog *)get_node(NodePath("OpenFile")))->popup_centered();
         break;
     case 3:
-        this->_on_TabContainer_tab_close(((Tabs *)get_node("TabContainer"))->get_current_tab());
+        this->_on_TabContainer_tab_close(((Tabs *)get_node("VBoxContainer/TabContainer"))->get_current_tab());
         break;
     case 4:
         save_file();
@@ -324,9 +324,9 @@ void EditorFile::_on_TabContainer_tab_changed(int tab)
     {
         this->current_editor_instance->hide();
     }
-    this->current_editor_instance = cast_to<CodeEditor>(((Tabs *)get_node("TabContainer"))->get_child(tab));
+    this->current_editor_instance = cast_to<CodeEditor>(((Tabs *)get_node("VBoxContainer/Editor"))->get_child(tab));
     this->current_editor_instance->show();
-    this->file_name = ((Tabs *)get_node("TabContainer"))->get_tab_title(tab);
+    this->file_name = ((Tabs *)get_node("VBoxContainer/TabContainer"))->get_tab_title(tab);
 }
 
 void EditorFile::_on_TabContainer_tab_close(int tab)
@@ -334,8 +334,8 @@ void EditorFile::_on_TabContainer_tab_close(int tab)
     this->instance_defined = false;
     this->file_name = "";
     this->file_path = "";
-    ((Tabs *)get_node("TabContainer"))->get_child(tab)->queue_free();
-    this->tab_number = ((Tabs *)get_node("TabContainer"))->get_child_count();
+    ((Tabs *)get_node("VBoxContainer/Editor"))->get_child(tab)->queue_free();
+    this->tab_number = ((Tabs *)get_node("VBoxContainer/Editor"))->get_child_count();
     if (this->tab_number > 1)
     {
         if (tab == 0)
@@ -347,7 +347,8 @@ void EditorFile::_on_TabContainer_tab_close(int tab)
             this->_on_TabContainer_tab_changed(tab - 1);
         }
     }
-    ((Tabs *)get_node("TabContainer"))->remove_tab(tab);
+    ((Tabs *)get_node("VBoxContainer/TabContainer"))->remove_tab(tab);
+    ((Tabs *)get_node("VBoxContainer/Editor"))->remove_tab(tab);
 }
 
 void EditorFile::_process()

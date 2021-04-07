@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://addons/cpp_file_editor/Scripts/native/editor_file.gdns" type="Script" id=1]
 [ext_resource path="res://addons/cpp_file_editor/Fonts/RobotoSlab-VariableFont_wght.ttf" type="DynamicFontData" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://addons/cpp_file_editor/Scripts/native/project_manager.gdns" type="Script" id=6]
 [ext_resource path="res://addons/cpp_file_editor/Scenes/Settings.tscn" type="PackedScene" id=7]
 [ext_resource path="res://addons/cpp_file_editor/Scenes/ProjectSettings.tscn" type="PackedScene" id=8]
+[ext_resource path="res://addons/cpp_file_editor/Scenes/LogPanel.tscn" type="PackedScene" id=9]
 
 [sub_resource type="DynamicFont" id=1]
 size = 14
@@ -22,15 +23,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TabContainer" type="Tabs" parent="."]
-anchor_right = 1.0
-margin_left = 2.0
-margin_top = 30.0
-size_flags_horizontal = 3
-custom_fonts/font = SubResource( 1 )
-tab_align = 0
-tab_close_display_policy = 1
-drag_to_rearrange_enabled = true
+[node name="Panel" type="Panel" parent="."]
+margin_right = 1280.0
+margin_bottom = 720.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -71,6 +66,40 @@ margin_right = 193.0
 margin_bottom = 30.0
 text = "Settings"
 items = [ "General", null, 0, false, false, 0, 0, null, "", false, "Project", null, 0, false, false, 1, 0, null, "", false ]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_top = 30.0
+margin_right = 1280.0
+margin_bottom = 720.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TabContainer" type="Tabs" parent="VBoxContainer"]
+margin_right = 1280.0
+margin_bottom = 29.0
+custom_fonts/font = SubResource( 1 )
+tab_align = 0
+tab_close_display_policy = 1
+drag_to_rearrange_enabled = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Editor" type="Panel" parent="VBoxContainer"]
+margin_top = 33.0
+margin_right = 1280.0
+margin_bottom = 522.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Control" parent="VBoxContainer" instance=ExtResource( 9 )]
+anchor_right = 0.0
+margin_top = 526.0
+margin_right = 1280.0
+margin_bottom = 690.0
 
 [node name="NewFile" type="FileDialog" parent="."]
 margin_right = 650.0
@@ -453,8 +482,8 @@ margin_right = 807.0
 
 [node name="ProjectSettings" parent="." instance=ExtResource( 8 )]
 
-[connection signal="tab_changed" from="TabContainer" to="." method="_on_TabContainer_tab_changed"]
-[connection signal="tab_close" from="TabContainer" to="." method="_on_TabContainer_tab_close"]
+[connection signal="tab_changed" from="VBoxContainer/TabContainer" to="." method="_on_TabContainer_tab_changed"]
+[connection signal="tab_close" from="VBoxContainer/TabContainer" to="." method="_on_TabContainer_tab_close"]
 [connection signal="file_selected" from="NewFile" to="." method="_on_NewFile_file_selected"]
 [connection signal="file_selected" from="OpenFile" to="." method="_on_OpenFile_file_selected"]
 [connection signal="pressed" from="ProjectManager/OkButton" to="ProjectManager" method="_on_OkButton_pressed"]
