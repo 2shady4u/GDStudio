@@ -1,5 +1,12 @@
 #!python
 import os
+import platform as pl
+
+current_platform = "windows"
+if pl.system() == "Linux":
+	current_platform = "linux"
+elif pl.system() == "Darwin":
+	current_platform = "osx"
 
 # platform= makes it in line with Godots scons file, keeping p for backwards compatibility
 platform = ARGUMENTS.get("p", "linux")
@@ -51,9 +58,9 @@ env.Append(
 )
 
 if target == "debug":
-    env.Append(LIBS=["libgodot-cpp.windows.debug.64"])
+    env.Append(LIBS=["libgodot-cpp."+current_platform+".debug.64"])
 else:
-    env.Append(LIBS=["libgodot-cpp.windows.release.64"])
+    env.Append(LIBS=["libgodot-cpp."+current_platform+".release.64"])
 
 env.Append(LIBPATH=["godot-cpp/bin/"])
 
