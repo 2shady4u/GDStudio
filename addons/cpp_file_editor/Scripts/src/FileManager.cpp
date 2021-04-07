@@ -12,6 +12,7 @@
 #include <Theme.hpp>
 #include <Array.hpp>
 #include <PoolArrays.hpp>
+#include <TextEdit.hpp>
 
 #include "FileManager.hpp"
 #include "ProjectManager.hpp"
@@ -244,7 +245,8 @@ void EditorFile::execute_command(String string_command)
     char buffer[256];
     while (fgets(buffer, sizeof(buffer), pipe) != NULL)
     {
-        this->get_editor_instance()->edit_log(buffer);
+        ((TextEdit *)get_node(NodePath("VBoxContainer/Control/TabContainer/Log/TextEdit")))->insert_text_at_cursor(buffer);
+        //this->get_editor_instance()->edit_log(buffer);
     }
 }
 

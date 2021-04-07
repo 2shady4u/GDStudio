@@ -301,11 +301,6 @@ bool CodeEditor::get_text_changed()
     return this->text_changed;
 }
 
-void CodeEditor::edit_log(String text)
-{
-    ((TextEdit *)get_node(NodePath("BuildContainer/Log")))->insert_text_at_cursor(text);
-}
-
 void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
 {
     InputEventKey *event_key = cast_to<InputEventKey>(event);
@@ -437,7 +432,6 @@ void CodeEditor::_register_methods()
     register_method((char *)"get_content", &CodeEditor::get_content);
     register_method((char *)"save_contents", &CodeEditor::save_contents);
     register_method((char *)"get_text_changed", &CodeEditor::get_text_changed);
-    register_method((char *)"edit_log", &CodeEditor::edit_log);
     register_method((char *)"get_build_platform_cpp", &CodeEditor::get_build_platform_cpp);
     register_method((char *)"set_custom_font", &CodeEditor::set_custom_font);
     register_method((char *)"set_font_size", &CodeEditor::set_font_size);
