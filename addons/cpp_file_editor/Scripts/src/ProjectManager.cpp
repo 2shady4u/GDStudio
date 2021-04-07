@@ -53,15 +53,13 @@ void ProjectManager::build_task(int task = 0)
         {
             execute_command = settings[3];
         }
-        
+
         this->check_thread();
         String selected_os = cast_to<EditorFile>(this->get_parent())->get_selected_platform();
 
         if (settings[0] == "c++")
         {
-            keys = Array::make("godot_cpp_folder");
-            String bindings = cast_to<EditorFile>(this->get_parent())->load_config(load_file, "settings", keys)[0];
-            String command = this->build_cpp_project(settings[1], selected_os, execute_command, bindings);
+            String command = this->build_cpp_project(settings[1], selected_os, execute_command);
             thread = new std::thread(&EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()), command);
         }
         else if (settings[0] == "rust")
@@ -71,12 +69,23 @@ void ProjectManager::build_task(int task = 0)
     }
 }
 
-String ProjectManager::build_cpp_project(String path, String selected_platform, String command_line, String bindings)
+String ProjectManager::build_cpp_project(String path, String selected_platform, String command_line)
 {
+    PoolStringArray keys = Array::make("godot_cpp_folder", "include_folders", "linker_folders", "linker_settings");
+    String load_file = cast_to<EditorFile>(this->get_parent())->get_project_path() + "/settings.gdnproj";
+    PoolStringArray settings = cast_to<EditorFile>(this->get_parent())->load_config(load_file, "settings", keys);
+    String bindings = settings[0];
+    String include_folders = settings[1];
+    String linker_folders = settings[2];
+    String linker_settings = settings[3];
+
     String command = command_line;
     command = command.replace("{platform}", selected_platform);
     command = command.replace("{path}", path);
     command = command.replace("{bindings_path}", bindings);
+    command = command.replace("{include}", include_folders);
+    command = command.replace("{linker}", linker_folders);
+    command = command.replace("{libs}", linker_settings);
     if (cast_to<EditorFile>(this->get_parent())->get_selected_profile() == true)
     {
         command += "target=release";
@@ -254,44 +263,65 @@ void ProjectManager::create_new_project()
                                "platform = ARGUMENTS.get(\"platform\", platform)\n\n"
                                "bindings = \"\"\n"
                                "bindings = ARGUMENTS.get(\"cpp_path\", bindings)\n\n"
+                               "include_folders = \"\"\n"
+                               "include_folders = ARGUMENTS.get(\"include_path\", include_folders)\n\n"
+                               "linker_folders = \"\"\n"
+                               "linker_folders = ARGUMENTS.get(\"linker_path\", linker_folders)\n\n"
+                               "linker_settings = \"\"\n"
+                               "linker_settings = ARGUMENTS.get(\"link_libs\", linker_settings)\n\n"
                                "env = Environment()\n"
                                "if platform == \"windows\":\n\t"
                                "env = Environment(ENV=os.environ)\n\n"
                                "godot_headers_path = ARGUMENTS.get(\"headers\", os.getenv(\"GODOT_HEADERS\", bindings+\"/godot_headers\"))\n"
-                                          "godot_bindings_path = ARGUMENTS.get(\"cpp_bindings\", os.getenv(\"CPP_BINDINGS\", bindings))\n\n"
-                                          "target = ARGUMENTS.get(\"target\", \"debug\")\n\n"
-                                          "if ARGUMENTS.get(\"use_llvm\", \"no\") == \"yes\":\n\t"
-                                          "env[\"CXX\"] = \"clang++\"\n\n"
-                                          "if platform == \"osx\":\n\t"
-                                          "env.Append(CCFLAGS=[\"-g\", \"-O3\", \"-std=c++14\", \"-arch\", \"x86_64\"])\n\t"
-                                          "env.Append(LINKFLAGS=[\"-arch\", \"x86_64\", \"-framework\", \"Cocoa\", \"-Wl,-undefined,dynamic_lookup\"])\n"
-                                          "if platform == \"linux\":\n\t"
-                                          "env.Append(CCFLAGS=[\"-g\", \"-O3\", \"-std=c++14\", \"-Wno-writable-strings\"])\n\t"
-                                          "env.Append(LINKFLAGS=[\"-Wl,-R,'$$ORIGIN'\"])\n"
-                                          "if platform == \"windows\":\n\t"
-                                          "env.Append(LINKFLAGS=[\"/WX\"])\n\t"
-                                          "if target == \"debug\":\n\t\t"
-                                          "env.Append(CCFLAGS=[\"-EHsc\", \"-D_DEBUG\", \"/MDd\"])\n\t"
-                                          "else:\n\t\t"
-                                          "env.Append(CCFLAGS=[\"-O2\", \"-EHsc\", \"-DNDEBUG\", \"/MDd\"])\n\n"
-                                          "def add_sources(sources, dir):\n\t"
-                                          "for f in os.listdir(dir):\n\t\t"
-                                          "if f.endswith(\".cpp\"):\n\t\t\t"
-                                          "sources.append(dir + \"/\" + f)\n\n"
-                                          "env.Append(\n\t"
-                                          "CPPPATH=[\n\t\t"
-                                          "godot_headers_path,\n\t\t"
-                                          "godot_bindings_path + \"/include\",\n\t\t"
-                                          "godot_bindings_path + \"/include/gen/\",\n\t\t"
-                                          "godot_bindings_path + \"/include/core/\",\n\t"
-                                          "],\n)\n\n"
-                                          "if target == \"debug\":\n\t"
-                                          "env.Append(LIBS=[\"libgodot-cpp.\"+current_platform+\".debug.64\"])\n"
-                                          "else:\n\t"
-                                          "env.Append(LIBS=[\"libgodot-cpp.\"+current_platform+\".release.64\"])\n"
-                                          "env.Append(LIBPATH=[godot_bindings_path + \"/bin/\"])\n\n"
-                                          "sources = []\n"
-                                          "add_sources(sources, \"" +
+                               "godot_bindings_path = ARGUMENTS.get(\"cpp_bindings\", os.getenv(\"CPP_BINDINGS\", bindings))\n\n"
+                               "target = ARGUMENTS.get(\"target\", \"debug\")\n\n"
+                               "if ARGUMENTS.get(\"use_llvm\", \"no\") == \"yes\":\n\t"
+                               "env[\"CXX\"] = \"clang++\"\n\n"
+                               "if platform == \"osx\":\n\t"
+                               "env.Append(CCFLAGS=[\"-g\", \"-O3\", \"-std=c++14\", \"-arch\", \"x86_64\"])\n\t"
+                               "env.Append(LINKFLAGS=[\"-arch\", \"x86_64\", \"-framework\", \"Cocoa\", \"-Wl,-undefined,dynamic_lookup\"])\n"
+                               "if platform == \"linux\":\n\t"
+                               "env.Append(CCFLAGS=[\"-g\", \"-O3\", \"-std=c++14\", \"-Wno-writable-strings\"])\n\t"
+                               "env.Append(LINKFLAGS=[\"-Wl,-R,'$$ORIGIN'\"])\n"
+                               "if platform == \"windows\":\n\t"
+                               "env.Append(LINKFLAGS=[\"/WX\"])\n\t"
+                               "if target == \"debug\":\n\t\t"
+                               "env.Append(CCFLAGS=[\"-EHsc\", \"-D_DEBUG\", \"/MDd\"])\n\t"
+                               "else:\n\t\t"
+                               "env.Append(CCFLAGS=[\"-O2\", \"-EHsc\", \"-DNDEBUG\", \"/MDd\"])\n\n"
+                               "def add_sources(sources, dir):\n\t"
+                               "for f in os.listdir(dir):\n\t\t"
+                               "if f.endswith(\".cpp\"):\n\t\t\t"
+                               "sources.append(dir + \"/\" + f)\n\n"
+                               "env.Append(\n\t"
+                               "CPPPATH=[\n\t\t"
+                               "godot_headers_path,\n\t\t"
+                               "godot_bindings_path + \"/include\",\n\t\t"
+                               "godot_bindings_path + \"/include/gen/\",\n\t\t"
+                               "godot_bindings_path + \"/include/core/\",\n\t"
+                               "],\n)\n\n"
+                               "if target == \"debug\":\n\t"
+                               "env.Append(LIBS=[\"libgodot-cpp.\"+current_platform+\".debug.64\"])\n"
+                               "else:\n\t"
+                               "env.Append(LIBS=[\"libgodot-cpp.\"+current_platform+\".release.64\"])\n\n"
+                               "env.Append(LIBPATH=[godot_bindings_path + \"/bin/\"])\n\n"
+                               "for includes in include_folders:\n\t"
+                               "env.Append(\n\t\t"
+                               "CPPPATH=[\n\t\t\t"
+                               "includes\n\t\t"
+                               "],\n\n)\n\n"
+                               "for linker in linker_folders:\n\t"
+                               "env.Append(\n\t\t"
+                               "LIBPATH=[\n\t\t\t"
+                               "linker\n\t\t"
+                               "],\n\n)\n\n"
+                               "for lib in linker_settings:\n\t"
+                               "env.Append(\n\t\t"
+                               "LIBS=[\n\t\t\t"
+                               "lib\n\t\t"
+                               "],\n\n)\n\n"
+                               "sources = []\n"
+                               "add_sources(sources, \"" +
                                source_folder + "\")\n\n"
                                                "library = env.SharedLibrary(target=\"bin/lib" +
                                project_name + "\", source=sources)\n"
@@ -310,7 +340,7 @@ void ProjectManager::create_new_project()
                                           "include_folders=\"\"\n"
                                           "linker_folders=\"\"\n"
                                           "linker_settings=\"\"\n"
-                                          "build_command=\"scons -C {path} platform={platform} cpp_path={bindings_path}\"\n"
+                                          "build_command=\"scons -C {path} platform={platform} cpp_path={bindings_path} include_path={include} linker_path={linker} link_libs={libs}\"\n"
                                           "clean_command=\"scons -C {path} --clean\"");
             file->close();
 
