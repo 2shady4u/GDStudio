@@ -48,37 +48,41 @@ void ProjectManager::build_task(int task = 0)
         PoolStringArray keys = Array::make("language", "path", "build_command", "clean_command");
         String load_file = cast_to<EditorFile>(this->get_parent())->get_project_path() + "/settings.gdnproj";
         PoolStringArray settings = cast_to<EditorFile>(this->get_parent())->load_config(load_file, "settings", keys);
-        String command = settings[2];
+        String execute_command = settings[2];
         if (task == 1)
         {
-            command = settings[3];
+            execute_command = settings[3];
         }
-
+        Godot::print(settings[0]);
         this->check_thread();
         String selected_os = cast_to<EditorFile>(this->get_parent())->get_selected_platform();
 
         if (settings[0] == "c++")
         {
-            thread = new std::thread(&ProjectManager::build_cpp_project, this, settings[1], selected_os, command);
+            keys = Array::make("godot_cpp_folder");
+            String bindings = cast_to<EditorFile>(this->get_parent())->load_config(load_file, "settings", keys)[0];
+            String command = this->build_cpp_project(settings[1], selected_os, execute_command, bindings);
+            thread = new std::thread(&EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()), command);
         }
         else if (settings[0] == "rust")
         {
-            thread = new std::thread(&ProjectManager::build_rust_project, this, settings[1], selected_os, command);
+            thread = new std::thread(&ProjectManager::build_rust_project, this, settings[1], selected_os, execute_command);
         }
     }
 }
 
-void ProjectManager::build_cpp_project(String path, String selected_platform, String command_line)
+String ProjectManager::build_cpp_project(String path, String selected_platform, String command_line, String bindings)
 {
     String command = command_line;
     command = command.replace("{platform}", selected_platform);
     command = command.replace("{path}", path);
+    command = command.replace("{bindings_path}", bindings);
     if (cast_to<EditorFile>(this->get_parent())->get_selected_profile() == true)
     {
         command += "target=release";
     }
 
-    std::future<void> th = std::async(std::launch::async, &EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()), command);
+    return command;
 }
 
 void ProjectManager::build_rust_project(String path, String selected_platform, String command_line)
@@ -248,13 +252,13 @@ void ProjectManager::create_new_project()
                                "current_platform = \"osx\"\n\n"
                                "platform = ARGUMENTS.get(\"p\", \"linux\")\n"
                                "platform = ARGUMENTS.get(\"platform\", platform)\n\n"
+                               "bindings = \"\"\n"
+                               "bindings = ARGUMENTS.get(\"cpp_path\", bindings)\n\n"
                                "env = Environment()\n"
                                "if platform == \"windows\":\n\t"
                                "env = Environment(ENV=os.environ)\n\n"
-                               "godot_headers_path = ARGUMENTS.get(\"headers\", os.getenv(\"GODOT_HEADERS\", \"" +
-                               cpp_path + "/godot_headers\"))\n"
-                                          "godot_bindings_path = ARGUMENTS.get(\"cpp_bindings\", os.getenv(\"CPP_BINDINGS\", \"" +
-                               cpp_path + "\"))\n\n"
+                               "godot_headers_path = ARGUMENTS.get(\"headers\", os.getenv(\"GODOT_HEADERS\", bindings+\"/godot_headers\"))\n"
+                                          "godot_bindings_path = ARGUMENTS.get(\"cpp_bindings\", os.getenv(\"CPP_BINDINGS\", bindings))\n\n"
                                           "target = ARGUMENTS.get(\"target\", \"debug\")\n\n"
                                           "if ARGUMENTS.get(\"use_llvm\", \"no\") == \"yes\":\n\t"
                                           "env[\"CXX\"] = \"clang++\"\n\n"
@@ -305,7 +309,7 @@ void ProjectManager::create_new_project()
                                cpp_path + "\"\n"
                                           "include_folders=\"\"\n"
                                           "linker_folders=\"\"\n"
-                                          "build_command=\"scons -C {path} platform={platform}\"\n"
+                                          "build_command=\"scons -C {path} platform={platform} cpp_path={bindings_path}\"\n"
                                           "clean_command=\"scons -C {path} --clean\"");
             file->close();
 

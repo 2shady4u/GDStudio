@@ -408,13 +408,13 @@ String CodeEditor::get_build_platform_cpp()
 
 void CodeEditor::_on_Build_pressed()
 {
-    EditorFile *editor = cast_to<EditorFile>(this->get_parent()->get_parent());
+    EditorFile *editor = cast_to<EditorFile>(this->get_parent()->get_parent()->get_parent());
     editor->execute_build();
 }
 
 void CodeEditor::_on_Clean_pressed()
 {
-    EditorFile *editor = cast_to<EditorFile>(this->get_parent()->get_parent());
+    EditorFile *editor = cast_to<EditorFile>(this->get_parent()->get_parent()->get_parent());
     editor->execute_clean();
 }
 
