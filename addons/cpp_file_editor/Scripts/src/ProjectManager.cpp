@@ -53,7 +53,7 @@ void ProjectManager::build_task(int task = 0)
         {
             execute_command = settings[3];
         }
-        Godot::print(settings[0]);
+        
         this->check_thread();
         String selected_os = cast_to<EditorFile>(this->get_parent())->get_selected_platform();
 

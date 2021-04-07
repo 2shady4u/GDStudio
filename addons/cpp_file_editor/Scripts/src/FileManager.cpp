@@ -243,10 +243,13 @@ void EditorFile::execute_command(String string_command)
     const char *command = string_command.utf8().get_data();
     FILE *pipe = _popen(command, "r");
     char buffer[256];
-    while (fgets(buffer, sizeof(buffer), pipe) != NULL)
+    while (!feof(pipe))
     {
-        ((TextEdit *)get_node(NodePath("VBoxContainer/Control/TabContainer/Log/TextEdit")))->insert_text_at_cursor(buffer);
-        //this->get_editor_instance()->edit_log(buffer);
+        if (fgets(buffer, sizeof(buffer), pipe) != nullptr)
+        {
+            ((TextEdit *)get_node(NodePath("VBoxContainer/Control/TabContainer/Log/TextEdit")))->insert_text_at_cursor(buffer);
+        }
+        
     }
 }
 
