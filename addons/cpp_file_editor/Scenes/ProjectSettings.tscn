@@ -5,6 +5,7 @@
 [ext_resource path="res://addons/cpp_file_editor/Scripts/native/project_settings.gdns" type="Script" id=3]
 
 [node name="ProjectSettings" type="WindowDialog"]
+visible = true
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -320.0
@@ -115,7 +116,6 @@ margin_right = 946.0
 margin_bottom = 88.0
 
 [node name="CPP" type="ScrollContainer" parent="PanelContainer/VBoxContainer"]
-visible = false
 margin_top = 92.0
 margin_right = 946.0
 margin_bottom = 502.0
@@ -124,7 +124,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/CPP"]
-margin_right = 946.0
+margin_right = 934.0
 margin_bottom = 432.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -246,7 +246,7 @@ margin_bottom = 20.0
 size_flags_horizontal = 3
 text = "Add"
 
-[node name="Button" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/Buttons"]
+[node name="Edit" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/Buttons"]
 margin_left = 113.0
 margin_right = 223.0
 margin_bottom = 20.0
@@ -533,9 +533,9 @@ margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="Confirm" type="CenterContainer" parent="PanelContainer/VBoxContainer"]
-margin_top = 92.0
+margin_top = 506.0
 margin_right = 946.0
-margin_bottom = 112.0
+margin_bottom = 526.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -564,4 +564,9 @@ access = 2
 current_dir = "/Work/Godot/Code-Editor"
 current_path = "/Work/Godot/Code-Editor/"
 
+[connection signal="pressed" from="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/Buttons/AddPath" to="." method="_on_AddIncludePath_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/Buttons/Edit" to="." method="_on_EditIncludePath_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/Buttons/RemovePath" to="." method="_on_RemoveIncludePath_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/Buttons/Clear" to="." method="_on_ClearIncludePath_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Confirm/ConfirmSettings" to="." method="_on_ConfirmSettings_pressed"]
+[connection signal="dir_selected" from="OpenFolder" to="." method="_on_OpenFolder_dir_selected"]

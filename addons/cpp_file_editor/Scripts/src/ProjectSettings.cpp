@@ -10,6 +10,7 @@
 #include <ItemList.hpp>
 #include <Reference.hpp>
 #include <Texture.hpp>
+#include <FileDialog.hpp>
 
 #include "ProjectSettings.hpp"
 #include "FileManager.hpp"
@@ -26,7 +27,6 @@ ProjectSettings::~ProjectSettings()
 
 void ProjectSettings::_init()
 {
-
 }
 
 void ProjectSettings::_ready()
@@ -60,8 +60,8 @@ void ProjectSettings::setup()
 void ProjectSettings::load_settings(String language)
 {
     ConfigFile *config_file = ConfigFile::_new();
-    config_file->load(cast_to<EditorFile>(this->get_parent())->get_project_path()+"/settings.gdnproj");
-    
+    config_file->load(cast_to<EditorFile>(this->get_parent())->get_project_path() + "/settings.gdnproj");
+
     String project_path = config_file->get_value("settings", "path");
     ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/ProjectPath/LineEdit")))->set_text(project_path);
     int size = project_path.split('/').size();
@@ -90,7 +90,7 @@ void ProjectSettings::load_settings(String language)
         }
         String build_command = config_file->get_value("settings", "build_command");
         ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/Build/LineEdit")))->set_text(build_command);
-        
+
         String clean_command = config_file->get_value("settings", "clean_command");
         ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/Clean/LineEdit")))->set_text(clean_command);
     }
@@ -104,10 +104,10 @@ void ProjectSettings::load_settings(String language)
         String gdn_version = config_file->get_value("settings", "gnative_version");
         ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/Rust/VBoxContainer/CargoVersion/LineEdit")))->set_text(output[0]);
         ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/Rust/VBoxContainer/GDNativeVersion/LineEdit")))->set_text(gdn_version);
-        
+
         String build_command = config_file->get_value("settings", "build_command");
         ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/Rust/VBoxContainer/Build/LineEdit")))->set_text(build_command);
-        
+
         String clean_command = config_file->get_value("settings", "clean_command");
         ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/Rust/VBoxContainer/Clean/LineEdit")))->set_text(clean_command);
     }
@@ -117,10 +117,10 @@ void ProjectSettings::load_settings(String language)
 void ProjectSettings::_on_ConfirmSettings_pressed()
 {
     ConfigFile *config_file = ConfigFile::_new();
-    config_file->load(cast_to<EditorFile>(this->get_parent())->get_project_path()+"/settings.gdnproj");
-    
+    config_file->load(cast_to<EditorFile>(this->get_parent())->get_project_path() + "/settings.gdnproj");
+
     config_file->set_value("settings", "path", ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/ProjectPath/LineEdit")))->get_text());
-    
+
     if (this->project_lang == "c++")
     {
         config_file->set_value("settings", "sources_folder", ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/Sources/LineEdit")))->get_text());
@@ -158,10 +158,57 @@ void ProjectSettings::_on_ConfirmSettings_pressed()
         config_file->set_value("settings", "build_command", ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/Rust/VBoxContainer/Build/LineEdit")))->get_text());
         config_file->set_value("settings", "clean_command", ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/Rust/VBoxContainer/Clean/LineEdit")))->get_text());
     }
-    
-    config_file->save(cast_to<EditorFile>(this->get_parent())->get_project_path()+"/settings.gdnproj");
+
+    config_file->save(cast_to<EditorFile>(this->get_parent())->get_project_path() + "/settings.gdnproj");
     config_file->free();
     this->hide();
+}
+
+void ProjectSettings::_on_AddIncludePath_pressed()
+{
+    this->folder_return = 0;
+    ((FileDialog *)get_node(NodePath("OpenFolder")))->popup_centered();
+}
+
+void ProjectSettings::_on_EditIncludePath_pressed()
+{
+    this->folder_return = 1;
+    ((FileDialog *)get_node(NodePath("OpenFolder")))->popup_centered();
+}
+
+void ProjectSettings::_on_RemoveIncludePath_pressed()
+{
+    int selected = ((ItemList *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/ItemList")))->get_selected_items()[0];
+    if (selected > -1)
+    {
+        ((ItemList *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/ItemList")))->remove_item(selected);
+    }
+}
+
+void ProjectSettings::_on_ClearIncludePath_pressed()
+{
+    ((ItemList *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/ItemList")))->clear();
+}
+
+void ProjectSettings::_on_OpenFolder_dir_selected(String dir)
+{
+    if (this->folder_return == 0)
+    {
+        ((ItemList *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/ItemList")))->add_item(dir);
+    }
+    else if (this->folder_return == 1)
+    {
+        int selected = ((ItemList *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/ItemList")))->get_selected_items()[0];
+        if (selected > -1)
+        {
+            ((ItemList *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/ItemList")))->set_item_text(selected, dir);
+        }
+    }
+    else if (this->folder_return == 2)
+    {
+        ((ItemList *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer/ItemList")))->add_item(dir);
+    }
+    this->folder_return = -1;
 }
 
 void ProjectSettings::_register_methods()
@@ -170,6 +217,10 @@ void ProjectSettings::_register_methods()
     register_method((char *)"_ready", &ProjectSettings::_ready);
     register_method((char *)"setup", &ProjectSettings::setup);
     register_method((char *)"load_settings", &ProjectSettings::load_settings);
-    
+
     register_method((char *)"_on_ConfirmSettings_pressed", &ProjectSettings::_on_ConfirmSettings_pressed);
+    register_method((char *)"_on_AddIncludePath_pressed", &ProjectSettings::_on_AddIncludePath_pressed);
+    register_method((char *)"_on_EditIncludePath_pressed", &ProjectSettings::_on_EditIncludePath_pressed);
+    register_method((char *)"_on_RemoveIncludePath_pressed", &ProjectSettings::_on_RemoveIncludePath_pressed);
+    register_method((char *)"_on_OpenFolder_dir_selected", &ProjectSettings::_on_OpenFolder_dir_selected);
 }
