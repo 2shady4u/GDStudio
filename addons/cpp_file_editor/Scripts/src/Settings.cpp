@@ -8,6 +8,8 @@
 #include <Texture.hpp>
 #include <Reference.hpp>
 #include <ResourceLoader.hpp>
+#include <LineEdit.hpp>
+#include <SpinBox.hpp>
 
 #include "Settings.hpp"
 #include "FileManager.hpp"
@@ -55,8 +57,8 @@ void Settings::_ready()
 
     tree->set_hide_root(true);
     this->set_editor_data();
-    this->set_cpp_data();
-    this->set_rust_data();
+    //this->set_cpp_data();
+    //this->set_rust_data();
 }
 
 void Settings::show_window()
@@ -66,37 +68,15 @@ void Settings::show_window()
 
 void Settings::set_editor_data()
 {
-    ConfigFile *config_file = ConfigFile::_new();
-    config_file->load("user://editor.cfg");
-    String custom_font = config_file->get_value("Editor", "custom_font");
-    int font_size_value = config_file->get_value("Editor", "font_size");
-    String custom_theme = config_file->get_value("Editor", "custom_theme");
-
-    tree = ((Tree *)get_node(NodePath("VBoxContainer/Settings/EditorTree")));
-
-    TreeItem *root = tree->create_item();
-    TreeItem *font = tree->create_item(root);
-    font->set_text(0, "Custom Font");
-    font->set_text(1, custom_font);
-    font->set_editable(1, true);
-    Ref<Texture> icon;
-    icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/default_folder.svg", "Texture");
-    font->add_button(1, icon, 0);
-
-    TreeItem *font_size = tree->create_item(root);
-    font_size->set_text(0, "Font Size");
-    font_size->set_cell_mode(1, 2);
-    font_size->set_range_config(1, 6, 72, 2);
-    font_size->set_range(1, font_size_value);
-    font_size->set_editable(1, true);
-
-    TreeItem *theme = tree->create_item(root);
-    theme->set_text(0, "Custom Theme");
-    theme->set_text(1, custom_theme);
-    theme->set_editable(1, true);
-    theme->add_button(1, icon, 1);
-
-    config_file->free();
+    PoolStringArray keys = Array::make("custom_font", "custom_theme");
+    PoolStringArray settings = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Editor", keys);
+    keys = Array::make("font_size");
+    int font_size = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Editor", keys)[0];
+        
+    ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/FontName/LineEdit")))->set_text(settings[0]);
+    ((SpinBox *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/FontSize/SpinBox")))->set_value(font_size);
+    ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/CustomTheme/LineEdit")))->set_text(settings[1]);
+    
 }
 
 void Settings::set_cpp_data()
@@ -104,12 +84,12 @@ void Settings::set_cpp_data()
     ConfigFile *config_file = ConfigFile::_new();
     config_file->load("user://editor.cfg");
 
-    if (config_file->has_section_key("C++", "cpp_version") == false)
+    if (config_file->has_section_key("C++", "cpp_standard") == false)
     {
-        config_file->set_value("C++", "cpp_version", "c++14");
+        config_file->set_value("C++", "cpp_standard", "0");
         config_file->save("user://editor.cfg");
     }
-    String cpp_version_value = config_file->get_value("C++", "cpp_version");
+    String cpp_version_value = config_file->get_value("C++", "cpp_standard");
 
     tree = ((Tree *)get_node(NodePath("VBoxContainer/Settings/CPPTree")));
 
@@ -119,7 +99,7 @@ void Settings::set_cpp_data()
 
     //cpp_version->set_cell_mode(1, 4);
     cpp_version->set_editable(1, true);
-    cpp_version->set_text(1, config_file->get_value("C++", "cpp_version"));
+    cpp_version->set_text(1, config_file->get_value("C++", "cpp_standard"));
 
     config_file->free();
 }
@@ -132,19 +112,15 @@ void Settings::save_editor_data()
 {
     ConfigFile *config_file = ConfigFile::_new();
     config_file->load("user://editor.cfg");
+    
+    String custom_font = ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/FontName/LineEdit")))->get_text();
+    config_file->set_value("Editor", "custom_font", custom_font);
 
-    tree = ((Tree *)get_node(NodePath("VBoxContainer/Settings/EditorTree")));
+    int font_size = ((SpinBox *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/FontSize/SpinBox")))->get_value();
+    config_file->set_value("Editor", "font_size", font_size);
 
-    TreeItem *root = tree->get_root();
-
-    TreeItem *child = root->get_children();
-    config_file->set_value("Editor", "custom_font", child->get_text(1));
-
-    child = child->get_next();
-    config_file->set_value("Editor", "font_size", child->get_range(1));
-
-    child = child->get_next();
-    config_file->set_value("Editor", "custom_theme", child->get_text(1));
+    String custom_theme = ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/CustomTheme/LineEdit")))->get_text();
+    config_file->set_value("Editor", "custom_theme", custom_theme);
 
     config_file->save("user://editor.cfg");
     config_file->free();

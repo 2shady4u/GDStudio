@@ -212,7 +212,9 @@ void EditorFile::create_user_data()
     if (file->file_exists("user://editor.cfg") == false)
     {
         file->open("user://editor.cfg", File::WRITE);
-        file->store_string("[Editor]\ncustom_font=\"res://addons/cpp_file_editor/Fonts/RobotoSlab-VariableFont_wght.ttf\"\nfont_size=12\ncustom_theme=\"res://addons/cpp_file_editor/Themes/godot_theme.tres\"");
+        file->store_string("[Editor]\ncustom_font=\"res://addons/cpp_file_editor/Fonts/RobotoSlab-VariableFont_wght.ttf\"\nfont_size=12\ncustom_theme=\"res://addons/cpp_file_editor/Themes/godot_theme.tres\"\n"
+        "[C++]\ncpp_standard=0\noptimization=2\nmingw_path=\"\"\n"
+        "[Rust]\ncheck_on_save=false");
         file->close();
     }
     file->free();

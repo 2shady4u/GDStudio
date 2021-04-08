@@ -477,6 +477,7 @@ margin_bottom = 20.0
 text = "gdnproj"
 
 [node name="Settings" parent="." instance=ExtResource( 7 )]
+visible = false
 margin_left = -3.0
 margin_right = 807.0
 
