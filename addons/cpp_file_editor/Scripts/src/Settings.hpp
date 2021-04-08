@@ -22,7 +22,8 @@ public:
     void save_rust_data();
 
     void _on_ConfirmSettings_pressed();
-    void _on_EditorTree_button_pressed(TreeItem*, int, int);
+    void _on_SearchFont_pressed();
+    void _on_SearchTheme_pressed();
     void _on_OpenFile_file_selected(String);
     void _on_CategoryTree_item_selected();
 

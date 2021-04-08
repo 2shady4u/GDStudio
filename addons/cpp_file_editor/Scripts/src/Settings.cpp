@@ -169,44 +169,38 @@ void Settings::_on_ConfirmSettings_pressed()
     this->hide();
 }
 
-void Settings::_on_EditorTree_button_pressed(TreeItem *item, int column, int id)
+void Settings::_on_SearchFont_pressed()
 {
-    String text = item->get_text(0);
-    if (text == "Custom Font")
-    {
-        selected_id = 0;
-        PoolStringArray filter;
-        filter.append("*.ttf");
-        filter.append("*.otf");
-        ((FileDialog *)get_node(NodePath("OpenFile")))->set_filters(filter);
-        ((FileDialog *)get_node(NodePath("OpenFile")))->popup_centered();
-    }
-    else if (text == "Custom Theme")
-    {
-        selected_id = 1;
-        PoolStringArray filter;
-        filter.append("*.tres");
-        ((FileDialog *)get_node(NodePath("OpenFile")))->set_filters(filter);
-        ((FileDialog *)get_node(NodePath("OpenFile")))->popup_centered();
-    }
+    selected_id = 0;
+    PoolStringArray filter;
+    filter.append("*.ttf");
+    filter.append("*.otf");
+    ((FileDialog *)get_node(NodePath("OpenFile")))->set_filters(filter);
+    ((FileDialog *)get_node(NodePath("OpenFile")))->popup_centered();
+}
+
+void Settings::_on_SearchTheme_pressed()
+{
+    selected_id = 1;
+    PoolStringArray filter;
+    filter.append("*.tres");
+    ((FileDialog *)get_node(NodePath("OpenFile")))->set_filters(filter);
+    ((FileDialog *)get_node(NodePath("OpenFile")))->popup_centered();
 }
 
 void Settings::_on_OpenFile_file_selected(String path)
 {
-    TreeItem *root = tree->get_root();
-    TreeItem *child = root->get_children();
     switch (selected_id)
     {
     case 0:
-        child->set_text(1, path);
+        ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/FontName/LineEdit")))->set_text(path);
         break;
     case 1:
-        child = child->get_next();
-        child = child->get_next();
-
-        child->set_text(1, path);
+        
+        ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/CustomTheme/LineEdit")))->set_text(path);
         break;
     }
+    selected_id = -1;
 }
 
 void Settings::_on_CategoryTree_item_selected()
@@ -215,21 +209,21 @@ void Settings::_on_CategoryTree_item_selected()
 
     if (selected == "Editor")
     {
-        ((Tree *)get_node(NodePath("VBoxContainer/Settings/CPPTree")))->hide();
-        ((Tree *)get_node(NodePath("VBoxContainer/Settings/RustTree")))->hide();
-        ((Tree *)get_node(NodePath("VBoxContainer/Settings/EditorTree")))->show();
+        ((Control *)get_node(NodePath("VBoxContainer/Settings/CPPTree")))->hide();
+        ((Control *)get_node(NodePath("VBoxContainer/Settings/RustTree")))->hide();
+        ((Control *)get_node(NodePath("VBoxContainer/Settings/EditorTree")))->show();
     }
     else if (selected == "C++")
     {
-        ((Tree *)get_node(NodePath("VBoxContainer/Settings/RustTree")))->hide();
-        ((Tree *)get_node(NodePath("VBoxContainer/Settings/EditorTree")))->hide();
-        ((Tree *)get_node(NodePath("VBoxContainer/Settings/CPPTree")))->show();
+        ((Control *)get_node(NodePath("VBoxContainer/Settings/RustTree")))->hide();
+        ((Control *)get_node(NodePath("VBoxContainer/Settings/EditorTree")))->hide();
+        ((Control *)get_node(NodePath("VBoxContainer/Settings/CPPTree")))->show();
     }
     else if (selected == "Rust")
     {
-        ((Tree *)get_node(NodePath("VBoxContainer/Settings/EditorTree")))->hide();
-        ((Tree *)get_node(NodePath("VBoxContainer/Settings/CPPTree")))->hide();
-        ((Tree *)get_node(NodePath("VBoxContainer/Settings/RustTree")))->show();
+        ((Control *)get_node(NodePath("VBoxContainer/Settings/EditorTree")))->hide();
+        ((Control *)get_node(NodePath("VBoxContainer/Settings/CPPTree")))->hide();
+        ((Control *)get_node(NodePath("VBoxContainer/Settings/RustTree")))->show();
     }
 }
 
@@ -246,7 +240,8 @@ void Settings::_register_methods()
     register_method((char *)"save_rust_data", &Settings::save_rust_data);
 
     register_method((char *)"_on_ConfirmSettings_pressed", &Settings::_on_ConfirmSettings_pressed);
-    register_method((char *)"_on_EditorTree_button_pressed", &Settings::_on_EditorTree_button_pressed);
+    register_method((char *)"_on_SearchFont_pressed", &Settings::_on_SearchFont_pressed);
+    register_method((char *)"_on_SearchTheme_pressed", &Settings::_on_SearchTheme_pressed);
     register_method((char *)"_on_OpenFile_file_selected", &Settings::_on_OpenFile_file_selected);
     register_method((char *)"_on_CategoryTree_item_selected", &Settings::_on_CategoryTree_item_selected);
 }

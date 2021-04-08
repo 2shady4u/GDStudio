@@ -42,58 +42,60 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
 margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="FontName" type="HBoxContainer" parent="VBoxContainer/Settings/EditorTree/General"]
-margin_right = 644.0
+margin_right = 640.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/EditorTree/General/FontName"]
-margin_right = 303.0
+margin_right = 301.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="VBoxContainer/Settings/EditorTree/General/FontName/CenterContainer"]
-margin_left = 111.0
+margin_left = 110.0
 margin_top = 5.0
-margin_right = 192.0
+margin_right = 191.0
 margin_bottom = 19.0
 text = "Custom Font"
 
-[node name="Button" type="Button" parent="VBoxContainer/Settings/EditorTree/General/FontName"]
-margin_left = 307.0
-margin_right = 337.0
+[node name="SearchFont" type="Button" parent="VBoxContainer/Settings/EditorTree/General/FontName"]
+margin_left = 305.0
+margin_right = 335.0
 margin_bottom = 24.0
 icon = ExtResource( 2 )
 
 [node name="LineEdit" type="LineEdit" parent="VBoxContainer/Settings/EditorTree/General/FontName"]
-margin_left = 341.0
-margin_right = 644.0
+margin_left = 339.0
+margin_right = 640.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="FontSize" type="HBoxContainer" parent="VBoxContainer/Settings/EditorTree/General"]
 margin_top = 28.0
-margin_right = 644.0
+margin_right = 640.0
 margin_bottom = 52.0
 
 [node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/EditorTree/General/FontSize"]
-margin_right = 320.0
+margin_right = 318.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="VBoxContainer/Settings/EditorTree/General/FontSize/CenterContainer"]
-margin_left = 131.0
+margin_left = 130.0
 margin_top = 5.0
-margin_right = 189.0
+margin_right = 188.0
 margin_bottom = 19.0
 text = "Font Size"
 
 [node name="SpinBox" type="SpinBox" parent="VBoxContainer/Settings/EditorTree/General/FontSize"]
-margin_left = 324.0
-margin_right = 644.0
+margin_left = 322.0
+margin_right = 640.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 min_value = 8.0
@@ -104,30 +106,30 @@ rounded = true
 
 [node name="CustomTheme" type="HBoxContainer" parent="VBoxContainer/Settings/EditorTree/General"]
 margin_top = 56.0
-margin_right = 644.0
+margin_right = 640.0
 margin_bottom = 80.0
 
 [node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/EditorTree/General/CustomTheme"]
-margin_right = 303.0
+margin_right = 301.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="VBoxContainer/Settings/EditorTree/General/CustomTheme/CenterContainer"]
-margin_left = 103.0
+margin_left = 102.0
 margin_top = 5.0
-margin_right = 200.0
+margin_right = 199.0
 margin_bottom = 19.0
 text = "Custom Theme"
 
-[node name="Button" type="Button" parent="VBoxContainer/Settings/EditorTree/General/CustomTheme"]
-margin_left = 307.0
-margin_right = 337.0
+[node name="SearchTheme" type="Button" parent="VBoxContainer/Settings/EditorTree/General/CustomTheme"]
+margin_left = 305.0
+margin_right = 335.0
 margin_bottom = 24.0
 icon = ExtResource( 2 )
 
 [node name="LineEdit" type="LineEdit" parent="VBoxContainer/Settings/EditorTree/General/CustomTheme"]
-margin_left = 341.0
-margin_right = 644.0
+margin_left = 339.0
+margin_right = 640.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
@@ -137,8 +139,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
 margin_top = 32.0
-margin_right = -604.0
-margin_bottom = -323.0
+margin_right = -4.0
+margin_bottom = -4.0
 
 [node name="CPPTree" type="TabContainer" parent="VBoxContainer/Settings"]
 visible = false
@@ -153,6 +155,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
 margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -243,8 +247,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
 margin_top = 32.0
-margin_right = -604.0
-margin_bottom = -323.0
+margin_right = -4.0
+margin_bottom = -4.0
 
 [node name="RustTree" type="TabContainer" parent="VBoxContainer/Settings"]
 visible = false
@@ -259,6 +263,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
 margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -291,8 +297,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
 margin_top = 32.0
-margin_right = -604.0
-margin_bottom = -323.0
+margin_right = -4.0
+margin_bottom = -4.0
 
 [node name="CenterConfig" type="CenterContainer" parent="VBoxContainer"]
 margin_top = 399.0
@@ -322,5 +328,7 @@ current_dir = "/Work/Godot/Code-Editor"
 current_path = "/Work/Godot/Code-Editor/"
 
 [connection signal="item_selected" from="VBoxContainer/Settings/CategoryTree" to="." method="_on_CategoryTree_item_selected"]
+[connection signal="pressed" from="VBoxContainer/Settings/EditorTree/General/FontName/SearchFont" to="." method="_on_SearchFont_pressed"]
+[connection signal="pressed" from="VBoxContainer/Settings/EditorTree/General/CustomTheme/SearchTheme" to="." method="_on_SearchTheme_pressed"]
 [connection signal="pressed" from="VBoxContainer/CenterConfig/ConfirmSettings" to="." method="_on_ConfirmSettings_pressed"]
 [connection signal="file_selected" from="OpenFile" to="." method="_on_OpenFile_file_selected"]
