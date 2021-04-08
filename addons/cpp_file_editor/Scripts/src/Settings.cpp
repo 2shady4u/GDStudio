@@ -11,6 +11,7 @@
 #include <LineEdit.hpp>
 #include <SpinBox.hpp>
 #include <OptionButton.hpp>
+#include <CheckButton.hpp>
 
 #include "Settings.hpp"
 #include "FileManager.hpp"
@@ -36,7 +37,7 @@ void Settings::_ready()
     TreeItem *general = tree->create_item(root);
     general->set_text(0, "General");
     general->set_selectable(0, false);
-    
+
     TreeItem *editor = tree->create_item(general);
     editor->set_text(0, "Editor");
     editor->select(0);
@@ -44,13 +45,13 @@ void Settings::_ready()
     TreeItem *languages = tree->create_item(root);
     languages->set_text(0, "Languages");
     languages->set_selectable(0, false);
-    
+
     TreeItem *cpp = tree->create_item(languages);
     Ref<Texture> icon;
     icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/cplusplus-original.svg", "Texture");
     cpp->set_icon(0, icon);
     cpp->set_text(0, "C++");
-    
+
     TreeItem *rust = tree->create_item(languages);
     icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/rust-plain.svg", "Texture");
     rust->set_icon(0, icon);
@@ -73,11 +74,10 @@ void Settings::set_editor_data()
     PoolStringArray settings = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Editor", keys);
     keys = Array::make("font_size");
     int font_size = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Editor", keys)[0];
-        
+
     ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/FontName/LineEdit")))->set_text(settings[0]);
     ((SpinBox *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/FontSize/SpinBox")))->set_value(font_size);
     ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/CustomTheme/LineEdit")))->set_text(settings[1]);
-    
 }
 
 void Settings::set_cpp_data()
@@ -94,13 +94,16 @@ void Settings::set_cpp_data()
 
 void Settings::set_rust_data()
 {
+    PoolStringArray keys = Array::make("check_on_save");
+    bool settings = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Rust", keys)[0];
+    ((CheckButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/CargoCheck/CheckButton")))->set_pressed(settings);
 }
 
 void Settings::save_editor_data()
 {
     ConfigFile *config_file = ConfigFile::_new();
     config_file->load("user://editor.cfg");
-    
+
     String custom_font = ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/FontName/LineEdit")))->get_text();
     config_file->set_value("Editor", "custom_font", custom_font);
 
@@ -132,12 +135,18 @@ void Settings::save_cpp_data()
 
     config_file->save("user://editor.cfg");
     config_file->free();
-
 }
 
 void Settings::save_rust_data()
 {
+    ConfigFile *config_file = ConfigFile::_new();
+    config_file->load("user://editor.cfg");
 
+    bool cargo_check = ((CheckButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/CargoCheck/CheckButton")))->is_pressed();
+    config_file->set_value("Rust", "check_on_save", cargo_check);
+
+    config_file->save("user://editor.cfg");
+    config_file->free();
 }
 
 void Settings::_on_ConfirmSettings_pressed()

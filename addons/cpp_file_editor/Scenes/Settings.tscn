@@ -278,7 +278,7 @@ margin_right = 239.0
 margin_bottom = 19.0
 text = "Use Cargo Check on save"
 
-[node name="CheckBox" type="CheckBox" parent="VBoxContainer/Settings/RustTree/General/CargoCheck"]
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/Settings/RustTree/General/CargoCheck"]
 margin_left = 324.0
 margin_right = 644.0
 margin_bottom = 24.0
