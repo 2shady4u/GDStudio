@@ -13,6 +13,7 @@
 #include <Array.hpp>
 #include <PoolArrays.hpp>
 #include <TextEdit.hpp>
+#include <Panel.hpp>
 
 #include "FileManager.hpp"
 #include "ProjectManager.hpp"
@@ -249,7 +250,6 @@ void EditorFile::execute_command(String string_command)
         {
             ((TextEdit *)get_node(NodePath("VBoxContainer/Control/TabContainer/Log/TextEdit")))->insert_text_at_cursor(buffer);
         }
-        
     }
 }
 
@@ -328,7 +328,7 @@ void EditorFile::_on_TabContainer_tab_changed(int tab)
     {
         this->current_editor_instance->hide();
     }
-    this->current_editor_instance = cast_to<CodeEditor>(((Tabs *)get_node("VBoxContainer/Editor"))->get_child(tab));
+    this->current_editor_instance = cast_to<CodeEditor>(((Panel *)get_node("VBoxContainer/Editor"))->get_child(tab));
     this->current_editor_instance->show();
     this->file_name = ((Tabs *)get_node("VBoxContainer/TabContainer"))->get_tab_title(tab);
 }
@@ -338,8 +338,8 @@ void EditorFile::_on_TabContainer_tab_close(int tab)
     this->instance_defined = false;
     this->file_name = "";
     this->file_path = "";
-    ((Tabs *)get_node("VBoxContainer/Editor"))->get_child(tab)->queue_free();
-    this->tab_number = ((Tabs *)get_node("VBoxContainer/Editor"))->get_child_count();
+    ((Panel *)get_node("VBoxContainer/Editor"))->get_child(tab)->queue_free();
+    this->tab_number = ((Panel *)get_node("VBoxContainer/Editor"))->get_child_count();
     if (this->tab_number > 1)
     {
         if (tab == 0)
@@ -352,7 +352,6 @@ void EditorFile::_on_TabContainer_tab_close(int tab)
         }
     }
     ((Tabs *)get_node("VBoxContainer/TabContainer"))->remove_tab(tab);
-    ((Tabs *)get_node("VBoxContainer/Editor"))->remove_tab(tab);
 }
 
 void EditorFile::_process()
