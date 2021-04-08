@@ -10,6 +10,7 @@
 #include <ResourceLoader.hpp>
 #include <LineEdit.hpp>
 #include <SpinBox.hpp>
+#include <OptionButton.hpp>
 
 #include "Settings.hpp"
 #include "FileManager.hpp"
@@ -57,7 +58,7 @@ void Settings::_ready()
 
     tree->set_hide_root(true);
     this->set_editor_data();
-    //this->set_cpp_data();
+    this->set_cpp_data();
     //this->set_rust_data();
 }
 
@@ -81,22 +82,14 @@ void Settings::set_editor_data()
 
 void Settings::set_cpp_data()
 {
-    ConfigFile *config_file = ConfigFile::_new();
-    config_file->load("user://editor.cfg");
+    PoolStringArray keys = Array::make("cpp_standard", "optimization");
+    PoolIntArray settings = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "C++", keys);
+    keys = Array::make("mingw_path");
+    PoolStringArray mingw = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "C++", keys);
 
-    String cpp_version_value = config_file->get_value("C++", "cpp_standard");
-
-    tree = ((Tree *)get_node(NodePath("VBoxContainer/Settings/CPPTree")));
-
-    TreeItem *root = tree->create_item();
-    TreeItem *cpp_version = tree->create_item(root);
-    cpp_version->set_text(0, "C++ Version");
-
-    //cpp_version->set_cell_mode(1, 4);
-    cpp_version->set_editable(1, true);
-    cpp_version->set_text(1, config_file->get_value("C++", "cpp_standard"));
-
-    config_file->free();
+    ((OptionButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/Standard/OptionButton")))->select(settings[0]);
+    ((OptionButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/Optimization/OptionButton")))->select(settings[1]);
+    ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/MingwPath/LineEdit")))->set_text(mingw[0]);
 }
 
 void Settings::set_rust_data()
@@ -128,11 +121,14 @@ void Settings::save_cpp_data()
     ConfigFile *config_file = ConfigFile::_new();
     config_file->load("user://editor.cfg");
 
-    tree = ((Tree *)get_node(NodePath("VBoxContainer/Settings/CPPTree")));
-    TreeItem *root = tree->get_root();
+    int cpp_standard = ((OptionButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/Standard/OptionButton")))->get_selected();
+    config_file->set_value("C++", "cpp_standard", cpp_standard);
 
-    TreeItem *child = root->get_children();
-    config_file->set_value("C++", "cpp_version", child->get_text(1));
+    int optimization = ((OptionButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/Optimization/OptionButton")))->get_selected();
+    config_file->set_value("C++", "optimization", optimization);
+
+    String mingw_path = ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/MingwPath/LineEdit")))->get_text();
+    config_file->set_value("C++", "mingw_path", mingw_path);
 
     config_file->save("user://editor.cfg");
     config_file->free();
