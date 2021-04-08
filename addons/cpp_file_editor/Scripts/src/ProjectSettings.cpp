@@ -78,12 +78,14 @@ void ProjectSettings::load_settings(String language)
         ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/Bindings/LineEdit")))->set_text(bindings);
         String include_string = config_file->get_value("settings", "include_folders");
         PoolStringArray include_array = include_string.split(',');
+        ((ItemList *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/ItemList")))->clear();
         for (int i = 0; i < include_array.size(); i++)
         {
             ((ItemList *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/ItemList")))->add_item(include_array[i]);
         }
         String linker_string = config_file->get_value("settings", "linker_folders");
         PoolStringArray linker_array = linker_string.split(',');
+        ((ItemList *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer/ItemList")))->clear();
         for (int i = 0; i < linker_array.size(); i++)
         {
             ((ItemList *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer/ItemList")))->add_item(linker_array[i]);
