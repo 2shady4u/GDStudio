@@ -259,7 +259,7 @@ void EditorFile::execute_command(String string_command)
         }
     }
     int status = pclose(pipe);
-    ((TextEdit *)get_node(NodePath("VBoxContainer/Control/TabContainer/Log/TextEdit")))->insert_text_at_cursor("Process returned: " + String::num_int64(status));
+    ((TextEdit *)get_node(NodePath("VBoxContainer/Control/TabContainer/Log/TextEdit")))->insert_text_at_cursor("Process returned: " + String::num_int64(status) + "\n");
 }
 
 void EditorFile::on_file_pressed(int index)

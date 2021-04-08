@@ -64,7 +64,8 @@ void ProjectManager::build_task(int task = 0)
         }
         else if (settings[0] == "rust")
         {
-            thread = new std::thread(&ProjectManager::build_rust_project, this, settings[1], selected_os, execute_command);
+            String command = this->build_rust_project(settings[1], selected_os, execute_command);
+            thread = new std::thread(&EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()), command);
         }
     }
 }
@@ -94,7 +95,7 @@ String ProjectManager::build_cpp_project(String path, String selected_platform, 
     return command;
 }
 
-void ProjectManager::build_rust_project(String path, String selected_platform, String command_line)
+String ProjectManager::build_rust_project(String path, String selected_platform, String command_line)
 {
     String command = command_line;
     command = command.replace("{path}", path + "/Cargo.toml");
@@ -127,7 +128,7 @@ void ProjectManager::build_rust_project(String path, String selected_platform, S
         command += "--release";
     }
 
-    std::future<void> th = std::async(std::launch::async, &EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()), command);
+    return command;
 }
 
 void ProjectManager::create_new_class()
