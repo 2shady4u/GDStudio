@@ -41,8 +41,9 @@ __meta__ = {
 }
 
 [node name="TextEdit" type="RichTextLabel" parent="TabContainer/Log/Panel"]
-margin_right = 1272.0
-margin_bottom = 127.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 bbcode_enabled = true

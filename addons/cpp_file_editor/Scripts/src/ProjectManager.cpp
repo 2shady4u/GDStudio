@@ -75,10 +75,42 @@ String ProjectManager::build_cpp_project(String path, String selected_platform, 
     PoolStringArray keys = Array::make("godot_cpp_folder", "include_folders", "linker_folders", "linker_settings");
     String load_file = cast_to<EditorFile>(this->get_parent())->get_project_path() + "/settings.gdnproj";
     PoolStringArray settings = cast_to<EditorFile>(this->get_parent())->load_config(load_file, "settings", keys);
+
+    keys = Array::make("cpp_standard", "optimization");
+    PoolIntArray global_settings = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "C++", keys);
+
     String bindings = settings[0];
     String include_folders = settings[1];
     String linker_folders = settings[2];
     String linker_settings = settings[3];
+    String standard = "-std=c++11";
+    String optimization = "-O3";
+
+    switch (global_settings[0])
+    {
+    case 0:
+        standard = "-std=c++11";
+        break;
+    case 1:
+        standard = "-std=c++14";
+        break;
+    case 2:
+        standard = "-std=c++17";
+        break;
+    }
+
+    switch (global_settings[1])
+    {
+    case 0:
+        optimization = "-O1";
+        break;
+    case 1:
+        optimization = "-O2";
+        break;
+    case 2:
+        optimization = "-O3";
+        break;
+    }
 
     String command = command_line;
     command = command.replace("{platform}", selected_platform);
@@ -87,6 +119,8 @@ String ProjectManager::build_cpp_project(String path, String selected_platform, 
     command = command.replace("{include}", include_folders);
     command = command.replace("{linker}", linker_folders);
     command = command.replace("{libs}", linker_settings);
+    command = command.replace("{standard}", standard);
+    command = command.replace("{optimization}", optimization);
     if (cast_to<EditorFile>(this->get_parent())->get_selected_profile() == true)
     {
         command += "target=release";
@@ -265,11 +299,15 @@ void ProjectManager::create_new_project()
                                "bindings = \"\"\n"
                                "bindings = ARGUMENTS.get(\"cpp_path\", bindings)\n\n"
                                "include_folders = \"\"\n"
-                               "include_folders = ARGUMENTS.get(\"include_path\", include_folders)\n\n"
+                               "include_folders = ARGUMENTS.get(\"include_path\", include_folders)\n"
                                "linker_folders = \"\"\n"
-                               "linker_folders = ARGUMENTS.get(\"linker_path\", linker_folders)\n\n"
+                               "linker_folders = ARGUMENTS.get(\"linker_path\", linker_folders)\n"
                                "linker_settings = \"\"\n"
                                "linker_settings = ARGUMENTS.get(\"link_libs\", linker_settings)\n\n"
+                               "standard = \"\"\n"
+                               "standard = ARGUMENTS.get(\"cpp_standard\", standard)\n"
+                               "optimization = \"\"\n"
+                               "optimization = ARGUMENTS.get(\"optimization\", optimization)\n\n"
                                "env = Environment()\n"
                                "if platform == \"windows\":\n\t"
                                "env = Environment(ENV=os.environ)\n\n"
@@ -278,6 +316,8 @@ void ProjectManager::create_new_project()
                                "target = ARGUMENTS.get(\"target\", \"debug\")\n\n"
                                "if ARGUMENTS.get(\"use_llvm\", \"no\") == \"yes\":\n\t"
                                "env[\"CXX\"] = \"clang++\"\n\n"
+                               "env.Append(CCFLAGS=[str(standard)])\n"
+                               "env.Append(CCFLAGS=[str(optimization)])\n\n"
                                "if platform == \"osx\":\n\t"
                                "if target == \"debug\":\n\t\t"
                                "env.Append(CCFLAGS=[\"-g\"])\n\t"
@@ -336,7 +376,7 @@ void ProjectManager::create_new_project()
                                           "include_folders=\"\"\n"
                                           "linker_folders=\"\"\n"
                                           "linker_settings=\"\"\n"
-                                          "build_command=\"scons -C {path} platform={platform} cpp_path={bindings_path} include_path={include} linker_path={linker} link_libs={libs}\"\n"
+                                          "build_command=\"scons -C {path} platform={platform} cpp_standard={standard} optimization={optimization} cpp_path={bindings_path} include_path={include} linker_path={linker} link_libs={libs}\"\n"
                                           "clean_command=\"scons -C {path} --clean\"");
             file->close();
 
