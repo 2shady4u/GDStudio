@@ -15,7 +15,7 @@
 #include <TextEdit.hpp>
 #include <Panel.hpp>
 #include <OS.hpp>
-#include <Color.hpp>
+#include <RichTextLabel.hpp>
 
 #include "FileManager.hpp"
 #include "ProjectManager.hpp"
@@ -255,11 +255,16 @@ void EditorFile::execute_command(String string_command)
     {
         if (fgets(buffer, sizeof(buffer), pipe) != nullptr)
         {
-            ((TextEdit *)get_node(NodePath("VBoxContainer/Control/TabContainer/Log/TextEdit")))->insert_text_at_cursor(buffer);
+            ((RichTextLabel *)get_node(NodePath("VBoxContainer/Control/TabContainer/Log/Panel/TextEdit")))->add_text(buffer);
         }
     }
     int status = pclose(pipe);
-    ((TextEdit *)get_node(NodePath("VBoxContainer/Control/TabContainer/Log/TextEdit")))->insert_text_at_cursor("Process returned: " + String::num_int64(status) + "\n");
+    String text = "[color=blue]Process returned: " + String::num_int64(status) + "[/color]\n";
+    if (status != 0)
+    {
+        text = "[color=red]Process returned: " + String::num_int64(status) + "[/color]\n";
+    }
+    ((RichTextLabel *)get_node(NodePath("VBoxContainer/Control/TabContainer/Log/Panel/TextEdit")))->append_bbcode(text);
 }
 
 void EditorFile::on_file_pressed(int index)
