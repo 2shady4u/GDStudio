@@ -14,6 +14,8 @@
 #include <PoolArrays.hpp>
 #include <TextEdit.hpp>
 #include <Panel.hpp>
+#include <OS.hpp>
+#include <Color.hpp>
 
 #include "FileManager.hpp"
 #include "ProjectManager.hpp"
@@ -241,8 +243,13 @@ void EditorFile::execute_clean()
 
 void EditorFile::execute_command(String string_command)
 {
-    const char *command = string_command.utf8().get_data();
-    FILE *pipe = _popen(command, "r");
+    const char *command = (string_command+" 2>&1").utf8().get_data();
+    if (OS::get_singleton()->get_name() == "windows")
+    {
+        #define popen _popen
+        #define pclose _pclose
+    }
+    FILE *pipe = popen(command, "r");
     char buffer[256];
     while (!feof(pipe))
     {
@@ -251,6 +258,8 @@ void EditorFile::execute_command(String string_command)
             ((TextEdit *)get_node(NodePath("VBoxContainer/Control/TabContainer/Log/TextEdit")))->insert_text_at_cursor(buffer);
         }
     }
+    int status = pclose(pipe);
+    ((TextEdit *)get_node(NodePath("VBoxContainer/Control/TabContainer/Log/TextEdit")))->insert_text_at_cursor("Process returned: " + String::num_int64(status));
 }
 
 void EditorFile::on_file_pressed(int index)
