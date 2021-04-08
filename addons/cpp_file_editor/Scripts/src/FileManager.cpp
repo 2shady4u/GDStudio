@@ -102,6 +102,16 @@ void EditorFile::save_file()
     this->current_editor_instance->save_contents();
     file->close();
     file->free();
+
+    if (this->get_project_lang() == "rust")
+    {
+        PoolStringArray keys = Array::make("check_on_save");
+        bool check_on_save = this->load_config("user://editor.cfg", "Rust", keys)[0];
+        if (check_on_save == true)
+        {
+            std::future<void> th = std::async(std::launch::async, &EditorFile::execute_command, this, "cargo check --manifest-path="+this->project_config+"/Cargo.toml");
+        }
+    }
 }
 
 Array EditorFile::load_config(String file, String section, PoolStringArray key)
