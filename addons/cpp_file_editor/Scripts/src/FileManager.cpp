@@ -112,6 +112,11 @@ Array EditorFile::load_config(String file, String section, PoolStringArray key)
     Array output;
     for (int i = 0; i < key.size(); i++)
     {
+        if (config_file->has_section_key(section, key[i]) == false)
+        {
+            config_file->set_value(section, key[i], "\"\"");
+            config_file->save(file);
+        }
         output.append(config_file->get_value(section, key[i]));
     }
     config_file->free();

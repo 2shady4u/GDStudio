@@ -84,11 +84,6 @@ void Settings::set_cpp_data()
     ConfigFile *config_file = ConfigFile::_new();
     config_file->load("user://editor.cfg");
 
-    if (config_file->has_section_key("C++", "cpp_standard") == false)
-    {
-        config_file->set_value("C++", "cpp_standard", "0");
-        config_file->save("user://editor.cfg");
-    }
     String cpp_version_value = config_file->get_value("C++", "cpp_standard");
 
     tree = ((Tree *)get_node(NodePath("VBoxContainer/Settings/CPPTree")));
