@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://addons/cpp_file_editor/Scripts/native/settings.gdns" type="Script" id=1]
+[ext_resource path="res://addons/cpp_file_editor/Icons/default_folder.svg" type="Texture" id=2]
 
 [node name="Settings" type="WindowDialog"]
 margin_right = 810.0
@@ -14,14 +15,13 @@ __meta__ = {
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 810.0
 margin_bottom = 400.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Settings" type="HBoxContainer" parent="VBoxContainer"]
-margin_right = 1450.0
+margin_right = 798.0
 margin_bottom = 395.0
 rect_min_size = Vector2( 0, 395 )
 
@@ -30,50 +30,282 @@ margin_right = 146.0
 margin_bottom = 395.0
 rect_min_size = Vector2( 146, 0 )
 
-[node name="EditorTree" type="Tree" parent="VBoxContainer/Settings"]
+[node name="EditorTree" type="TabContainer" parent="VBoxContainer/Settings"]
 margin_left = 150.0
 margin_right = 798.0
 margin_bottom = 395.0
 rect_min_size = Vector2( 648, 0 )
-columns = 2
-hide_folding = true
-hide_root = true
-drop_mode_flags = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+tab_align = 0
 
-[node name="CPPTree" type="Tree" parent="VBoxContainer/Settings"]
+[node name="General" type="VBoxContainer" parent="VBoxContainer/Settings/EditorTree"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="FontName" type="HBoxContainer" parent="VBoxContainer/Settings/EditorTree/General"]
+margin_right = 644.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/EditorTree/General/FontName"]
+margin_right = 303.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/EditorTree/General/FontName/CenterContainer"]
+margin_left = 111.0
+margin_top = 5.0
+margin_right = 192.0
+margin_bottom = 19.0
+text = "Custom Font"
+
+[node name="Button" type="Button" parent="VBoxContainer/Settings/EditorTree/General/FontName"]
+margin_left = 307.0
+margin_right = 337.0
+margin_bottom = 24.0
+icon = ExtResource( 2 )
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/Settings/EditorTree/General/FontName"]
+margin_left = 341.0
+margin_right = 644.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="FontSize" type="HBoxContainer" parent="VBoxContainer/Settings/EditorTree/General"]
+margin_top = 28.0
+margin_right = 644.0
+margin_bottom = 52.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/EditorTree/General/FontSize"]
+margin_right = 320.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/EditorTree/General/FontSize/CenterContainer"]
+margin_left = 131.0
+margin_top = 5.0
+margin_right = 189.0
+margin_bottom = 19.0
+text = "Font Size"
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/Settings/EditorTree/General/FontSize"]
+margin_left = 324.0
+margin_right = 644.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+min_value = 8.0
+max_value = 72.0
+step = 2.0
+value = 16.0
+rounded = true
+
+[node name="CustomTheme" type="HBoxContainer" parent="VBoxContainer/Settings/EditorTree/General"]
+margin_top = 56.0
+margin_right = 644.0
+margin_bottom = 80.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/EditorTree/General/CustomTheme"]
+margin_right = 303.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/EditorTree/General/CustomTheme/CenterContainer"]
+margin_left = 103.0
+margin_top = 5.0
+margin_right = 200.0
+margin_bottom = 19.0
+text = "Custom Theme"
+
+[node name="Button" type="Button" parent="VBoxContainer/Settings/EditorTree/General/CustomTheme"]
+margin_left = 307.0
+margin_right = 337.0
+margin_bottom = 24.0
+icon = ExtResource( 2 )
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/Settings/EditorTree/General/CustomTheme"]
+margin_left = 341.0
+margin_right = 644.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Syntax" type="VBoxContainer" parent="VBoxContainer/Settings/EditorTree"]
 visible = false
-margin_left = 802.0
-margin_right = 1450.0
-margin_bottom = 395.0
-rect_min_size = Vector2( 648, 0 )
-columns = 2
-hide_folding = true
-hide_root = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -604.0
+margin_bottom = -323.0
 
-[node name="RustTree" type="Tree" parent="VBoxContainer/Settings"]
+[node name="CPPTree" type="TabContainer" parent="VBoxContainer/Settings"]
 visible = false
 margin_left = 150.0
-margin_right = 151.0
+margin_right = 798.0
 margin_bottom = 395.0
 rect_min_size = Vector2( 648, 0 )
-columns = 2
-hide_folding = true
-hide_root = true
+tab_align = 0
+
+[node name="General" type="VBoxContainer" parent="VBoxContainer/Settings/CPPTree"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Standard" type="HBoxContainer" parent="VBoxContainer/Settings/CPPTree/General"]
+margin_right = 644.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 0, 24 )
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/CPPTree/General/Standard"]
+margin_right = 320.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/CPPTree/General/Standard/CenterContainer"]
+margin_left = 87.0
+margin_top = 5.0
+margin_right = 233.0
+margin_bottom = 19.0
+text = "C++ Language Standard"
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/Settings/CPPTree/General/Standard"]
+margin_left = 324.0
+margin_right = 644.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+text = "-std=c++11"
+items = [ "-std=c++11", null, false, 0, null, "-std=c++14", null, false, 1, null, "-std=c++17", null, false, 2, null ]
+selected = 0
+
+[node name="Optimization" type="HBoxContainer" parent="VBoxContainer/Settings/CPPTree/General"]
+margin_top = 28.0
+margin_right = 644.0
+margin_bottom = 48.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/CPPTree/General/Optimization"]
+margin_right = 320.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/CPPTree/General/Optimization/CenterContainer"]
+margin_left = 118.0
+margin_top = 3.0
+margin_right = 202.0
+margin_bottom = 17.0
+text = "Optimization"
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/Settings/CPPTree/General/Optimization"]
+margin_left = 324.0
+margin_right = 644.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "-O3"
+items = [ "-O1", null, false, 0, null, "-O2", null, false, 1, null, "-O3", null, false, 2, null ]
+selected = 2
+
+[node name="MingwPath" type="HBoxContainer" parent="VBoxContainer/Settings/CPPTree/General"]
+margin_top = 52.0
+margin_right = 644.0
+margin_bottom = 76.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/CPPTree/General/MingwPath"]
+margin_right = 306.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/CPPTree/General/MingwPath/CenterContainer"]
+margin_left = 116.0
+margin_top = 5.0
+margin_right = 189.0
+margin_bottom = 19.0
+text = "Mingw Path"
+
+[node name="Button" type="Button" parent="VBoxContainer/Settings/CPPTree/General/MingwPath"]
+margin_left = 310.0
+margin_right = 334.0
+margin_bottom = 24.0
+text = "..."
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/Settings/CPPTree/General/MingwPath"]
+margin_left = 338.0
+margin_right = 644.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Syntax" type="VBoxContainer" parent="VBoxContainer/Settings/CPPTree"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -604.0
+margin_bottom = -323.0
+
+[node name="RustTree" type="TabContainer" parent="VBoxContainer/Settings"]
+visible = false
+margin_left = 150.0
+margin_right = 798.0
+margin_bottom = 395.0
+rect_min_size = Vector2( 648, 0 )
+tab_align = 0
+
+[node name="General" type="VBoxContainer" parent="VBoxContainer/Settings/RustTree"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CargoCheck" type="HBoxContainer" parent="VBoxContainer/Settings/RustTree/General"]
+margin_right = 644.0
+margin_bottom = 24.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/RustTree/General/CargoCheck"]
+margin_right = 320.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/RustTree/General/CargoCheck/CenterContainer"]
+margin_left = 80.0
+margin_top = 5.0
+margin_right = 239.0
+margin_bottom = 19.0
+text = "Use Cargo Check on save"
+
+[node name="CheckBox" type="CheckBox" parent="VBoxContainer/Settings/RustTree/General/CargoCheck"]
+margin_left = 324.0
+margin_right = 644.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+text = "Active"
+
+[node name="Syntax" type="VBoxContainer" parent="VBoxContainer/Settings/RustTree"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -604.0
+margin_bottom = -323.0
 
 [node name="CenterConfig" type="CenterContainer" parent="VBoxContainer"]
 margin_top = 399.0
-margin_right = 1450.0
+margin_right = 798.0
 margin_bottom = 419.0
+size_flags_horizontal = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ConfirmSettings" type="Button" parent="VBoxContainer/CenterConfig"]
-margin_left = 694.0
-margin_right = 756.0
+margin_left = 368.0
+margin_right = 430.0
 margin_bottom = 20.0
 text = "Confirm"
 __meta__ = {
@@ -90,6 +322,5 @@ current_dir = "/Work/Godot/Code-Editor"
 current_path = "/Work/Godot/Code-Editor/"
 
 [connection signal="item_selected" from="VBoxContainer/Settings/CategoryTree" to="." method="_on_CategoryTree_item_selected"]
-[connection signal="button_pressed" from="VBoxContainer/Settings/EditorTree" to="." method="_on_EditorTree_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/CenterConfig/ConfirmSettings" to="." method="_on_ConfirmSettings_pressed"]
 [connection signal="file_selected" from="OpenFile" to="." method="_on_OpenFile_file_selected"]
