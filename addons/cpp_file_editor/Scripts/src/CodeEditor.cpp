@@ -415,12 +415,10 @@ void CodeEditor::_on_Clean_pressed()
 
 void CodeEditor::_on_ExecuteCustomCommandButton_pressed()
 {
-    Array output;
     String args;
-    String command = ((LineEdit *)get_node(NodePath("BuildContainer/Build/CustomCommand/Command")))->get_text();
+    String command = ((LineEdit *)get_node(NodePath("BuildContainer/Build/Command/Command")))->get_text();
 
-    args = ((LineEdit *)get_node(NodePath("BuildContainer/Build/Arguments/LineEdit")))->get_text();
-    std::future<void> th = std::async(std::launch::async, &EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()->get_parent()), command+args);
+    std::future<void> th = std::async(std::launch::async, &EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()->get_parent()->get_parent()), command);
 }
 
 void CodeEditor::_register_methods()
