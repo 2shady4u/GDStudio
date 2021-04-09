@@ -268,6 +268,11 @@ void EditorFile::execute_command(String string_command)
         #define pclose _pclose
     }
     FILE *pipe = popen(command, "r");
+    if (!pipe)
+    {
+        ((RichTextLabel *)get_node(NodePath("VBoxContainer/Control/TabContainer/Log/Panel/TextEdit")))->append_bbcode("[color=red]There was an error executing popen()[/color]");
+        return;
+    }
     char buffer[256];
     while (!feof(pipe))
     {
