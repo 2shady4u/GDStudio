@@ -78,6 +78,9 @@ String ProjectManager::build_cpp_project(String path, String selected_platform, 
 
     keys = Array::make("cpp_standard", "optimization");
     PoolIntArray global_settings = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "C++", keys);
+    
+    keys = Array::make("use_mingw");
+    bool use_mingw = cast_to<EditorFile>(this->get_parent())->load_config(load_file, "C++", keys)[0];
 
     String bindings = settings[0];
     String include_folders = settings[1];
@@ -121,6 +124,7 @@ String ProjectManager::build_cpp_project(String path, String selected_platform, 
     command = command.replace("{libs}", linker_settings);
     command = command.replace("{standard}", standard);
     command = command.replace("{optimization}", optimization);
+    command = command.replace("{mingw}", use_mingw);
     if (cast_to<EditorFile>(this->get_parent())->get_selected_profile() == true)
     {
         command += "target=release";
@@ -308,6 +312,11 @@ void ProjectManager::create_new_project()
                                "standard = ARGUMENTS.get(\"cpp_standard\", standard)\n"
                                "optimization = \"\"\n"
                                "optimization = ARGUMENTS.get(\"optimization\", optimization)\n\n"
+                               "mingw = \"\"\n"
+                               "mingw = ARGUMENTS.get(\"use_mingw\", mingw)\n\n"
+                               "if mingw == \"true\":\n\t"
+                               "env = Environment(tools=['mingw'])\n"
+                               "else:\n\t"
                                "env = Environment()\n"
                                "if platform == \"windows\":\n\t"
                                "env = Environment(ENV=os.environ)\n\n"
@@ -373,10 +382,11 @@ void ProjectManager::create_new_project()
                                source_folder + "\"\n\n"
                                                "godot_cpp_folder=\"" +
                                cpp_path + "\"\n"
+                               "use_mingw=false\n"
                                           "include_folders=\"\"\n"
                                           "linker_folders=\"\"\n"
                                           "linker_settings=\"\"\n"
-                                          "build_command=\"scons -C {path} platform={platform} cpp_standard={standard} optimization={optimization} cpp_path={bindings_path} include_path={include} linker_path={linker} link_libs={libs}\"\n"
+                                          "build_command=\"scons -C {path} platform={platform} use_mingw={mingw} cpp_standard={standard} optimization={optimization} cpp_path={bindings_path} include_path={include} linker_path={linker} link_libs={libs}\"\n"
                                           "clean_command=\"scons -C {path} --clean\"");
             file->close();
 
