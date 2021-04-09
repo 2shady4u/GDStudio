@@ -117,7 +117,6 @@ margin_bottom = 380.0
 window_title = "Abrir un Archivo"
 mode = 0
 access = 2
-filters = PoolStringArray( "*.gdnproj", "*.cpp", "*.hpp", "*.rs" )
 current_dir = "/Work/Godot/Code-Editor"
 current_path = "/Work/Godot/Code-Editor/"
 
