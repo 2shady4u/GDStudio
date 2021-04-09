@@ -330,7 +330,98 @@ margin_left = 322.0
 margin_right = 640.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
-text = "Active"
+
+[node name="PassTargetAll" type="HBoxContainer" parent="VBoxContainer/Settings/RustTree/General"]
+margin_top = 72.0
+margin_right = 640.0
+margin_bottom = 112.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/RustTree/General/PassTargetAll"]
+margin_right = 318.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/RustTree/General/PassTargetAll/CenterContainer"]
+margin_left = 35.0
+margin_top = 13.0
+margin_right = 282.0
+margin_bottom = 27.0
+text = "Pass --target-all to all build commands"
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/Settings/RustTree/General/PassTargetAll"]
+margin_left = 322.0
+margin_right = 640.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+
+[node name="PassOffline" type="HBoxContainer" parent="VBoxContainer/Settings/RustTree/General"]
+margin_top = 116.0
+margin_right = 640.0
+margin_bottom = 156.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/RustTree/General/PassOffline"]
+margin_right = 318.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/RustTree/General/PassOffline/CenterContainer"]
+margin_left = 44.0
+margin_top = 13.0
+margin_right = 274.0
+margin_bottom = 27.0
+text = "Pass --offline to all build commands"
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/Settings/RustTree/General/PassOffline"]
+margin_left = 322.0
+margin_right = 640.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+
+[node name="GlobalBuild" type="HBoxContainer" parent="VBoxContainer/Settings/RustTree/General"]
+margin_top = 160.0
+margin_right = 640.0
+margin_bottom = 184.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/RustTree/General/GlobalBuild"]
+margin_right = 318.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/RustTree/General/GlobalBuild/CenterContainer"]
+margin_left = 84.0
+margin_top = 5.0
+margin_right = 233.0
+margin_bottom = 19.0
+text = "Global build arguments"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/Settings/RustTree/General/GlobalBuild"]
+margin_left = 322.0
+margin_right = 640.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="GlobalClean" type="HBoxContainer" parent="VBoxContainer/Settings/RustTree/General"]
+margin_top = 188.0
+margin_right = 640.0
+margin_bottom = 212.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/RustTree/General/GlobalClean"]
+margin_right = 318.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/RustTree/General/GlobalClean/CenterContainer"]
+margin_left = 83.0
+margin_top = 5.0
+margin_right = 234.0
+margin_bottom = 19.0
+text = "Global clean arguments"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/Settings/RustTree/General/GlobalClean"]
+margin_left = 322.0
+margin_right = 640.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
 
 [node name="Syntax" type="VBoxContainer" parent="VBoxContainer/Settings/RustTree"]
 visible = false
