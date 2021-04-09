@@ -100,10 +100,20 @@ void Settings::set_rust_data()
     args.append("--version");
     Array output;
     String cargo_version = OS::get_singleton()->execute("cargo", args, true, output);
-    PoolStringArray keys = Array::make("check_on_save");
-    bool settings = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Rust", keys)[0];
+    
+    PoolStringArray keys = Array::make("check_on_save", "pass_target_all", "pass_offline");
+    bool cargo_check = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Rust", keys)[0];
+    bool target_all = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Rust", keys)[1];
+    bool offline = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Rust", keys)[2];
     ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/CargoVersion/LineEdit")))->set_text(output[0]);
-    ((CheckButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/CargoCheck/CheckButton")))->set_pressed(settings);
+    ((CheckButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/CargoCheck/CheckButton")))->set_pressed(cargo_check);
+    ((CheckButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/PassTargetAll/CheckButton")))->set_pressed(target_all);
+    ((CheckButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/PassOffline/CheckButton")))->set_pressed(offline);
+
+    keys = Array::make("global_build", "global_clean");
+    PoolStringArray global_options = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Rust", keys);
+    ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/GlobalBuild/LineEdit")))->set_text(global_options[0]);
+    ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/GlobalClean/LineEdit")))->set_text(global_options[1]);
 }
 
 void Settings::save_editor_data()
@@ -154,6 +164,18 @@ void Settings::save_rust_data()
 
     bool cargo_check = ((CheckButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/CargoCheck/CheckButton")))->is_pressed();
     config_file->set_value("Rust", "check_on_save", cargo_check);
+    
+    bool target_all = ((CheckButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/PassTargetAll/CheckButton")))->is_pressed();
+    config_file->set_value("Rust", "pass_target_all", target_all);
+
+    bool offline = ((CheckButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/PassOffline/CheckButton")))->is_pressed();
+    config_file->set_value("Rust", "pass_offline", offline);
+
+    String global_build = ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/GlobalBuild/LineEdit")))->get_text();
+    config_file->set_value("Rust", "global_build", global_build);
+
+    String global_clean = ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/GlobalClean/LineEdit")))->get_text();
+    config_file->set_value("Rust", "global_clean", global_clean);
 
     config_file->save("user://editor.cfg");
     config_file->free();

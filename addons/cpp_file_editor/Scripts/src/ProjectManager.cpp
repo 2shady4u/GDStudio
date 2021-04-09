@@ -80,12 +80,13 @@ void ProjectManager::build_task(int task = 0)
             PoolStringArray global_commands = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Rust", keys);
             if (task == 0)
             {
+                Godot::print(global_commands[2]);
                 command  = this->build_rust_project(settings[1], selected_os, execute_command) + " " + global_commands[0];
-                if (global_commands[2] == true)
+                if (global_commands[2] == "True")
                 {
                     command += " --target-all";
                 }
-                if (global_commands[3] == true)
+                if (global_commands[3] == "True")
                 {
                     command += " --offline";
                 }
