@@ -125,16 +125,40 @@ size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/CPP"]
 margin_right = 946.0
-margin_bottom = 432.0
+margin_bottom = 476.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Sources" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
+[node name="UseMingw" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
 margin_right = 934.0
-margin_bottom = 24.0
+margin_bottom = 40.0
+
+[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/UseMingw"]
+margin_right = 465.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/UseMingw/CenterContainer"]
+margin_left = 197.0
+margin_top = 13.0
+margin_right = 267.0
+margin_bottom = 27.0
+text = "Use Mingw"
+
+[node name="CheckButton" type="CheckButton" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/UseMingw"]
+margin_left = 469.0
+margin_right = 934.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+text = "Active"
+
+[node name="Sources" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
+margin_top = 44.0
+margin_right = 934.0
+margin_bottom = 68.0
 size_flags_horizontal = 3
 
 [node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Sources"]
@@ -156,9 +180,9 @@ margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="Bindings" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
-margin_top = 28.0
+margin_top = 72.0
 margin_right = 934.0
-margin_bottom = 52.0
+margin_bottom = 96.0
 
 [node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Bindings"]
 margin_right = 465.0
@@ -179,9 +203,9 @@ margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="LabelsContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
-margin_top = 56.0
+margin_top = 100.0
 margin_right = 934.0
-margin_bottom = 70.0
+margin_bottom = 114.0
 size_flags_horizontal = 3
 
 [node name="IncludePaths" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LabelsContainer"]
@@ -211,9 +235,9 @@ margin_bottom = 14.0
 text = "Linker Paths"
 
 [node name="PanelsContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
-margin_top = 74.0
+margin_top = 118.0
 margin_right = 934.0
-margin_bottom = 214.0
+margin_bottom = 258.0
 
 [node name="Include" type="PanelContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer"]
 margin_right = 465.0
@@ -318,9 +342,9 @@ size_flags_horizontal = 3
 text = "Clear"
 
 [node name="LinkerLabel" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
-margin_top = 218.0
+margin_top = 262.0
 margin_right = 934.0
-margin_bottom = 232.0
+margin_bottom = 276.0
 
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LinkerLabel"]
 margin_left = 420.0
@@ -329,9 +353,9 @@ margin_bottom = 14.0
 text = "Linker Settings"
 
 [node name="LinkerList" type="PanelContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
-margin_top = 236.0
+margin_top = 280.0
 margin_right = 934.0
-margin_bottom = 376.0
+margin_bottom = 420.0
 rect_min_size = Vector2( 0, 140 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LinkerList"]
@@ -378,9 +402,9 @@ rect_min_size = Vector2( 90, 0 )
 text = "Clear"
 
 [node name="Build" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
-margin_top = 380.0
+margin_top = 424.0
 margin_right = 934.0
-margin_bottom = 404.0
+margin_bottom = 448.0
 
 [node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Build"]
 margin_right = 465.0
@@ -401,9 +425,9 @@ margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="Clean" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
-margin_top = 408.0
+margin_top = 452.0
 margin_right = 934.0
-margin_bottom = 432.0
+margin_bottom = 476.0
 
 [node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Clean"]
 margin_right = 465.0
@@ -533,9 +557,9 @@ margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="Confirm" type="CenterContainer" parent="PanelContainer/VBoxContainer"]
-margin_top = 506.0
+margin_top = 92.0
 margin_right = 946.0
-margin_bottom = 526.0
+margin_bottom = 112.0
 __meta__ = {
 "_edit_use_anchors_": false
 }

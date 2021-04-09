@@ -80,7 +80,7 @@ String ProjectManager::build_cpp_project(String path, String selected_platform, 
     PoolIntArray global_settings = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "C++", keys);
     
     keys = Array::make("use_mingw");
-    bool use_mingw = cast_to<EditorFile>(this->get_parent())->load_config(load_file, "C++", keys)[0];
+    bool use_mingw = cast_to<EditorFile>(this->get_parent())->load_config(load_file, "settings", keys)[0];
 
     String bindings = settings[0];
     String include_folders = settings[1];
@@ -124,7 +124,16 @@ String ProjectManager::build_cpp_project(String path, String selected_platform, 
     command = command.replace("{libs}", linker_settings);
     command = command.replace("{standard}", standard);
     command = command.replace("{optimization}", optimization);
-    command = command.replace("{mingw}", use_mingw);
+    if (use_mingw == true)
+    {
+        command = command.replace("{mingw}", "true");
+    }
+    else
+    {
+        command = command.replace("{mingw}", "false");
+    }
+    
+    
     if (cast_to<EditorFile>(this->get_parent())->get_selected_profile() == true)
     {
         command += "target=release";
@@ -317,9 +326,7 @@ void ProjectManager::create_new_project()
                                "if mingw == \"true\":\n\t"
                                "env = Environment(tools=['mingw'])\n"
                                "else:\n\t"
-                               "env = Environment()\n"
-                               "if platform == \"windows\":\n\t"
-                               "env = Environment(ENV=os.environ)\n\n"
+                               "env = Environment()\n\n"
                                "godot_headers_path = ARGUMENTS.get(\"headers\", os.getenv(\"GODOT_HEADERS\", bindings+\"/godot_headers\"))\n"
                                "godot_bindings_path = ARGUMENTS.get(\"cpp_bindings\", os.getenv(\"CPP_BINDINGS\", bindings))\n\n"
                                "target = ARGUMENTS.get(\"target\", \"debug\")\n\n"
@@ -330,18 +337,24 @@ void ProjectManager::create_new_project()
                                "if platform == \"osx\":\n\t"
                                "if target == \"debug\":\n\t\t"
                                "env.Append(CCFLAGS=[\"-g\"])\n\t"
-                               "env.Append(CCFLAGS=[\"-O3\", \"-std=c++14\", \"-arch\", \"x86_64\"])\n\t"
+                               "env.Append(CCFLAGS=[\"-arch\", \"x86_64\"])\n\t"
                                "env.Append(LINKFLAGS=[\"-arch\", \"x86_64\", \"-framework\", \"Cocoa\", \"-Wl,-undefined,dynamic_lookup\"])\n"
                                "if platform == \"linux\":\n\t"
                                "if target == \"debug\":\n\t\t"
                                "env.Append(CCFLAGS=[\"-g\"])\n\t"
-                               "env.Append(CCFLAGS=[\"-O3\", \"-std=c++14\", \"-Wno-writable-strings\"])\n\t"
+                               "env.Append(CCFLAGS=[\"-Wno-writable-strings\"])\n\t"
                                "env.Append(LINKFLAGS=[\"-Wl,-R,'$$ORIGIN'\"])\n"
                                "if platform == \"windows\":\n\t"
-                               "env.Append(LINKFLAGS=[\"/WX\"])\n\t"
-                               "if target == \"debug\":\n\t\t"
-                               "env.Append(CCFLAGS=[\"-EHsc\", \"-D_DEBUG\", \"/MDd\"])\n\t"
+                               "if mingw == \"true\":\n\t\t"
+                               "if target == \"debug\":\n\t\t\t"
+                               "env.Append(CCFLAGS=[\"-g\"])\n\t\t"
+                               "env.Append(CCFLAGS=[\"-Wno-writable-strings\"])\n\t\t"
+                               "env.Append(LINKFLAGS=[\"-Wl,-R,'$$ORIGIN'\"])\n\t"
                                "else:\n\t\t"
+                               "env.Append(LINKFLAGS=[\"/WX\"])\n\t\t"
+                               "if target == \"debug\":\n\t\t\t"
+                               "env.Append(CCFLAGS=[\"-EHsc\", \"-D_DEBUG\", \"/MDd\"])\n\t\t"
+                               "else:\n\t\t\t"
                                "env.Append(CCFLAGS=[\"-O2\", \"-EHsc\", \"-DNDEBUG\", \"/MDd\"])\n\n"
                                "def add_sources(sources, dir):\n\t"
                                "for f in os.listdir(dir):\n\t\t"

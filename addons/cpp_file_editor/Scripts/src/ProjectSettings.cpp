@@ -11,6 +11,7 @@
 #include <Reference.hpp>
 #include <Texture.hpp>
 #include <FileDialog.hpp>
+#include <CheckButton.hpp>
 
 #include "ProjectSettings.hpp"
 #include "FileManager.hpp"
@@ -72,6 +73,8 @@ void ProjectSettings::load_settings(String language)
     if (language == "c++")
     {
         ((OptionButton *)get_node(NodePath("PanelContainer/VBoxContainer/ProjectLang/OptionButton")))->select(0);
+        bool use_mingw = config_file->get_value("settings", "use_mingw");
+        ((CheckButton *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/UseMingw/CheckButton")))->set_pressed(use_mingw);
         String sources = config_file->get_value("settings", "sources_folder");
         ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/Sources/LineEdit")))->set_text(sources);
         String bindings = config_file->get_value("settings", "godot_cpp_folder");
@@ -125,6 +128,7 @@ void ProjectSettings::_on_ConfirmSettings_pressed()
 
     if (this->project_lang == "c++")
     {
+        config_file->set_value("settings", "use_mingw", ((CheckButton *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/UseMingw/CheckButton")))->is_pressed());
         config_file->set_value("settings", "sources_folder", ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/Sources/LineEdit")))->get_text());
         config_file->set_value("settings", "godot_cpp_folder", ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/Bindings/LineEdit")))->get_text());
         int include_size = ((ItemList *)get_node(NodePath("PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/ItemList")))->get_item_count();
