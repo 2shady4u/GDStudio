@@ -60,7 +60,7 @@ void Settings::_ready()
     tree->set_hide_root(true);
     this->set_editor_data();
     this->set_cpp_data();
-    //this->set_rust_data();
+    this->set_rust_data();
 }
 
 void Settings::show_window()

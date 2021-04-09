@@ -4,6 +4,7 @@
 [ext_resource path="res://addons/cpp_file_editor/Icons/default_folder.svg" type="Texture" id=2]
 
 [node name="Settings" type="WindowDialog"]
+visible = true
 margin_right = 810.0
 margin_bottom = 430.0
 window_title = "Settings"
@@ -31,6 +32,7 @@ margin_bottom = 395.0
 rect_min_size = Vector2( 146, 0 )
 
 [node name="EditorTree" type="TabContainer" parent="VBoxContainer/Settings"]
+visible = false
 margin_left = 150.0
 margin_right = 798.0
 margin_bottom = 395.0
@@ -143,7 +145,6 @@ margin_right = -4.0
 margin_bottom = -4.0
 
 [node name="CPPTree" type="TabContainer" parent="VBoxContainer/Settings"]
-visible = false
 margin_left = 150.0
 margin_right = 798.0
 margin_bottom = 395.0
@@ -161,25 +162,25 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Standard" type="HBoxContainer" parent="VBoxContainer/Settings/CPPTree/General"]
-margin_right = 644.0
+margin_right = 640.0
 margin_bottom = 24.0
 rect_min_size = Vector2( 0, 24 )
 
 [node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/CPPTree/General/Standard"]
-margin_right = 320.0
+margin_right = 318.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="VBoxContainer/Settings/CPPTree/General/Standard/CenterContainer"]
-margin_left = 87.0
+margin_left = 86.0
 margin_top = 5.0
-margin_right = 233.0
+margin_right = 232.0
 margin_bottom = 19.0
 text = "C++ Language Standard"
 
 [node name="OptionButton" type="OptionButton" parent="VBoxContainer/Settings/CPPTree/General/Standard"]
-margin_left = 324.0
-margin_right = 644.0
+margin_left = 322.0
+margin_right = 640.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 text = "-std=c++11"
@@ -188,56 +189,73 @@ selected = 0
 
 [node name="Optimization" type="HBoxContainer" parent="VBoxContainer/Settings/CPPTree/General"]
 margin_top = 28.0
-margin_right = 644.0
+margin_right = 640.0
 margin_bottom = 48.0
 
 [node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/CPPTree/General/Optimization"]
-margin_right = 320.0
+margin_right = 318.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="VBoxContainer/Settings/CPPTree/General/Optimization/CenterContainer"]
-margin_left = 118.0
+margin_left = 117.0
 margin_top = 3.0
-margin_right = 202.0
+margin_right = 201.0
 margin_bottom = 17.0
 text = "Optimization"
 
 [node name="OptionButton" type="OptionButton" parent="VBoxContainer/Settings/CPPTree/General/Optimization"]
-margin_left = 324.0
-margin_right = 644.0
+margin_left = 322.0
+margin_right = 640.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 text = "-O3"
 items = [ "-O1", null, false, 0, null, "-O2", null, false, 1, null, "-O3", null, false, 2, null ]
 selected = 2
 
-[node name="MingwPath" type="HBoxContainer" parent="VBoxContainer/Settings/CPPTree/General"]
+[node name="GlobalBuild" type="HBoxContainer" parent="VBoxContainer/Settings/CPPTree/General"]
 margin_top = 52.0
-margin_right = 644.0
+margin_right = 640.0
 margin_bottom = 76.0
 
-[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/CPPTree/General/MingwPath"]
-margin_right = 306.0
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/CPPTree/General/GlobalBuild"]
+margin_right = 318.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="VBoxContainer/Settings/CPPTree/General/MingwPath/CenterContainer"]
-margin_left = 116.0
+[node name="Label" type="Label" parent="VBoxContainer/Settings/CPPTree/General/GlobalBuild/CenterContainer"]
+margin_left = 84.0
 margin_top = 5.0
-margin_right = 189.0
+margin_right = 233.0
 margin_bottom = 19.0
-text = "Mingw Path"
+text = "Global build arguments"
 
-[node name="Button" type="Button" parent="VBoxContainer/Settings/CPPTree/General/MingwPath"]
-margin_left = 310.0
-margin_right = 334.0
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/Settings/CPPTree/General/GlobalBuild"]
+margin_left = 322.0
+margin_right = 640.0
 margin_bottom = 24.0
-text = "..."
+size_flags_horizontal = 3
 
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer/Settings/CPPTree/General/MingwPath"]
-margin_left = 338.0
-margin_right = 644.0
+[node name="GlobalClean" type="HBoxContainer" parent="VBoxContainer/Settings/CPPTree/General"]
+margin_top = 80.0
+margin_right = 640.0
+margin_bottom = 104.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/CPPTree/General/GlobalClean"]
+margin_right = 318.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/CPPTree/General/GlobalClean/CenterContainer"]
+margin_left = 83.0
+margin_top = 5.0
+margin_right = 234.0
+margin_bottom = 19.0
+text = "Global clean arguments"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/Settings/CPPTree/General/GlobalClean"]
+margin_left = 322.0
+margin_right = 640.0
 margin_bottom = 24.0
 size_flags_horizontal = 3
 
