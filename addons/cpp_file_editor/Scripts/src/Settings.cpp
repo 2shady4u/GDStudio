@@ -12,6 +12,7 @@
 #include <SpinBox.hpp>
 #include <OptionButton.hpp>
 #include <CheckButton.hpp>
+#include <OS.hpp>
 
 #include "Settings.hpp"
 #include "FileManager.hpp"
@@ -95,8 +96,13 @@ void Settings::set_cpp_data()
 
 void Settings::set_rust_data()
 {
+    PoolStringArray args;
+    args.append("--version");
+    Array output;
+    String cargo_version = OS::get_singleton()->execute("cargo", args, true, output);
     PoolStringArray keys = Array::make("check_on_save");
     bool settings = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Rust", keys)[0];
+    ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/CargoVersion/LineEdit")))->set_text(output[0]);
     ((CheckButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/CargoCheck/CheckButton")))->set_pressed(settings);
 }
 
