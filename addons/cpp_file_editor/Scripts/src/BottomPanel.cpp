@@ -27,21 +27,23 @@ void BottomPanel::_on_TabContainer_tab_selected(int id)
         if (this->visible == true)
         {
             ((Control *)get_node(NodePath("TabContainer/Log")))->hide();
-            int x = ((Control *)get_node(NodePath("TabContainer")))->get_size()[0];
-            ((Control *)get_node(NodePath("TabContainer")))->set_size(Vector2(x, 36));
-            x = ((Control *)get_node(NodePath("TabContainer")))->get_position()[0];
-            int y = ((Control *)get_node(NodePath("TabContainer")))->get_position()[1];
-            ((Control *)get_node(NodePath("TabContainer")))->set_position(Vector2(x, y+128));
+            int x = this->get_size()[0];
+            this->set_size(Vector2(x, 36));
+            this->set_custom_minimum_size(Vector2(0, 36));
+            x = this->get_position()[0];
+            int y = this->get_position()[1];
+            this->set_position(Vector2(x, y+128));
             this->visible = false;
         }
         else
         {
             ((Control *)get_node(NodePath("TabContainer/Log")))->show();
-            int x = ((Control *)get_node(NodePath("TabContainer")))->get_size()[0];
-            ((Control *)get_node(NodePath("TabContainer")))->set_size(Vector2(x, 164));
-            x = ((Control *)get_node(NodePath("TabContainer")))->get_position()[0];
-            int y = ((Control *)get_node(NodePath("TabContainer")))->get_position()[1];
-            ((Control *)get_node(NodePath("TabContainer")))->set_position(Vector2(x, y-128));
+            int x = this->get_size()[0];
+            this->set_size(Vector2(x, 164));
+            this->set_custom_minimum_size(Vector2(x, 164));
+            x = this->get_position()[0];
+            int y = this->get_position()[1];
+            this->set_position(Vector2(x, y-128));
             this->visible = true;
         }
     }
