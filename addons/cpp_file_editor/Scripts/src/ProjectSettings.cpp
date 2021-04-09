@@ -101,7 +101,7 @@ void ProjectSettings::load_settings(String language)
     else if (language == "rust")
     {
         ((OptionButton *)get_node(NodePath("PanelContainer/VBoxContainer/ProjectLang/OptionButton")))->select(1);
-        String gdn_version = config_file->get_value("settings", "gnative_version");
+        String gdn_version = config_file->get_value("settings", "gdnative_version");
         ((LineEdit *)get_node(NodePath("PanelContainer/VBoxContainer/Rust/VBoxContainer/GDNativeVersion/LineEdit")))->set_text(gdn_version);
 
         String build_command = config_file->get_value("settings", "build_command");
