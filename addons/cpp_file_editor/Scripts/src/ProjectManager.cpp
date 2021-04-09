@@ -48,6 +48,7 @@ void ProjectManager::build_task(int task = 0)
         PoolStringArray keys = Array::make("language", "path", "build_command", "clean_command");
         String load_file = cast_to<EditorFile>(this->get_parent())->get_project_path() + "/settings.gdnproj";
         PoolStringArray settings = cast_to<EditorFile>(this->get_parent())->load_config(load_file, "settings", keys);
+        
         String execute_command = settings[2];
         if (task == 1)
         {
@@ -59,7 +60,17 @@ void ProjectManager::build_task(int task = 0)
 
         if (settings[0] == "c++")
         {
-            String command = this->build_cpp_project(settings[1], selected_os, execute_command);
+            String command;
+            keys = Array::make("global_build", "global_clean");
+            PoolStringArray global_commands = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "C++", keys);
+            if (task == 0)
+            {
+                command  = this->build_cpp_project(settings[1], selected_os, execute_command) + " " + global_commands[0];
+            }
+            else
+            {
+                command  = this->build_cpp_project(settings[1], selected_os, execute_command) + " " + global_commands[1];
+            }
             thread = new std::thread(&EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()), command);
         }
         else if (settings[0] == "rust")

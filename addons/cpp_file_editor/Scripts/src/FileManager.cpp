@@ -33,6 +33,7 @@ EditorFile::~EditorFile()
 
 void EditorFile::_init()
 {
+    create_user_data();
     this->settings_scene = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Scenes/Settings.tscn");
     this->code_scene = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Scenes/CodeEditor.tscn");
 }
@@ -44,7 +45,6 @@ void EditorFile::_ready()
     ((MenuButton *)get_node(NodePath("TopBar/Project")))->get_popup()->connect("id_pressed", this, "on_project_pressed");
     ((MenuButton *)get_node(NodePath("TopBar/Settings")))->get_popup()->connect("id_pressed", this, "on_settings_pressed");
     create_shortcuts();
-    create_user_data();
 }
 
 void EditorFile::open_file(String path)
@@ -118,13 +118,13 @@ Array EditorFile::load_config(String file, String section, PoolStringArray key)
 {
     ConfigFile *config_file = ConfigFile::_new();
     config_file->load(file);
-
+    
     Array output;
     for (int i = 0; i < key.size(); i++)
     {
         if (config_file->has_section_key(section, key[i]) == false)
         {
-            config_file->set_value(section, key[i], "\"\"");
+            config_file->set_value(section, key[i], "");
             config_file->save(file);
         }
         output.append(config_file->get_value(section, key[i]));
@@ -228,8 +228,8 @@ void EditorFile::create_user_data()
     {
         file->open("user://editor.cfg", File::WRITE);
         file->store_string("[Editor]\ncustom_font=\"res://addons/cpp_file_editor/Fonts/RobotoSlab-VariableFont_wght.ttf\"\nfont_size=12\ncustom_theme=\"res://addons/cpp_file_editor/Themes/godot_theme.tres\"\n"
-        "[C++]\ncpp_standard=0\noptimization=2\nmingw_path=\"\"\n"
-        "[Rust]\ncheck_on_save=false");
+        "[C++]\ncpp_standard=0\noptimization=2\nglobal_build=\"-Q\"\nglobal_clean=\"\"\n"
+        "[Rust]\ncheck_on_save=false\nglobal_build=\"\"\nglobal_clean=\"\"");
         file->close();
     }
     file->free();
@@ -260,6 +260,7 @@ void EditorFile::execute_clean()
 
 void EditorFile::execute_command(String string_command)
 {
+    ((RichTextLabel *)get_node(NodePath("VBoxContainer/Control/TabContainer/Log/Panel/TextEdit")))->add_text("Executing: "+string_command+"\n");
     const char *command = (string_command+" 2>&1").utf8().get_data();
     if (OS::get_singleton()->get_name() == "windows")
     {

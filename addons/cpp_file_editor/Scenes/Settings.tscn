@@ -4,7 +4,6 @@
 [ext_resource path="res://addons/cpp_file_editor/Icons/default_folder.svg" type="Texture" id=2]
 
 [node name="Settings" type="WindowDialog"]
-visible = true
 margin_right = 810.0
 margin_bottom = 430.0
 window_title = "Settings"
@@ -32,7 +31,6 @@ margin_bottom = 395.0
 rect_min_size = Vector2( 146, 0 )
 
 [node name="EditorTree" type="TabContainer" parent="VBoxContainer/Settings"]
-visible = false
 margin_left = 150.0
 margin_right = 798.0
 margin_bottom = 395.0
@@ -145,6 +143,7 @@ margin_right = -4.0
 margin_bottom = -4.0
 
 [node name="CPPTree" type="TabContainer" parent="VBoxContainer/Settings"]
+visible = false
 margin_left = 150.0
 margin_right = 798.0
 margin_bottom = 395.0

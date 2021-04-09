@@ -84,12 +84,13 @@ void Settings::set_cpp_data()
 {
     PoolStringArray keys = Array::make("cpp_standard", "optimization");
     PoolIntArray settings = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "C++", keys);
-    keys = Array::make("mingw_path");
-    PoolStringArray mingw = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "C++", keys);
+    keys = Array::make("global_build", "global_clean");
+    PoolStringArray global_build = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "C++", keys);
 
     ((OptionButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/Standard/OptionButton")))->select(settings[0]);
     ((OptionButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/Optimization/OptionButton")))->select(settings[1]);
-    ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/MingwPath/LineEdit")))->set_text(mingw[0]);
+    ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/GlobalBuild/LineEdit")))->set_text(global_build[0]);
+    ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/GlobalClean/LineEdit")))->set_text(global_build[1]);
 }
 
 void Settings::set_rust_data()
@@ -130,8 +131,11 @@ void Settings::save_cpp_data()
     int optimization = ((OptionButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/Optimization/OptionButton")))->get_selected();
     config_file->set_value("C++", "optimization", optimization);
 
-    String mingw_path = ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/MingwPath/LineEdit")))->get_text();
-    config_file->set_value("C++", "mingw_path", mingw_path);
+    String global_build = ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/GlobalBuild/LineEdit")))->get_text();
+    config_file->set_value("C++", "global_build", global_build);
+
+    String global_clean = ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/Clean/LineEdit")))->get_text();
+    config_file->set_value("C++", "global_clean", global_clean);
 
     config_file->save("user://editor.cfg");
     config_file->free();
