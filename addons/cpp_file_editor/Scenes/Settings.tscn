@@ -142,6 +142,52 @@ margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
 
+[node name="ExitSuccess" type="HBoxContainer" parent="VBoxContainer/Settings/EditorTree/Syntax"]
+margin_right = 640.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 0, 24 )
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/EditorTree/Syntax/ExitSuccess"]
+margin_right = 318.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/EditorTree/Syntax/ExitSuccess/CenterContainer"]
+margin_left = 73.0
+margin_top = 5.0
+margin_right = 244.0
+margin_bottom = 19.0
+text = "On Command exit success"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/Settings/EditorTree/Syntax/ExitSuccess"]
+margin_left = 322.0
+margin_right = 640.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="ExitError" type="HBoxContainer" parent="VBoxContainer/Settings/EditorTree/Syntax"]
+margin_top = 28.0
+margin_right = 640.0
+margin_bottom = 48.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/EditorTree/Syntax/ExitError"]
+margin_right = 318.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/EditorTree/Syntax/ExitError/CenterContainer"]
+margin_left = 83.0
+margin_top = 3.0
+margin_right = 234.0
+margin_bottom = 17.0
+text = "On Command exit error"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/Settings/EditorTree/Syntax/ExitError"]
+margin_left = 322.0
+margin_right = 640.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
 [node name="CPPTree" type="TabContainer" parent="VBoxContainer/Settings"]
 visible = false
 margin_left = 150.0
@@ -266,6 +312,120 @@ margin_left = 4.0
 margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
+
+[node name="Functions" type="HBoxContainer" parent="VBoxContainer/Settings/CPPTree/Syntax"]
+margin_right = 640.0
+margin_bottom = 20.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/CPPTree/Syntax/Functions"]
+margin_right = 318.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/CPPTree/Syntax/Functions/CenterContainer"]
+margin_left = 128.0
+margin_top = 3.0
+margin_right = 190.0
+margin_bottom = 17.0
+text = "Functions"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/Settings/CPPTree/Syntax/Functions"]
+margin_left = 322.0
+margin_right = 640.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Strings" type="HBoxContainer" parent="VBoxContainer/Settings/CPPTree/Syntax"]
+margin_top = 24.0
+margin_right = 640.0
+margin_bottom = 44.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/CPPTree/Syntax/Strings"]
+margin_right = 318.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/CPPTree/Syntax/Strings/CenterContainer"]
+margin_left = 137.0
+margin_top = 3.0
+margin_right = 180.0
+margin_bottom = 17.0
+text = "Strings"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/Settings/CPPTree/Syntax/Strings"]
+margin_left = 322.0
+margin_right = 640.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Comments" type="HBoxContainer" parent="VBoxContainer/Settings/CPPTree/Syntax"]
+margin_top = 48.0
+margin_right = 640.0
+margin_bottom = 68.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/CPPTree/Syntax/Comments"]
+margin_right = 318.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/CPPTree/Syntax/Comments/CenterContainer"]
+margin_left = 124.0
+margin_top = 3.0
+margin_right = 194.0
+margin_bottom = 17.0
+text = "Comments"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/Settings/CPPTree/Syntax/Comments"]
+margin_left = 322.0
+margin_right = 640.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Preprocessor" type="HBoxContainer" parent="VBoxContainer/Settings/CPPTree/Syntax"]
+margin_top = 72.0
+margin_right = 640.0
+margin_bottom = 92.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/CPPTree/Syntax/Preprocessor"]
+margin_right = 318.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/CPPTree/Syntax/Preprocessor/CenterContainer"]
+margin_left = 117.0
+margin_top = 3.0
+margin_right = 201.0
+margin_bottom = 17.0
+text = "Preprocessor"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/Settings/CPPTree/Syntax/Preprocessor"]
+margin_left = 322.0
+margin_right = 640.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Keywords" type="HBoxContainer" parent="VBoxContainer/Settings/CPPTree/Syntax"]
+margin_top = 96.0
+margin_right = 640.0
+margin_bottom = 116.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/CPPTree/Syntax/Keywords"]
+margin_right = 318.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/CPPTree/Syntax/Keywords/CenterContainer"]
+margin_left = 128.0
+margin_top = 3.0
+margin_right = 189.0
+margin_bottom = 17.0
+text = "Keywords"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/Settings/CPPTree/Syntax/Keywords"]
+margin_left = 322.0
+margin_right = 640.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
 
 [node name="RustTree" type="TabContainer" parent="VBoxContainer/Settings"]
 visible = false
@@ -431,6 +591,120 @@ margin_left = 4.0
 margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
+
+[node name="Functions" type="HBoxContainer" parent="VBoxContainer/Settings/RustTree/Syntax"]
+margin_right = 640.0
+margin_bottom = 20.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/RustTree/Syntax/Functions"]
+margin_right = 318.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/RustTree/Syntax/Functions/CenterContainer"]
+margin_left = 128.0
+margin_top = 3.0
+margin_right = 190.0
+margin_bottom = 17.0
+text = "Functions"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/Settings/RustTree/Syntax/Functions"]
+margin_left = 322.0
+margin_right = 640.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Strings" type="HBoxContainer" parent="VBoxContainer/Settings/RustTree/Syntax"]
+margin_top = 24.0
+margin_right = 640.0
+margin_bottom = 44.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/RustTree/Syntax/Strings"]
+margin_right = 318.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/RustTree/Syntax/Strings/CenterContainer"]
+margin_left = 137.0
+margin_top = 3.0
+margin_right = 180.0
+margin_bottom = 17.0
+text = "Strings"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/Settings/RustTree/Syntax/Strings"]
+margin_left = 322.0
+margin_right = 640.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Comments" type="HBoxContainer" parent="VBoxContainer/Settings/RustTree/Syntax"]
+margin_top = 48.0
+margin_right = 640.0
+margin_bottom = 68.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/RustTree/Syntax/Comments"]
+margin_right = 318.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/RustTree/Syntax/Comments/CenterContainer"]
+margin_left = 124.0
+margin_top = 3.0
+margin_right = 194.0
+margin_bottom = 17.0
+text = "Comments"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/Settings/RustTree/Syntax/Comments"]
+margin_left = 322.0
+margin_right = 640.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Keywords" type="HBoxContainer" parent="VBoxContainer/Settings/RustTree/Syntax"]
+margin_top = 72.0
+margin_right = 640.0
+margin_bottom = 92.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/RustTree/Syntax/Keywords"]
+margin_right = 318.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/RustTree/Syntax/Keywords/CenterContainer"]
+margin_left = 128.0
+margin_top = 3.0
+margin_right = 189.0
+margin_bottom = 17.0
+text = "Keywords"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/Settings/RustTree/Syntax/Keywords"]
+margin_left = 322.0
+margin_right = 640.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Types" type="HBoxContainer" parent="VBoxContainer/Settings/RustTree/Syntax"]
+margin_top = 96.0
+margin_right = 640.0
+margin_bottom = 116.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/RustTree/Syntax/Types"]
+margin_right = 318.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/RustTree/Syntax/Types/CenterContainer"]
+margin_left = 140.0
+margin_top = 3.0
+margin_right = 177.0
+margin_bottom = 17.0
+text = "Types"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/Settings/RustTree/Syntax/Types"]
+margin_left = 322.0
+margin_right = 640.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
 
 [node name="CenterConfig" type="CenterContainer" parent="VBoxContainer"]
 margin_top = 399.0
