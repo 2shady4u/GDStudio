@@ -117,8 +117,8 @@ margin_bottom = 380.0
 window_title = "Abrir un Archivo"
 mode = 0
 access = 2
-current_dir = "/Work/Godot/Code-Editor"
-current_path = "/Work/Godot/Code-Editor/"
+current_dir = "/Work/Godot/GDStudio"
+current_path = "/Work/Godot/GDStudio/"
 
 [node name="ProjectManager" type="WindowDialog" parent="."]
 margin_right = 580.0
@@ -151,8 +151,8 @@ margin_bottom = 350.0
 window_title = "Abrir un Directorio"
 mode = 2
 access = 2
-current_dir = "/Work/Godot/Code-Editor"
-current_path = "/Work/Godot/Code-Editor/"
+current_dir = "/Work/Godot/GDStudio"
+current_path = "/Work/Godot/GDStudio/"
 
 [node name="BuildWarning" type="AcceptDialog" parent="ProjectManager"]
 margin_right = 393.0
@@ -427,8 +427,8 @@ margin_bottom = 429.0
 window_title = "Abrir un Directorio"
 mode = 2
 access = 2
-current_dir = "/Work/Godot/Code-Editor"
-current_path = "/Work/Godot/Code-Editor/"
+current_dir = "/Work/Godot/GDStudio"
+current_path = "/Work/Godot/GDStudio/"
 
 [node name="Warning" type="AcceptDialog" parent="ProjectManager/TabContainer/NewProject/CPP"]
 margin_right = 94.0

@@ -184,7 +184,7 @@ void Settings::save_cpp_data()
     String global_build = ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/GlobalBuild/LineEdit")))->get_text();
     config_file->set_value("C++", "global_build", global_build);
 
-    String global_clean = ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/Clean/LineEdit")))->get_text();
+    String global_clean = ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/GlobalClean/LineEdit")))->get_text();
     config_file->set_value("C++", "global_clean", global_clean);
 
     config_file->save("user://editor.cfg");
@@ -211,6 +211,7 @@ void Settings::save_cpp_data()
     config_file->save("user://syntax.cfg");
     config_file->free();
 
+    cast_to<EditorFile>(this->get_parent())->load_color_settings();
 }
 
 void Settings::save_rust_data()
@@ -256,6 +257,8 @@ void Settings::save_rust_data()
 
     config_file->save("user://syntax.cfg");
     config_file->free();
+    
+    cast_to<EditorFile>(this->get_parent())->load_color_settings();
 }
 
 void Settings::_on_ConfirmSettings_pressed()

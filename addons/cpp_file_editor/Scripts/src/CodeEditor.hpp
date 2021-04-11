@@ -20,9 +20,9 @@ public:
     void _init();
     void _ready();
     void set_initial_content(String);
-    void setup_syntax();
     void setup_language(String);
     String get_content();
+    String get_language();
     void save_contents();
     String get_build_platform_cpp();
     void set_custom_font(String);
@@ -44,6 +44,7 @@ public:
     static void _register_methods();
 
 private:
+    String language = "";
     String error_text = "";
     String current_content = "";
     String file_name = "";

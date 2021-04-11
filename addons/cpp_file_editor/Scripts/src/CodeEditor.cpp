@@ -49,22 +49,20 @@ void CodeEditor::set_initial_content(String content)
 {
     ((TextEdit *)get_node("Container/CodeEditor"))->set_text(content);
     this->current_content = content;
-    this->setup_syntax();
     ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_line(0);
     ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_column(0);
-}
-
-void CodeEditor::setup_syntax()
-{
-    ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("\"", "\"", Color(0.5, 0.5, 0.5, 1), false);
-    ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("//", "", Color(0, 0.5, 0, 1), true);
-    ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("/*", "*/", Color(0, 0.5, 0, 1));
 }
 
 void CodeEditor::setup_language(String lang)
 {
     if (lang == "cpp")
     {
+        PoolStringArray keys = Array::make("functions", "strings", "comments", "preprocessor", "keywords");
+        PoolColorArray cpp_colors = cast_to<EditorFile>(this->get_parent())->load_config("user://syntax.cfg", "C++", keys);
+        ((TextEdit *)get_node(NodePath("Container/CodeEditor")))->add_color_override("function_color", cpp_colors[0]);
+        ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("\"", "\"", cpp_colors[1], false);
+        ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("//", "", cpp_colors[2], true);
+        ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("/*", "*/", cpp_colors[2]);
         Array preprocessor = Array::make("#", "include", "define");
         Array keywords = Array::make("auto", "short", "struct", "unsigned",
                                      "break", "continue", "else", "for", "long", "signed", "switch", "void",
@@ -80,15 +78,22 @@ void CodeEditor::setup_language(String lang)
         Array operators = Array::make("+", "-", "*", "/", "=", "%", "<<", ">>");
         for (int j = 0; j < preprocessor.size(); j++)
         {
-            ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region(preprocessor[j], "", Color(0.5, 0.25, 0, 1), true);
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region(preprocessor[j], "", cpp_colors[3], true);
         }
         for (int i = 0; i < keywords.size(); i++)
         {
-            ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(keywords[i], Color(0.5, 0, 0.5, 1));
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(keywords[i], cpp_colors[4]);
         }
+        this->language = "cpp";
     }
     else if (lang == "rust")
     {
+        PoolStringArray keys = Array::make("functions", "strings", "comments", "keywords", "types");
+        PoolColorArray rust_colors = cast_to<EditorFile>(this->get_parent())->load_config("user://syntax.cfg", "Rust", keys);
+        ((TextEdit *)get_node(NodePath("Container/CodeEditor")))->add_color_override("function_color", rust_colors[0]);
+        ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("\"", "\"", rust_colors[1], false);
+        ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("//", "", rust_colors[2], true);
+        ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("/*", "*/", rust_colors[2]);
         Array keywords = Array::make("alignof", "as", "be", "box", "break", "const", "continue", "crate",
                                      "do", "else", "enum", "extern", "false", "fn", "for", "if", "impl", "in", "let", "loop",
                                      "match", "mod", "mut", "offsetof", "once", "priv", "proc", "pub", "pure", "ref", "return", "self",
@@ -98,18 +103,24 @@ void CodeEditor::setup_language(String lang)
                                   "str", "u8", "u16", "u32", "u64", "Self");
         for (int i = 0; i < keywords.size(); i++)
         {
-            ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(keywords[i], Color(0, 0, 0.5, 1));
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(keywords[i], rust_colors[3]);
         }
         for (int i = 0; i < types.size(); i++)
         {
-            ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(types[i], Color(0, 0, 0.5, 1));
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(types[i], rust_colors[4]);
         }
+        this->language = "rust";
     }
 }
 
 String CodeEditor::get_content()
 {
     return ((TextEdit *)get_node("Container/CodeEditor"))->get_text();
+}
+
+String CodeEditor::get_language()
+{
+    return this->language;
 }
 
 void CodeEditor::save_contents()
@@ -425,7 +436,6 @@ void CodeEditor::_register_methods()
 {
     register_method((char *)"_init", &CodeEditor::_init);
     register_method((char *)"set_initial_content", &CodeEditor::set_initial_content);
-    register_method((char *)"setup_syntax", &CodeEditor::setup_syntax);
     register_method((char *)"setup_language", &CodeEditor::setup_language);
     register_method((char *)"get_content", &CodeEditor::get_content);
     register_method((char *)"save_contents", &CodeEditor::save_contents);

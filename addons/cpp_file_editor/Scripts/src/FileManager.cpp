@@ -156,6 +156,19 @@ void EditorFile::load_editor_settings()
     cast_to<Control>(this)->set_theme(theme);
 }
 
+void EditorFile::load_color_settings()
+{
+    if (this->tab_number > 0)
+    {
+        for (int i = 0; i < this->tab_number; i++)
+        {
+            String lang = cast_to<CodeEditor>(((Tabs *)get_node("VBoxContainer/Editor"))->get_children()[i])->get_language();
+            cast_to<CodeEditor>(((Tabs *)get_node("VBoxContainer/Editor"))->get_children()[i])->setup_language(lang);
+        }
+    }
+
+}
+
 CodeEditor *EditorFile::get_editor_instance()
 {
     return this->current_editor_instance;
@@ -236,8 +249,8 @@ void EditorFile::create_user_data()
     {
         file->open("user://syntax.cfg", File::WRITE);
         file->store_string("[Global]\nexit_success=Color(0,0.15,0.85,1)\nexit_error=Color(0.85,0.15,0.0,1)\n"
-                           "[C++]\nfunctions=Color(0,0.25,0.75,1)\nstrings=Color(0.5, 0.5, 0.5,1)\ncomments=Color(0, 0.5, 0,1)\npreprocessor=Color(0.5, 0.25, 0,1)\nkeywords=Color(0.5, 0, 0.5,1)\n"
-                           "[Rust]\nfunctions=Color(0,0.25,0.75,1)\nstrings=Color(0.5, 0.5, 0.5,1)\ncomments=Color(0, 0.5, 0,1)\nnkeywords=Color(0, 0, 0.5,1)\ntypes=Color(0, 0, 0.5,1)");
+                           "[C++]\nfunctions=Color(0.4,0.64,0.81,1)\nstrings=Color(0.5, 0.5, 0.5,1)\ncomments=Color(0, 0.5, 0,1)\npreprocessor=Color(0.5, 0.25, 0,1)\nkeywords=Color(0.5, 0, 0.5,1)\n"
+                           "[Rust]\nfunctions=Color(0.4,0.64,0.81,1)\nstrings=Color(0.5, 0.5, 0.5,1)\ncomments=Color(0, 0.5, 0,1)\nnkeywords=Color(0, 0, 0.5,1)\ntypes=Color(0, 0, 0.5,1)");
         file->close();
     }
     file->free();
@@ -425,6 +438,7 @@ void EditorFile::_register_methods()
     register_method((char *)"save_file", &EditorFile::save_file);
     register_method((char *)"load_config", &EditorFile::load_config);
     register_method((char *)"load_editor_settings", &EditorFile::load_editor_settings);
+    register_method((char *)"load_color_settings", &EditorFile::load_color_settings);
     register_method((char *)"create_shortcuts", &EditorFile::create_shortcuts);
     register_method((char *)"change_project_path", &EditorFile::change_project_path);
     register_method((char *)"execute_build", &EditorFile::execute_build);

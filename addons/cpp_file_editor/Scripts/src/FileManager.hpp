@@ -23,6 +23,7 @@ public:
     void save_file();
     Array load_config(String, String, PoolStringArray);
     void load_editor_settings();
+    void load_color_settings();
     String get_project_path();
     String get_selected_platform();
     bool get_selected_profile();
