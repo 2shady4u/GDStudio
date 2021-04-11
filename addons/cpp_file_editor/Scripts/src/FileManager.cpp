@@ -109,7 +109,7 @@ void EditorFile::save_file()
         bool check_on_save = this->load_config("user://editor.cfg", "Rust", keys)[0];
         if (check_on_save == true)
         {
-            std::future<void> th = std::async(std::launch::async, &EditorFile::execute_command, this, "cargo check --manifest-path="+this->project_config+"/Cargo.toml");
+            std::future<void> th = std::async(std::launch::async, &EditorFile::execute_command, this, "cargo check --manifest-path=" + this->project_config + "/Cargo.toml");
         }
     }
 }
@@ -118,7 +118,7 @@ Array EditorFile::load_config(String file, String section, PoolStringArray key)
 {
     ConfigFile *config_file = ConfigFile::_new();
     config_file->load(file);
-    
+
     Array output;
     for (int i = 0; i < key.size(); i++)
     {
@@ -228,8 +228,16 @@ void EditorFile::create_user_data()
     {
         file->open("user://editor.cfg", File::WRITE);
         file->store_string("[Editor]\ncustom_font=\"res://addons/cpp_file_editor/Fonts/RobotoSlab-VariableFont_wght.ttf\"\nfont_size=12\ncustom_theme=\"res://addons/cpp_file_editor/Themes/godot_theme.tres\"\n"
-        "[C++]\ncpp_standard=0\noptimization=2\nglobal_build=\"-Q\"\nglobal_clean=\"\"\n"
-        "[Rust]\ncheck_on_save=false\npass_target_all=false\npass_offline=false\nglobal_build=\"\"\nglobal_clean=\"\"");
+                           "[C++]\ncpp_standard=0\noptimization=2\nglobal_build=\"-Q\"\nglobal_clean=\"\"\n"
+                           "[Rust]\ncheck_on_save=false\npass_target_all=false\npass_offline=false\nglobal_build=\"\"\nglobal_clean=\"\"");
+        file->close();
+    }
+    if (file->file_exists("user://syntax.cfg") == false)
+    {
+        file->open("user://syntax.cfg", File::WRITE);
+        file->store_string("[Global]\nexit_success=Color(0,0.15,0.85,1)\nexit_error=Color(0.85,0.15,0.0,1)\n"
+                           "[C++]\nfunctions=Color(0,0.25,0.75,1)\nstrings=Color(0.5, 0.5, 0.5,1)\ncomments=Color(0, 0.5, 0,1)\npreprocessor=Color(0.5, 0.25, 0,1)\nkeywords=Color(0.5, 0, 0.5,1)\n"
+                           "[Rust]\nfunctions=Color(0,0.25,0.75,1)\nstrings=Color(0.5, 0.5, 0.5,1)\ncomments=Color(0, 0.5, 0,1)\nnkeywords=Color(0, 0, 0.5,1)\ntypes=Color(0, 0, 0.5,1)");
         file->close();
     }
     file->free();
@@ -260,12 +268,12 @@ void EditorFile::execute_clean()
 
 void EditorFile::execute_command(String string_command)
 {
-    ((RichTextLabel *)get_node(NodePath("VBoxContainer/Control/TabContainer/Log/Panel/TextEdit")))->add_text("Executing: "+string_command+"\n");
-    const char *command = (string_command+" 2>&1").utf8().get_data();
+    ((RichTextLabel *)get_node(NodePath("VBoxContainer/Control/TabContainer/Log/Panel/TextEdit")))->add_text("Executing: " + string_command + "\n");
+    const char *command = (string_command + " 2>&1").utf8().get_data();
     if (OS::get_singleton()->get_name() == "windows")
     {
-        #define popen _popen
-        #define pclose _pclose
+#define popen _popen
+#define pclose _pclose
     }
     FILE *pipe = popen(command, "r");
     if (!pipe)

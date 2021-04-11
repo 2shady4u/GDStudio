@@ -13,6 +13,7 @@
 #include <OptionButton.hpp>
 #include <CheckButton.hpp>
 #include <OS.hpp>
+#include <ColorPickerButton.hpp>
 
 #include "Settings.hpp"
 #include "FileManager.hpp"
@@ -79,6 +80,11 @@ void Settings::set_editor_data()
     ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/FontName/LineEdit")))->set_text(settings[0]);
     ((SpinBox *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/FontSize/SpinBox")))->set_value(font_size);
     ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/CustomTheme/LineEdit")))->set_text(settings[1]);
+
+    keys = Array::make("exit_success", "exit_error");
+    PoolColorArray global_colors = cast_to<EditorFile>(this->get_parent())->load_config("user://syntax.cfg", "Global", keys);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/EditorTree/Syntax/ExitSuccess/ColorPickerButton")))->set_pick_color(global_colors[0]);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/EditorTree/Syntax/ExitError/ColorPickerButton")))->set_pick_color(global_colors[1]);
 }
 
 void Settings::set_cpp_data()
@@ -92,6 +98,14 @@ void Settings::set_cpp_data()
     ((OptionButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/Optimization/OptionButton")))->select(settings[1]);
     ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/GlobalBuild/LineEdit")))->set_text(global_build[0]);
     ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/GlobalClean/LineEdit")))->set_text(global_build[1]);
+
+    keys = Array::make("functions", "strings", "comments", "preprocessor", "keywords");
+    PoolColorArray cpp_colors = cast_to<EditorFile>(this->get_parent())->load_config("user://syntax.cfg", "C++", keys);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Functions/ColorPickerButton")))->set_pick_color(cpp_colors[0]);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Strings/ColorPickerButton")))->set_pick_color(cpp_colors[1]);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Comments/ColorPickerButton")))->set_pick_color(cpp_colors[2]);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Preprocessor/ColorPickerButton")))->set_pick_color(cpp_colors[3]);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Keywords/ColorPickerButton")))->set_pick_color(cpp_colors[4]);
 }
 
 void Settings::set_rust_data()
@@ -114,6 +128,14 @@ void Settings::set_rust_data()
     PoolStringArray global_options = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Rust", keys);
     ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/GlobalBuild/LineEdit")))->set_text(global_options[0]);
     ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/GlobalClean/LineEdit")))->set_text(global_options[1]);
+
+    keys = Array::make("functions", "strings", "comments", "keywords", "types");
+    PoolColorArray rust_colors = cast_to<EditorFile>(this->get_parent())->load_config("user://syntax.cfg", "Rust", keys);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Functions/ColorPickerButton")))->set_pick_color(rust_colors[0]);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Strings/ColorPickerButton")))->set_pick_color(rust_colors[1]);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Comments/ColorPickerButton")))->set_pick_color(rust_colors[2]);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Keywords/ColorPickerButton")))->set_pick_color(rust_colors[3]);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Types/ColorPickerButton")))->set_pick_color(rust_colors[4]);
 }
 
 void Settings::save_editor_data()
@@ -131,6 +153,18 @@ void Settings::save_editor_data()
     config_file->set_value("Editor", "custom_theme", custom_theme);
 
     config_file->save("user://editor.cfg");
+    config_file->free();
+
+    config_file = ConfigFile::_new();
+    config_file->load("user://syntax.cfg");
+
+    Color exit_success = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/EditorTree/Syntax/ExitSuccess/ColorPickerButton")))->get_pick_color();
+    config_file->set_value("Global", "exit_success", exit_success);
+
+    Color exit_error = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/EditorTree/Syntax/ExitError/ColorPickerButton")))->get_pick_color();
+    config_file->set_value("Global", "exit_error", exit_error);
+
+    config_file->save("user://syntax.cfg");
     config_file->free();
 
     cast_to<EditorFile>(this->get_parent())->load_editor_settings();
@@ -155,6 +189,28 @@ void Settings::save_cpp_data()
 
     config_file->save("user://editor.cfg");
     config_file->free();
+    
+    config_file = ConfigFile::_new();
+    config_file->load("user://syntax.cfg");
+
+    Color functions = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Functions/ColorPickerButton")))->get_pick_color();
+    config_file->set_value("C++", "functions", functions);
+    
+    Color strings = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Strings/ColorPickerButton")))->get_pick_color();
+    config_file->set_value("C++", "strings", strings);
+    
+    Color comments = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Comments/ColorPickerButton")))->get_pick_color();
+    config_file->set_value("C++", "comments", comments);
+    
+    Color preprocessor = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Preprocessor/ColorPickerButton")))->get_pick_color();
+    config_file->set_value("C++", "preprocessor", preprocessor);
+    
+    Color keywords = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Keywords/ColorPickerButton")))->get_pick_color();
+    config_file->set_value("C++", "keywords", keywords);
+
+    config_file->save("user://syntax.cfg");
+    config_file->free();
+
 }
 
 void Settings::save_rust_data()
@@ -178,6 +234,27 @@ void Settings::save_rust_data()
     config_file->set_value("Rust", "global_clean", global_clean);
 
     config_file->save("user://editor.cfg");
+    config_file->free();
+    
+    config_file = ConfigFile::_new();
+    config_file->load("user://syntax.cfg");
+
+    Color functions = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Functions/ColorPickerButton")))->get_pick_color();
+    config_file->set_value("Rust", "functions", functions);
+    
+    Color strings = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Strings/ColorPickerButton")))->get_pick_color();
+    config_file->set_value("Rust", "strings", strings);
+    
+    Color comments = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Comments/ColorPickerButton")))->get_pick_color();
+    config_file->set_value("Rust", "comments", comments);
+
+    Color keywords = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Keywords/ColorPickerButton")))->get_pick_color();
+    config_file->set_value("Rust", "keywords", keywords);
+    
+    Color types = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Types/ColorPickerButton")))->get_pick_color();
+    config_file->set_value("Rust", "types", types);
+
+    config_file->save("user://syntax.cfg");
     config_file->free();
 }
 
