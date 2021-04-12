@@ -14,6 +14,7 @@
 #include <CheckButton.hpp>
 #include <OS.hpp>
 #include <ColorPickerButton.hpp>
+#include <ItemList.hpp>
 
 #include "Settings.hpp"
 #include "FileManager.hpp"
@@ -123,6 +124,16 @@ void Settings::set_rust_data()
     ((CheckButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/General/CargoCheck/CheckButton")))->set_pressed(cargo_check);
     ((CheckButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/General/PassTargetAll/CheckButton")))->set_pressed(target_all);
     ((CheckButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/General/PassOffline/CheckButton")))->set_pressed(offline);
+
+    args.remove(0);
+    output.clear();
+    args.append("toolchain");
+    args.append("list");
+    OS::get_singleton()->execute("rustup", args, true, output);
+    for (int i = 0; i < output.size(); i++)
+    {
+        ((ItemList *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/General/Toolchains/ItemList")))->add_item(output[i]);
+    }
 
     keys = Array::make("global_build", "global_clean");
     PoolStringArray global_options = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Rust", keys);
