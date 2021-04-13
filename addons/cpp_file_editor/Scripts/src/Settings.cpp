@@ -73,14 +73,12 @@ void Settings::show_window()
 
 void Settings::set_editor_data()
 {
-    PoolStringArray keys = Array::make("custom_font", "custom_theme");
-    PoolStringArray settings = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Editor", keys);
-    keys = Array::make("font_size");
-    int font_size = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Editor", keys)[0];
-
+    PoolStringArray keys = Array::make("custom_font", "font_size", "custom_theme");
+    Array settings = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Editor", keys);
+    
     ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/FontName/LineEdit")))->set_text(settings[0]);
-    ((SpinBox *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/FontSize/SpinBox")))->set_value(font_size);
-    ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/CustomTheme/LineEdit")))->set_text(settings[1]);
+    ((SpinBox *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/FontSize/SpinBox")))->set_value(settings[1]);
+    ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/CustomTheme/LineEdit")))->set_text(settings[2]);
 
     keys = Array::make("exit_success", "exit_error");
     PoolColorArray global_colors = cast_to<EditorFile>(this->get_parent())->load_config("user://syntax.cfg", "Global", keys);
@@ -90,18 +88,17 @@ void Settings::set_editor_data()
 
 void Settings::set_cpp_data()
 {
-    PoolStringArray keys = Array::make("cpp_standard", "optimization");
-    PoolIntArray settings = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "C++", keys);
-    keys = Array::make("global_build", "global_clean");
-    PoolStringArray global_build = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "C++", keys);
-
+    PoolStringArray keys = Array::make("cpp_standard", "optimization", "global_build", "global_clean");
+    Array settings = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "C++", keys);
+    
     ((OptionButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/Standard/OptionButton")))->select(settings[0]);
     ((OptionButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/Optimization/OptionButton")))->select(settings[1]);
-    ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/GlobalBuild/LineEdit")))->set_text(global_build[0]);
-    ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/GlobalClean/LineEdit")))->set_text(global_build[1]);
+    ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/GlobalBuild/LineEdit")))->set_text(settings[2]);
+    ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/GlobalClean/LineEdit")))->set_text(settings[3]);
 
     keys = Array::make("functions", "strings", "comments", "preprocessor", "keywords");
     PoolColorArray cpp_colors = cast_to<EditorFile>(this->get_parent())->load_config("user://syntax.cfg", "C++", keys);
+    
     ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Functions/ColorPickerButton")))->set_pick_color(cpp_colors[0]);
     ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Strings/ColorPickerButton")))->set_pick_color(cpp_colors[1]);
     ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Comments/ColorPickerButton")))->set_pick_color(cpp_colors[2]);
@@ -117,13 +114,11 @@ void Settings::set_rust_data()
     String cargo_version = OS::get_singleton()->execute("cargo", args, true, output);
     
     PoolStringArray keys = Array::make("check_on_save", "pass_target_all", "pass_offline");
-    bool cargo_check = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Rust", keys)[0];
-    bool target_all = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Rust", keys)[1];
-    bool offline = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Rust", keys)[2];
+    Array rust_options = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Rust", keys);
     ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/General/CargoVersion/LineEdit")))->set_text(output[0]);
-    ((CheckButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/General/CargoCheck/CheckButton")))->set_pressed(cargo_check);
-    ((CheckButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/General/PassTargetAll/CheckButton")))->set_pressed(target_all);
-    ((CheckButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/General/PassOffline/CheckButton")))->set_pressed(offline);
+    ((CheckButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/General/CargoCheck/CheckButton")))->set_pressed(rust_options[0]);
+    ((CheckButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/General/PassTargetAll/CheckButton")))->set_pressed(rust_options[1]);
+    ((CheckButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/General/PassOffline/CheckButton")))->set_pressed(rust_options[2]);
 
     args.remove(0);
     output.clear();

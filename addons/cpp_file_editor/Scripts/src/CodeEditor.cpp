@@ -50,7 +50,7 @@ void CodeEditor::set_initial_content(String content)
     ((TextEdit *)get_node("Container/CodeEditor"))->set_text(content);
     this->current_content = content;
     ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_line(0);
-    ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_column(0);
+    ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_column(1);
 }
 
 void CodeEditor::setup_language(String lang)
@@ -168,15 +168,6 @@ void CodeEditor::list_directories(String path)
     TreeItem *root = tree->create_item();
     TreeItem *item;
 
-    Ref<Texture> folder_icon;
-    folder_icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/default_folder.svg", "Texture");
-    Ref<Texture> file_icon;
-    file_icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/file.svg", "Texture");
-    Ref<Texture> cpp_icon;
-    cpp_icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/cplusplus-original.svg", "Texture");
-    Ref<Texture> rs_icon;
-    rs_icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/rust-plain.svg", "Texture");
-
     PoolStringArray dirs;
     PoolStringArray files;
     Directory *dir = Directory::_new();
@@ -206,25 +197,14 @@ void CodeEditor::list_directories(String path)
         item = tree->create_item(root);
         item->set_text(0, dirs[i]);
         list_subdirectories(path+"/"+dirs[i], item);
-        item->set_icon(0, folder_icon);
+        item->set_icon(0, cast_to<EditorFile>(this->get_parent()->get_parent()->get_parent())->get_file_icon("folder"));
     }
     
     for (int i = 0; i < files.size(); i++)
     {
         item = tree->create_item(root);
         item->set_text(0, files[i]);
-        if (files[i].get_extension() == "cpp" || files[i].get_extension() == "hpp")
-        {
-            item->set_icon(0, cpp_icon);
-        }
-        else if (files[i].get_extension() == "rs")
-        {
-            item->set_icon(0, rs_icon);
-        }
-        else
-        {
-            item->set_icon(0, file_icon);
-        }
+        item->set_icon(0, cast_to<EditorFile>(this->get_parent()->get_parent()->get_parent())->get_file_icon(files[i].get_extension()));
     }
     dir->free();
 }
@@ -234,15 +214,7 @@ void CodeEditor::list_subdirectories(String path, TreeItem *root)
     Tree *tree = ((Tree *)get_node(NodePath("BuildContainer/Explorer/VBoxContainer/Tree")));
 
     TreeItem *item;
-    Ref<Texture> folder_icon;
-    folder_icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/default_folder.svg", "Texture");
-    Ref<Texture> file_icon;
-    file_icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/file.svg", "Texture");
-    Ref<Texture> cpp_icon;
-    cpp_icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/cplusplus-original.svg", "Texture");
-    Ref<Texture> rs_icon;
-    rs_icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/rust-plain.svg", "Texture");
-
+    
     PoolStringArray dirs;
     PoolStringArray files;
     Directory *dir = Directory::_new();
@@ -272,25 +244,14 @@ void CodeEditor::list_subdirectories(String path, TreeItem *root)
         item = tree->create_item(root);
         item->set_text(0, dirs[i]);
         list_subdirectories(path+"/"+dirs[i], item);
-        item->set_icon(0, folder_icon);
+        item->set_icon(0, cast_to<EditorFile>(this->get_parent()->get_parent()->get_parent())->get_file_icon("folder"));
     }
     
     for (int i = 0; i < files.size(); i++)
     {
         item = tree->create_item(root);
         item->set_text(0, files[i]);
-        if (files[i].get_extension() == "cpp" || files[i].get_extension() == "hpp")
-        {
-            item->set_icon(0, cpp_icon);
-        }
-        else if (files[i].get_extension() == "rs")
-        {
-            item->set_icon(0, rs_icon);
-        }
-        else
-        {
-            item->set_icon(0, file_icon);
-        }
+        item->set_icon(0, cast_to<EditorFile>(this->get_parent()->get_parent()->get_parent())->get_file_icon(files[i].get_extension()));
     }
     dir->free();
 }

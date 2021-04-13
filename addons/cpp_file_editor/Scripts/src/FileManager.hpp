@@ -29,6 +29,7 @@ public:
     bool get_selected_profile();
     CodeEditor *get_editor_instance();
     String get_project_lang();
+    Ref<Texture> get_file_icon(String);
     void create_shortcuts();
     void create_user_data();
     void change_project_path(String);

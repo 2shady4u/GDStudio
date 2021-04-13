@@ -67,27 +67,20 @@ void EditorFile::open_file(String path)
     this->file_name = path.get_file();
     String file_extension = this->file_name.get_extension();
 
-    Ref<Texture> icon;
+    Ref<Texture> icon = this->get_file_icon(file_extension);
 
     if (file_extension == "cpp" || file_extension == "hpp")
     {
         this->current_editor_instance->setup_language("cpp");
-        icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/cplusplus-original.svg", "Texture");
     }
     else if (file_extension == "rs")
     {
         this->current_editor_instance->setup_language("rust");
-        icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/rust-plain.svg", "Texture");
     }
     else if (file_extension == "gdnproj")
     {
         PoolStringArray keys = Array::make("path");
         this->change_project_path(this->load_config(path, "settings", keys)[0]);
-        icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/file.svg", "Texture");
-    }
-    else
-    {
-        icon = ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/file.svg", "Texture");
     }
 
     ((Tabs *)get_node("VBoxContainer/TabContainer"))->add_tab(this->file_name, icon);
@@ -200,6 +193,30 @@ String EditorFile::get_project_lang()
     else
     {
         return "none";
+    }
+}
+
+Ref<Texture> EditorFile::get_file_icon(String extension)
+{
+    if (extension == "folder")
+    {
+        return ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/default_folder.svg", "Texture");
+    }
+    else if (extension == "cpp")
+    {
+        return ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/cplusplus-original.svg", "Texture");
+    }
+    else if (extension == "hpp")
+    {
+        return ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/cppheader.svg", "Texture");
+    }
+    else if (extension == "rs")
+    {
+        return ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/rust-plain.svg", "Texture");
+    }
+    else
+    {
+        return ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/file.svg", "Texture");
     }
 }
 
@@ -450,6 +467,7 @@ void EditorFile::_register_methods()
     register_method((char *)"get_selected_profile", &EditorFile::get_selected_profile);
     register_method((char *)"get_editor_instance", &EditorFile::get_editor_instance);
     register_method((char *)"get_project_lang", &EditorFile::get_project_lang);
+    register_method((char *)"get_file_icon", &EditorFile::get_file_icon);
 
     register_method((char *)"_on_NewFile_file_selected", &EditorFile::_on_NewFile_file_selected);
     register_method((char *)"_on_OpenFile_file_selected", &EditorFile::_on_OpenFile_file_selected);
