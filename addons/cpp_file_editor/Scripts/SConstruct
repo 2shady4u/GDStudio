@@ -54,6 +54,9 @@ env.Append(
         "godot-cpp/include",
         "godot-cpp/include/gen/",
         "godot-cpp/include/core/",
+		"tree-sitter/include/",
+		"tree-sitter/src/",
+		"tree-sitter-cpp/src/",
     ]
 )
 
