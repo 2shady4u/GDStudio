@@ -2,15 +2,15 @@
 #include <String.hpp>
 
 #include <tree_sitter/api.h>
-
 using namespace godot;
 
-TSLanguage *tree_sitter_cpp();
+extern "C" TSLanguage *tree_sitter_cpp();
+
 int test_parse(String text)
 {
     TSParser *parser = ts_parser_new();
     ts_parser_set_language(parser, tree_sitter_cpp());
-    const char *source_code = "double i = 0.2;";
+    const char *source_code = text.utf8().get_data();
     TSTree *tree = ts_parser_parse_string(
         parser,
         NULL,
