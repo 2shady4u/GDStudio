@@ -1,0 +1,16 @@
+Icons:
+
+devicons: 
+-https://github.com/devicons/devicon
+-License: MIT
+-Location: Icons/
+
+brackets-tree-icons
+-https://github.com/wolffe/brackets-tree-icons
+-License: MIT
+-Location: Icons/
+
+RobotoSlab Font
+-https://fonts.google.com/specimen/Roboto+Slab
+-License: Apache 2.0
+-Location: Fonts/
