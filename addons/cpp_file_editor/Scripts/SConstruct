@@ -69,6 +69,9 @@ env.Append(LIBPATH=["godot-cpp/bin/"])
 
 sources = []
 add_sources(sources, "src")
+sources.append("tree-sitter/src/lib.c")
+sources.append("tree-sitter-cpp/src/parser.c")
+sources.append("tree-sitter-cpp/src/scanner.cc")
 
 library = env.SharedLibrary(target="bin/fileEditor", source=sources)
 Default(library)
