@@ -29,7 +29,6 @@ margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
 size_flags_horizontal = 3
-size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -50,7 +49,6 @@ margin_top = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 bbcode_enabled = true
-fit_content_height = true
 scroll_following = true
 __meta__ = {
 "_edit_use_anchors_": false
