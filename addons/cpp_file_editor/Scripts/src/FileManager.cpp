@@ -40,10 +40,10 @@ void EditorFile::_init()
 
 void EditorFile::_ready()
 {
-    this->tabNode = ((Tabs *)get_node("VBoxContainer/TabContainer"));
-    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->connect("id_pressed", this, "on_file_pressed");
-    ((MenuButton *)get_node(NodePath("TopBar/Project")))->get_popup()->connect("id_pressed", this, "on_project_pressed");
-    ((MenuButton *)get_node(NodePath("TopBar/Settings")))->get_popup()->connect("id_pressed", this, "on_settings_pressed");
+    this->tabNode = ((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/TabContainer"));
+    ((MenuButton *)get_node(NodePath("VBoxContainer/TopBar/File")))->get_popup()->connect("id_pressed", this, "on_file_pressed");
+    ((MenuButton *)get_node(NodePath("VBoxContainer/TopBar/Project")))->get_popup()->connect("id_pressed", this, "on_project_pressed");
+    ((MenuButton *)get_node(NodePath("VBoxContainer/TopBar/Settings")))->get_popup()->connect("id_pressed", this, "on_settings_pressed");
     create_shortcuts();
 }
 
@@ -83,8 +83,8 @@ void EditorFile::open_file(String path)
         this->change_project_path(this->load_config(path, "settings", keys)[0]);
     }
 
-    ((Tabs *)get_node("VBoxContainer/TabContainer"))->add_tab(this->file_name, icon);
-    ((Tabs *)get_node("VBoxContainer/TabContainer"))->set_current_tab(this->tab_number - 1);
+    ((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/TabContainer"))->add_tab(this->file_name, icon);
+    ((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/TabContainer"))->set_current_tab(this->tab_number - 1);
 }
 
 void EditorFile::save_file()
@@ -243,28 +243,28 @@ void EditorFile::create_shortcuts()
     hotkey.instance();
     hotkey->set_scancode(80);
     hotkey->set_control(true);
-    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(0, hotkey->get_scancode_with_modifiers());
+    ((MenuButton *)get_node(NodePath("VBoxContainer/TopBar/File")))->get_popup()->set_item_accelerator(0, hotkey->get_scancode_with_modifiers());
 
     hotkey->set_scancode(78);
     hotkey->set_control(true);
-    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(1, hotkey->get_scancode_with_modifiers());
+    ((MenuButton *)get_node(NodePath("VBoxContainer/TopBar/File")))->get_popup()->set_item_accelerator(1, hotkey->get_scancode_with_modifiers());
 
     hotkey->set_scancode(79);
     hotkey->set_control(true);
-    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(2, hotkey->get_scancode_with_modifiers());
+    ((MenuButton *)get_node(NodePath("VBoxContainer/TopBar/File")))->get_popup()->set_item_accelerator(2, hotkey->get_scancode_with_modifiers());
 
     hotkey->set_scancode(52);
     hotkey->set_control(true);
-    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(3, hotkey->get_scancode_with_modifiers());
+    ((MenuButton *)get_node(NodePath("VBoxContainer/TopBar/File")))->get_popup()->set_item_accelerator(3, hotkey->get_scancode_with_modifiers());
 
     hotkey->set_scancode(83);
     hotkey->set_control(true);
-    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(5, hotkey->get_scancode_with_modifiers());
+    ((MenuButton *)get_node(NodePath("VBoxContainer/TopBar/File")))->get_popup()->set_item_accelerator(5, hotkey->get_scancode_with_modifiers());
 
     hotkey->set_scancode(83);
     hotkey->set_control(true);
     hotkey->set_alt(true);
-    ((MenuButton *)get_node(NodePath("TopBar/File")))->get_popup()->set_item_accelerator(6, hotkey->get_scancode_with_modifiers());
+    ((MenuButton *)get_node(NodePath("VBoxContainer/TopBar/File")))->get_popup()->set_item_accelerator(6, hotkey->get_scancode_with_modifiers());
 }
 
 void EditorFile::create_user_data()
@@ -358,7 +358,7 @@ void EditorFile::on_file_pressed(int index)
         ((FileDialog *)get_node(NodePath("OpenFile")))->popup_centered();
         break;
     case 3:
-        this->_on_TabContainer_tab_close(((Tabs *)get_node("VBoxContainer/TabContainer"))->get_current_tab());
+        this->_on_TabContainer_tab_close(((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/TabContainer"))->get_current_tab());
         break;
     case 4:
         save_file();
@@ -419,9 +419,9 @@ void EditorFile::_on_TabContainer_tab_changed(int tab)
     {
         this->current_editor_instance->hide();
     }
-    this->current_editor_instance = cast_to<CodeEditor>(((Panel *)get_node("VBoxContainer/Editor"))->get_child(tab));
+    this->current_editor_instance = cast_to<CodeEditor>(((Panel *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/Editor"))->get_child(tab));
     this->current_editor_instance->show();
-    this->file_name = ((Tabs *)get_node("VBoxContainer/TabContainer"))->get_tab_title(tab);
+    this->file_name = ((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/TabContainer"))->get_tab_title(tab);
 }
 
 void EditorFile::_on_TabContainer_tab_close(int tab)
@@ -442,7 +442,7 @@ void EditorFile::_on_TabContainer_tab_close(int tab)
             this->_on_TabContainer_tab_changed(tab - 1);
         }
     }
-    ((Tabs *)get_node("VBoxContainer/TabContainer"))->remove_tab(tab);
+    ((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/TabContainer"))->remove_tab(tab);
 }
 
 void EditorFile::_process()

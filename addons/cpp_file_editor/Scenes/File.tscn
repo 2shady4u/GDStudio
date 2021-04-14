@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://addons/cpp_file_editor/Scripts/native/editor_file.gdns" type="Script" id=1]
 [ext_resource path="res://addons/cpp_file_editor/Fonts/RobotoSlab-VariableFont_wght.ttf" type="DynamicFontData" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://addons/cpp_file_editor/Scenes/Settings.tscn" type="PackedScene" id=7]
 [ext_resource path="res://addons/cpp_file_editor/Scenes/ProjectSettings.tscn" type="PackedScene" id=8]
 [ext_resource path="res://addons/cpp_file_editor/Scenes/LogPanel.tscn" type="PackedScene" id=9]
+[ext_resource path="res://addons/cpp_file_editor/Scenes/Sidebar.tscn" type="PackedScene" id=10]
 
 [sub_resource type="DynamicFont" id=1]
 size = 14
@@ -26,49 +27,58 @@ __meta__ = {
 [node name="Panel" type="Panel" parent="."]
 margin_right = 1280.0
 margin_bottom = 720.0
+size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TopBar" type="HBoxContainer" parent="."]
-margin_right = 960.0
-margin_bottom = 30.0
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+margin_bottom = 720.0
+size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="File" type="MenuButton" parent="TopBar"]
+[node name="TopBar" type="HBoxContainer" parent="VBoxContainer"]
+margin_right = 1280.0
+margin_bottom = 25.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="File" type="MenuButton" parent="VBoxContainer/TopBar"]
 margin_right = 36.0
-margin_bottom = 30.0
+margin_bottom = 25.0
 rect_min_size = Vector2( 36, 0 )
 custom_colors/font_color_hover = Color( 0, 0, 0.501961, 1 )
 text = "File"
 items = [ "New Project", null, 0, false, false, 0, 268435536, null, "", false, "New File", null, 0, false, false, 1, 268435534, null, "", false, "Open File", null, 0, false, false, 2, 268435535, null, "", false, "Close File", null, 0, false, false, 3, 301989971, null, "", false, "", null, 0, false, false, -1, 0, null, "", true, "Save File", null, 0, false, false, 4, 268435539, null, "", false, "Save File As", null, 0, false, false, 5, 335544402, null, "", false ]
 switch_on_hover = true
 
-[node name="Edit" type="MenuButton" parent="TopBar"]
+[node name="Edit" type="MenuButton" parent="VBoxContainer/TopBar"]
 margin_left = 40.0
 margin_right = 76.0
-margin_bottom = 30.0
+margin_bottom = 25.0
 rect_min_size = Vector2( 36, 0 )
 text = "Edit"
 
-[node name="Project" type="MenuButton" parent="TopBar"]
+[node name="Project" type="MenuButton" parent="VBoxContainer/TopBar"]
 margin_left = 80.0
 margin_right = 131.0
-margin_bottom = 30.0
+margin_bottom = 25.0
 text = "Project"
 items = [ "Build", null, 0, false, false, 0, 0, null, "", false, "Clean", null, 0, false, false, 1, 0, null, "", false ]
 
-[node name="Settings" type="MenuButton" parent="TopBar"]
+[node name="Settings" type="MenuButton" parent="VBoxContainer/TopBar"]
 margin_left = 135.0
 margin_right = 193.0
-margin_bottom = 30.0
+margin_bottom = 25.0
 text = "Settings"
 items = [ "Global", null, 0, false, false, 0, 0, null, "", false, "Project", null, 0, false, false, 1, 0, null, "", false ]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-margin_top = 30.0
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 29.0
 margin_right = 1280.0
 margin_bottom = 720.0
 size_flags_horizontal = 3
@@ -77,8 +87,17 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TabContainer" type="Tabs" parent="VBoxContainer"]
-margin_right = 1280.0
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer"]
+margin_right = 961.0
+margin_bottom = 691.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TabContainer" type="Tabs" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
+margin_right = 961.0
 margin_bottom = 29.0
 custom_fonts/font = SubResource( 1 )
 tab_align = 0
@@ -88,18 +107,23 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Editor" type="Panel" parent="VBoxContainer"]
+[node name="Editor" type="Panel" parent="VBoxContainer/HBoxContainer/VBoxContainer"]
 margin_top = 33.0
-margin_right = 1280.0
-margin_bottom = 522.0
+margin_right = 961.0
+margin_bottom = 523.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Control" parent="VBoxContainer" instance=ExtResource( 9 )]
+[node name="Control" parent="VBoxContainer/HBoxContainer/VBoxContainer" instance=ExtResource( 9 )]
 anchor_right = 0.0
-margin_top = 526.0
+margin_top = 527.0
+margin_right = 961.0
+margin_bottom = 691.0
+
+[node name="Sidebar" parent="VBoxContainer/HBoxContainer" instance=ExtResource( 10 )]
+margin_left = 965.0
 margin_right = 1280.0
-margin_bottom = 690.0
+margin_bottom = 691.0
 
 [node name="NewFile" type="FileDialog" parent="."]
 margin_right = 650.0
@@ -481,8 +505,8 @@ margin_right = 807.0
 
 [node name="ProjectSettings" parent="." instance=ExtResource( 8 )]
 
-[connection signal="tab_changed" from="VBoxContainer/TabContainer" to="." method="_on_TabContainer_tab_changed"]
-[connection signal="tab_close" from="VBoxContainer/TabContainer" to="." method="_on_TabContainer_tab_close"]
+[connection signal="tab_changed" from="VBoxContainer/HBoxContainer/VBoxContainer/TabContainer" to="." method="_on_TabContainer_tab_changed"]
+[connection signal="tab_close" from="VBoxContainer/HBoxContainer/VBoxContainer/TabContainer" to="." method="_on_TabContainer_tab_close"]
 [connection signal="file_selected" from="NewFile" to="." method="_on_NewFile_file_selected"]
 [connection signal="file_selected" from="OpenFile" to="." method="_on_OpenFile_file_selected"]
 [connection signal="pressed" from="ProjectManager/OkButton" to="ProjectManager" method="_on_OkButton_pressed"]

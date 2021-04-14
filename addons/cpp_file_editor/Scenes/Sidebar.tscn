@@ -1,9 +1,9 @@
 [gd_scene format=2]
 
 [node name="Sidebar" type="TabContainer"]
-margin_right = 8.0
-margin_bottom = 36.0
-rect_min_size = Vector2( 315, 720 )
+margin_right = 315.0
+margin_bottom = 174.0
+rect_min_size = Vector2( 315, 0 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
