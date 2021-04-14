@@ -21,6 +21,7 @@
 #include <thread>
 #include <future>
 
+#include "tree-sitter/tree-sitter.cpp"
 #include "CodeEditor.hpp"
 #include "FileManager.hpp"
 using namespace godot;
@@ -48,6 +49,7 @@ void CodeEditor::set_initial_content(String content)
     this->current_content = content;
     ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_line(0);
     ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_column(1);
+    test_parse("yes");
 }
 
 void CodeEditor::setup_language(String lang)
