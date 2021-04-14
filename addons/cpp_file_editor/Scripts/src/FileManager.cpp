@@ -214,6 +214,22 @@ Ref<Texture> EditorFile::get_file_icon(String extension)
     {
         return ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/rust-plain.svg", "Texture");
     }
+    else if (extension == "ini")
+    {
+        return ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/ini.svg", "Texture");
+    }
+    else if (extension == "bat" || extension == "sh")
+    {
+        return ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/shell.svg", "Texture");
+    }
+    else if (extension == "xml")
+    {
+        return ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/xml.svg", "Texture");
+    }
+    else if (extension == "zip")
+    {
+        return ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/zip.svg", "Texture");
+    }
     else
     {
         return ResourceLoader::get_singleton()->load("res://addons/cpp_file_editor/Icons/file.svg", "Texture");
