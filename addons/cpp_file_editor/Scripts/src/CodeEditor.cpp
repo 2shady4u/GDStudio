@@ -13,9 +13,6 @@
 #include <DynamicFontData.hpp>
 #include <Theme.hpp>
 #include <LineEdit.hpp>
-#include <Directory.hpp>
-#include <Tree.hpp>
-#include <TreeItem.hpp>
 #include <Texture.hpp>
 #include <Reference.hpp>
 #include <ResourceLoader.hpp>
@@ -146,116 +143,6 @@ void CodeEditor::set_custom_theme(String path)
     cast_to<Control>(this->get_parent()->get_parent())->set_theme(theme);
 }
 
-bool CodeEditor::get_release_flag()
-{
-    int button = ((OptionButton *)get_node(NodePath("BuildContainer/Build/CenterContainer/Release")))->get_selected();
-    if (button == 1)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-void CodeEditor::list_directories(String path)
-{
-    ((LineEdit *)get_node(NodePath("BuildContainer/Explorer/VBoxContainer/Root")))->set_text(path);
-
-    Tree *tree = ((Tree *)get_node(NodePath("BuildContainer/Explorer/VBoxContainer/Tree")));
-
-    TreeItem *root = tree->create_item();
-    TreeItem *item;
-
-    PoolStringArray dirs;
-    PoolStringArray files;
-    Directory *dir = Directory::_new();
-    dir->open(path);
-    dir->list_dir_begin();
-    String name = dir->get_next();
-    String dot = ".";
-    while (name != "")
-    {
-        if (name.begins_with(dot) == false)
-        {
-            if (dir->current_is_dir() == true)
-            {
-                dirs.append(name);
-            }
-            else
-            {
-                files.append(name);
-            }
-        }
-
-        name = dir->get_next();
-    }
-
-    for (int i = 0; i < dirs.size(); i++)
-    {
-        item = tree->create_item(root);
-        item->set_text(0, dirs[i]);
-        list_subdirectories(path+"/"+dirs[i], item);
-        item->set_icon(0, cast_to<EditorFile>(this->get_parent()->get_parent()->get_parent())->get_file_icon("folder"));
-    }
-    
-    for (int i = 0; i < files.size(); i++)
-    {
-        item = tree->create_item(root);
-        item->set_text(0, files[i]);
-        item->set_icon(0, cast_to<EditorFile>(this->get_parent()->get_parent()->get_parent())->get_file_icon(files[i].get_extension()));
-    }
-    dir->free();
-}
-
-void CodeEditor::list_subdirectories(String path, TreeItem *root)
-{
-    Tree *tree = ((Tree *)get_node(NodePath("BuildContainer/Explorer/VBoxContainer/Tree")));
-
-    TreeItem *item;
-    
-    PoolStringArray dirs;
-    PoolStringArray files;
-    Directory *dir = Directory::_new();
-    dir->open(path);
-    dir->list_dir_begin();
-    String name = dir->get_next();
-    String dot = ".";
-    while (name != "")
-    {
-        if (name.begins_with(dot) == false)
-        {
-            if (dir->current_is_dir() == true)
-            {
-                dirs.append(name);
-            }
-            else
-            {
-                files.append(name);
-            }
-        }
-
-        name = dir->get_next();
-    }
-    
-    for (int i = 0; i < dirs.size(); i++)
-    {
-        item = tree->create_item(root);
-        item->set_text(0, dirs[i]);
-        list_subdirectories(path+"/"+dirs[i], item);
-        item->set_icon(0, cast_to<EditorFile>(this->get_parent()->get_parent()->get_parent())->get_file_icon("folder"));
-    }
-    
-    for (int i = 0; i < files.size(); i++)
-    {
-        item = tree->create_item(root);
-        item->set_text(0, files[i]);
-        item->set_icon(0, cast_to<EditorFile>(this->get_parent()->get_parent()->get_parent())->get_file_icon(files[i].get_extension()));
-    }
-    dir->free();
-}
-
 void CodeEditor::_on_CodeEditor_text_changed()
 {
     if (((TextEdit *)get_node("Container/CodeEditor"))->get_text() == this->current_content)
@@ -346,53 +233,6 @@ void CodeEditor::_on_CodeEditor_symbol_lookup(String symbol, int row, int column
     Godot::print(symbol);
 }
 
-String CodeEditor::get_build_platform_cpp()
-{
-    int index = ((OptionButton *)get_node(NodePath("BuildContainer/Build/Platform/Platform")))->get_selected_id();
-
-    switch (index)
-    {
-    case 0:
-        return "windows";
-        break;
-    case 1:
-        return "x11";
-        break;
-    case 2:
-        return "osx";
-        break;
-    case 3:
-        return "android";
-        break;
-    case 4:
-        return "ios";
-        break;
-    default:
-        return "unknown";
-        break;
-    }
-}
-
-void CodeEditor::_on_Build_pressed()
-{
-    EditorFile *editor = cast_to<EditorFile>(this->get_parent()->get_parent()->get_parent());
-    editor->execute_build();
-}
-
-void CodeEditor::_on_Clean_pressed()
-{
-    EditorFile *editor = cast_to<EditorFile>(this->get_parent()->get_parent()->get_parent());
-    editor->execute_clean();
-}
-
-void CodeEditor::_on_ExecuteCustomCommandButton_pressed()
-{
-    String args;
-    String command = ((LineEdit *)get_node(NodePath("BuildContainer/Build/Command/Command")))->get_text();
-
-    std::future<void> th = std::async(std::launch::async, &EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()->get_parent()->get_parent()), command);
-}
-
 void CodeEditor::_register_methods()
 {
     register_method((char *)"_init", &CodeEditor::_init);
@@ -401,17 +241,10 @@ void CodeEditor::_register_methods()
     register_method((char *)"get_content", &CodeEditor::get_content);
     register_method((char *)"save_contents", &CodeEditor::save_contents);
     register_method((char *)"get_text_changed", &CodeEditor::get_text_changed);
-    register_method((char *)"get_build_platform_cpp", &CodeEditor::get_build_platform_cpp);
     register_method((char *)"set_custom_font", &CodeEditor::set_custom_font);
     register_method((char *)"set_font_size", &CodeEditor::set_font_size);
     register_method((char *)"set_custom_theme", &CodeEditor::set_custom_theme);
-    register_method((char *)"get_release_flag", &CodeEditor::get_release_flag);
-    register_method((char *)"list_directories", &CodeEditor::list_directories);
-    register_method((char *)"list_subdirectories", &CodeEditor::list_subdirectories);
 
     register_method((char *)"_on_CodeEditor_text_changed", &CodeEditor::_on_CodeEditor_text_changed);
     register_method((char *)"_on_CodeEditor_gui_input", &CodeEditor::_on_CodeEditor_gui_input);
-    register_method((char *)"_on_Build_pressed", &CodeEditor::_on_Build_pressed);
-    register_method((char *)"_on_Clean_pressed", &CodeEditor::_on_Clean_pressed);
-    register_method((char *)"_on_ExecuteCustomCommandButton_pressed", &CodeEditor::_on_ExecuteCustomCommandButton_pressed);
 }

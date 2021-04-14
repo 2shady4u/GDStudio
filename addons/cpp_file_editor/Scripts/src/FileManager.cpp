@@ -17,6 +17,7 @@
 #include <OS.hpp>
 #include <RichTextLabel.hpp>
 
+#include "Sidebar.hpp"
 #include "FileManager.hpp"
 #include "ProjectManager.hpp"
 #include "Settings.hpp"
@@ -56,12 +57,12 @@ void EditorFile::open_file(String path)
     String content = file->get_as_text();
     file->close();
     file->free();
-    ((Tabs *)get_node("VBoxContainer/Editor"))->add_child(this->current_editor_instance, true);
+    ((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/Editor"))->add_child(this->current_editor_instance, true);
     this->current_editor_instance->set_initial_content(content);
     this->current_editor_instance->set_custom_font(this->custom_font);
     this->current_editor_instance->set_font_size(this->font_size);
     this->current_editor_instance->set_custom_theme(this->custom_theme);
-    this->tab_number = ((Tabs *)get_node("VBoxContainer/Editor"))->get_child_count();
+    this->tab_number = ((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/Editor"))->get_child_count();
     this->file_path = path;
 
     this->file_name = path.get_file();
@@ -140,7 +141,7 @@ void EditorFile::load_editor_settings()
     {
         for (int i = 0; i < this->tab_number; i++)
         {
-            cast_to<CodeEditor>(((Tabs *)get_node("VBoxContainer/Editor"))->get_children()[i])->set_custom_font(this->custom_font);
+            cast_to<CodeEditor>(((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/Editor"))->get_children()[i])->set_custom_font(this->custom_font);
             cast_to<CodeEditor>(((Tabs *)get_node("VBoxContainer/Editor"))->get_children()[i])->set_font_size(this->font_size);
         }
     }
@@ -155,8 +156,8 @@ void EditorFile::load_color_settings()
     {
         for (int i = 0; i < this->tab_number; i++)
         {
-            String lang = cast_to<CodeEditor>(((Tabs *)get_node("VBoxContainer/Editor"))->get_children()[i])->get_language();
-            cast_to<CodeEditor>(((Tabs *)get_node("VBoxContainer/Editor"))->get_children()[i])->setup_language(lang);
+            String lang = cast_to<CodeEditor>(((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/Editor"))->get_children()[i])->get_language();
+            cast_to<CodeEditor>(((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/Editor"))->get_children()[i])->setup_language(lang);
         }
     }
 
@@ -174,12 +175,12 @@ String EditorFile::get_project_path()
 
 String EditorFile::get_selected_platform()
 {
-    return this->current_editor_instance->get_build_platform_cpp();
+    return cast_to<Sidebar>(get_node(NodePath("VBoxContainer/HBoxContainer/Sidebar")))->get_build_platform();
 }
 
 bool EditorFile::get_selected_profile()
 {
-    return this->current_editor_instance->get_release_flag();
+    return cast_to<Sidebar>(get_node(NodePath("VBoxContainer/HBoxContainer/Sidebar")))->get_release_flag();
 }
 
 String EditorFile::get_project_lang()
@@ -296,7 +297,7 @@ void EditorFile::change_project_path(String path)
     this->project_config = path;
     if (this->instance_defined == true)
     {
-        this->current_editor_instance->list_directories(path);
+       cast_to<Sidebar>(get_node(NodePath("VBoxContainer/HBoxContainer/Sidebar")))->list_directories(path);
     }
 }
 
@@ -314,7 +315,7 @@ void EditorFile::execute_clean()
 
 void EditorFile::execute_command(String string_command)
 {
-    ((RichTextLabel *)get_node(NodePath("VBoxContainer/Control/TabContainer/Log/Panel/TextEdit")))->add_text("Executing: " + string_command + "\n");
+    ((RichTextLabel *)get_node(NodePath("VBoxContainer/HBoxContainer/VBoxContainer/Control/TabContainer/Log/Panel/TextEdit")))->add_text("Executing: " + string_command + "\n");
     const char *command = (string_command + " 2>&1").utf8().get_data();
     if (OS::get_singleton()->get_name() == "windows")
     {
@@ -324,7 +325,7 @@ void EditorFile::execute_command(String string_command)
     FILE *pipe = popen(command, "r");
     if (!pipe)
     {
-        ((RichTextLabel *)get_node(NodePath("VBoxContainer/Control/TabContainer/Log/Panel/TextEdit")))->append_bbcode("[color=red]There was an error executing popen()[/color]");
+        ((RichTextLabel *)get_node(NodePath("VBoxContainer/HBoxContainer/VBoxContainer/Control/TabContainer/Log/Panel/TextEdit")))->append_bbcode("[color=red]There was an error executing popen()[/color]");
         return;
     }
     char buffer[256];
@@ -332,7 +333,7 @@ void EditorFile::execute_command(String string_command)
     {
         if (fgets(buffer, sizeof(buffer), pipe) != nullptr)
         {
-            ((RichTextLabel *)get_node(NodePath("VBoxContainer/Control/TabContainer/Log/Panel/TextEdit")))->add_text(buffer);
+            ((RichTextLabel *)get_node(NodePath("VBoxContainer/HBoxContainer/VBoxContainer/Control/TabContainer/Log/Panel/TextEdit")))->add_text(buffer);
         }
     }
     int status = pclose(pipe);
@@ -341,7 +342,7 @@ void EditorFile::execute_command(String string_command)
     {
         text = "[color=red]Process returned: " + String::num_int64(status) + "[/color]\n";
     }
-    ((RichTextLabel *)get_node(NodePath("VBoxContainer/Control/TabContainer/Log/Panel/TextEdit")))->append_bbcode(text);
+    ((RichTextLabel *)get_node(NodePath("VBoxContainer/HBoxContainer/VBoxContainer/Control/TabContainer/Log/Panel/TextEdit")))->append_bbcode(text);
 }
 
 void EditorFile::on_file_pressed(int index)
@@ -429,8 +430,8 @@ void EditorFile::_on_TabContainer_tab_close(int tab)
     this->instance_defined = false;
     this->file_name = "";
     this->file_path = "";
-    ((Panel *)get_node("VBoxContainer/Editor"))->get_child(tab)->queue_free();
-    this->tab_number = ((Panel *)get_node("VBoxContainer/Editor"))->get_child_count();
+    ((Panel *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/Editor"))->get_child(tab)->queue_free();
+    this->tab_number = ((Panel *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/Editor"))->get_child_count();
     if (this->tab_number > 1)
     {
         if (tab == 0)
