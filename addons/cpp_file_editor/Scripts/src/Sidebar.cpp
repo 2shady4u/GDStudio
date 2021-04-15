@@ -55,6 +55,7 @@ void Sidebar::list_directories(String path)
     tree->clear();
     
     TreeItem *root = tree->create_item();
+    root->set_text(0, path);
     TreeItem *item;
 
     PoolStringArray dirs;
@@ -172,6 +173,12 @@ String Sidebar::get_build_platform()
     }
 }
 
+void Sidebar::disable_build_buttons(bool disable)
+{
+    ((Button *)get_node("Build/BuildButtons/Build"))->set_disabled(disable);
+    ((Button *)get_node("Build/BuildButtons/Clean"))->set_disabled(disable);
+}
+
 void Sidebar::_on_Build_pressed()
 {
     EditorFile *editor = cast_to<EditorFile>(this->get_parent()->get_parent()->get_parent());
@@ -200,6 +207,7 @@ void Sidebar::_register_methods()
     register_method((char *)"list_directories", &Sidebar::list_directories);
     register_method((char *)"list_subdirectories", &Sidebar::list_subdirectories);
     register_method((char *)"get_build_platform", &Sidebar::get_build_platform);
+    register_method((char *)"disable_build_buttons", &Sidebar::disable_build_buttons);
 
     register_method((char *)"_on_Build_pressed", &Sidebar::_on_Build_pressed);
     register_method((char *)"_on_Clean_pressed", &Sidebar::_on_Clean_pressed);

@@ -129,7 +129,6 @@ margin_top = 28.0
 margin_right = 307.0
 margin_bottom = 138.0
 size_flags_vertical = 3
-hide_root = true
 
 [connection signal="pressed" from="Build/BuildButtons/Build" to="." method="_on_Build_pressed"]
 [connection signal="pressed" from="Build/BuildButtons/Clean" to="." method="_on_Clean_pressed"]

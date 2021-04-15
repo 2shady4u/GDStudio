@@ -315,6 +315,9 @@ void EditorFile::execute_clean()
 
 void EditorFile::execute_command(String string_command)
 {
+    ((MenuButton *)get_node(NodePath("VBoxContainer/TopBar/Project")))->get_popup()->set_item_disabled(0, true);
+    ((MenuButton *)get_node(NodePath("VBoxContainer/TopBar/Project")))->get_popup()->set_item_disabled(1, true);
+    cast_to<Sidebar>(get_node(NodePath("VBoxContainer/HBoxContainer/Sidebar")))->disable_build_buttons(true);
     ((RichTextLabel *)get_node(NodePath("VBoxContainer/HBoxContainer/VBoxContainer/Control/TabContainer/Log/Panel/TextEdit")))->add_text("Executing: " + string_command + "\n");
     const char *command = (string_command + " 2>&1").utf8().get_data();
     if (OS::get_singleton()->get_name() == "windows")
@@ -343,6 +346,10 @@ void EditorFile::execute_command(String string_command)
         text = "[color=red]Process returned: " + String::num_int64(status) + "[/color]\n";
     }
     ((RichTextLabel *)get_node(NodePath("VBoxContainer/HBoxContainer/VBoxContainer/Control/TabContainer/Log/Panel/TextEdit")))->append_bbcode(text);
+    
+    ((MenuButton *)get_node(NodePath("VBoxContainer/TopBar/Project")))->get_popup()->set_item_disabled(0, false);
+    ((MenuButton *)get_node(NodePath("VBoxContainer/TopBar/Project")))->get_popup()->set_item_disabled(1, false);
+    cast_to<Sidebar>(get_node(NodePath("VBoxContainer/HBoxContainer/Sidebar")))->disable_build_buttons(false);
 }
 
 void EditorFile::on_file_pressed(int index)

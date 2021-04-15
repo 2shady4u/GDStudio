@@ -21,6 +21,7 @@ public:
     void list_directories(String);
     void list_subdirectories(String, TreeItem *);
     String get_build_platform();
+    void disable_build_buttons(bool);
 
     void _on_Build_pressed();
     void _on_Clean_pressed();
