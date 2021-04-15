@@ -49,7 +49,11 @@ void CodeEditor::set_initial_content(String content)
     this->current_content = content;
     ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_line(0);
     ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_column(1);
-    test_parse(content);
+    Array node_array = test_parse(content);
+    for (int i = 0; i < node_array.size(); i++)
+    {
+        Godot::print(node_array[i]);
+    }
 }
 
 void CodeEditor::setup_language(String lang)
