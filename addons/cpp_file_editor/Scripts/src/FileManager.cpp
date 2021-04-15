@@ -401,6 +401,10 @@ void EditorFile::_on_NewFile_file_selected(String path)
     file->close();
     file->free();
     open_file(path);
+    if (this->project_config != "")
+    {
+        cast_to<Sidebar>(get_node(NodePath("VBoxContainer/HBoxContainer/Sidebar")))->list_directories(this->project_config);
+    }
 }
 
 void EditorFile::_on_OpenFile_file_selected(String path)

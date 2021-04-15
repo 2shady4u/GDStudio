@@ -21,6 +21,19 @@ void Sidebar::_init()
 {
 }
 
+void Sidebar::_notification(int what)
+{
+    if (what == MainLoop::NOTIFICATION_WM_FOCUS_IN)
+    {
+        String path = ((LineEdit *)get_node(NodePath("Explorer/VBoxContainer/Root")))->get_text();
+        if (path != "")
+        {
+            this->list_directories(path);
+        }
+        
+    }
+}
+
 bool Sidebar::get_release_flag()
 {
     int button = ((OptionButton *)get_node(NodePath("Build/Target/OptionButton")))->get_selected();
@@ -39,7 +52,8 @@ void Sidebar::list_directories(String path)
     ((LineEdit *)get_node(NodePath("Explorer/VBoxContainer/Root")))->set_text(path);
 
     Tree *tree = ((Tree *)get_node(NodePath("Explorer/VBoxContainer/Tree")));
-
+    tree->clear();
+    
     TreeItem *root = tree->create_item();
     TreeItem *item;
 
@@ -181,6 +195,7 @@ void Sidebar::_on_ExecuteCustomCommandButton_pressed()
 void Sidebar::_register_methods()
 {
     register_method((char *)"_init", &Sidebar::_init);
+    register_method((char *)"_notification", &Sidebar::_notification);
     register_method((char *)"get_release_flag", &Sidebar::get_release_flag);
     register_method((char *)"list_directories", &Sidebar::list_directories);
     register_method((char *)"list_subdirectories", &Sidebar::list_subdirectories);

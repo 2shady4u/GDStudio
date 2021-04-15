@@ -2,6 +2,7 @@
 #include <Control.hpp>
 #include <Tree.hpp>
 #include <TreeItem.hpp>
+#include <MainLoop.hpp>
 
 using namespace godot;
 
@@ -15,6 +16,7 @@ public:
     Sidebar();
     ~Sidebar();
     void _init();
+    void _notification(int);
     bool get_release_flag();
     void list_directories(String);
     void list_subdirectories(String, TreeItem *);
