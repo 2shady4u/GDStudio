@@ -21,6 +21,7 @@ public:
     void _ready();
     void set_initial_content(String);
     void setup_language(String);
+    void setup_cpp_colors(Array);
     String get_content();
     String get_language();
     void save_contents();
@@ -37,6 +38,8 @@ public:
     static void _register_methods();
 
 private:
+    Array node_array;
+    Dictionary cpp_colors;
     String language = "";
     String error_text = "";
     String current_content = "";

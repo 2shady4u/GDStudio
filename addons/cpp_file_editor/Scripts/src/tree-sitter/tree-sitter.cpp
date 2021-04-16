@@ -17,13 +17,18 @@ Array get_child_array(TSNode root_node)
         const char *name = ts_node_type(child_node);
         int start = ts_node_start_byte(child_node);
         int end = ts_node_end_byte(child_node);
-        node.append(name);
+        node.append(String(name));
         node.append(start);
         node.append(end);
         if (ts_node_child_count(child_node) > 0)
         {
             node.append(get_child_array(child_node));
         }
+        else
+        {
+            node.append(String(""));
+        }
+        
         array.append(node);
     }
     return array;

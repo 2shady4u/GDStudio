@@ -58,7 +58,6 @@ void EditorFile::open_file(String path)
     file->close();
     file->free();
     ((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/Editor"))->add_child(this->current_editor_instance, true);
-    this->current_editor_instance->set_initial_content(content);
     this->current_editor_instance->set_custom_font(this->custom_font);
     this->current_editor_instance->set_font_size(this->font_size);
     this->current_editor_instance->set_custom_theme(this->custom_theme);
@@ -83,7 +82,8 @@ void EditorFile::open_file(String path)
         PoolStringArray keys = Array::make("path");
         this->change_project_path(this->load_config(path, "settings", keys)[0]);
     }
-
+    this->current_editor_instance->set_initial_content(content);
+    
     ((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/TabContainer"))->add_tab(this->file_name, icon);
     ((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/TabContainer"))->set_current_tab(this->tab_number - 1);
 }
