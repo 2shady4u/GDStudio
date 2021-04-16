@@ -59,7 +59,7 @@ void CodeEditor::setup_language(String lang)
     {
         PoolStringArray keys = Array::make("functions", "strings", "comments", "preprocessor", "keywords");
         PoolColorArray cpp_colors_array = cast_to<EditorFile>(this->get_parent())->load_config("user://syntax.cfg", "C++", keys);
-        cpp_colors["preproc_include"] = cpp_colors_array[3];
+        cpp_colors["preproc"] = cpp_colors_array[3];
         cpp_colors["comment"] = cpp_colors_array[2];
         cpp_colors["primitive_type"] = cpp_colors_array[4];
         cpp_colors["type_identifier"] = cpp_colors_array[4];
@@ -104,16 +104,22 @@ void CodeEditor::setup_cpp_colors(Array node_array)
         int end = int(current_node[2]);
         int len = int(end - start);
         String keyword = ((TextEdit *)get_node("Container/CodeEditor"))->get_text().substr(start, len);
-        Color color = cpp_colors[current_node[0]];
+        Color color = Color(0.0,0.0,0.0,1.0);
+        if (cpp_colors.has(current_node[0]))
+        {
+            color = cpp_colors[current_node[0]];
+        }
+        String node_name = current_node[0];
         if (current_node[3] != String(""))
         {
             this->setup_cpp_colors(current_node[3]);
         }
-        if (current_node[0] == String("preproc_include"))
+        if (node_name.substr(0, 7) == String("preproc"))
         {
-            ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region(keyword, "", color, false);
+            color = cpp_colors["preproc"];
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(keyword, color);
         }
-        else if (current_node[0] == String("comment"))
+        else if (node_name == String("comment"))
         {
             ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region(keyword, "", color, false);
         }
@@ -239,7 +245,11 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
             ((TextEdit *)get_node("Container/CodeEditor"))->select(line, column, line, column);
             ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_column(column);
             node_array = test_parse(((TextEdit *)get_node("Container/CodeEditor"))->get_text());
-            setup_cpp_colors(node_array);
+            if (this->language == "cpp")
+            {
+                setup_cpp_colors(node_array);
+            }
+            
         }
     }
 }

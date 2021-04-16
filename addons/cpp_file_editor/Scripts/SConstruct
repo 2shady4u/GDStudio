@@ -46,7 +46,12 @@ def add_sources(sources, dir):
         if f.endswith(".cpp"):
             sources.append(dir + "/" + f)
 
-
+def add_languages(sources, dir):
+	for folder in os.listdir(dir):
+		env.Append(CPPPATH=[dir + folder + "/src/"])
+		sources.append(dir + folder + "/src/parser.c")
+		sources.append(dir + folder + "/src/scanner.cc")
+		
 env.Append(
     CPPPATH=[
         "godot-cpp",
@@ -56,7 +61,7 @@ env.Append(
         "godot-cpp/include/core/",
 		"tree-sitter/include/",
 		"tree-sitter/src/",
-		"tree-sitter-cpp/src/",
+		"tree-sitter-lang/",
     ]
 )
 
@@ -70,8 +75,7 @@ env.Append(LIBPATH=["godot-cpp/bin/"])
 sources = []
 add_sources(sources, "src")
 sources.append("tree-sitter/src/lib.c")
-sources.append("tree-sitter-cpp/src/parser.c")
-sources.append("tree-sitter-cpp/src/scanner.cc")
+add_languages(sources, "tree-sitter-lang/")
 
 library = env.SharedLibrary(target="bin/fileEditor", source=sources)
 Default(library)
