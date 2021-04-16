@@ -45,6 +45,7 @@ Array test_parse(String text)
         source_code,
         strlen(source_code));
     TSNode root_node = ts_tree_root_node(tree);
+    //Godot::print(ts_node_string(root_node));
     Array node_array = get_child_array(root_node);
     ts_tree_delete(tree);
     ts_parser_delete(parser);

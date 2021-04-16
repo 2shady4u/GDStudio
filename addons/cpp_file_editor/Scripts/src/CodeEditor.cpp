@@ -18,6 +18,7 @@
 #include <ResourceLoader.hpp>
 #include <String.hpp>
 #include <PoolArrays.hpp>
+#include <VisualServer.hpp>
 #include <thread>
 #include <future>
 
@@ -64,6 +65,8 @@ void CodeEditor::setup_language(String lang)
         cpp_colors["primitive_type"] = cpp_colors_array[4];
         cpp_colors["type_identifier"] = cpp_colors_array[4];
         cpp_colors["identifier"] = cpp_colors_array[0];
+        cpp_colors["statement"] = Color(1.0, 0.0, 0.0, 1.0);
+        cpp_colors["scoped_identifier"] = Color(0.0, 0.75, 0.25, 1.0);
         cpp_colors["number_literal"] = cpp_colors_array[1];
         cpp_colors["string_literal"] = cpp_colors_array[1];
         this->language = "cpp";
@@ -104,12 +107,14 @@ void CodeEditor::setup_cpp_colors(Array node_array)
         int end = int(current_node[2]);
         int len = int(end - start);
         String keyword = ((TextEdit *)get_node("Container/CodeEditor"))->get_text().substr(start, len);
-        Color color = Color(0.0,0.0,0.0,1.0);
+        Color color = Color(1.0,1.0,1.0,1.0);
         if (cpp_colors.has(current_node[0]))
         {
             color = cpp_colors[current_node[0]];
         }
         String node_name = current_node[0];
+        String statement = "statement";
+        //Godot::print(keyword + ": " + node_name);
         if (current_node[3] != String(""))
         {
             this->setup_cpp_colors(current_node[3]);
@@ -122,6 +127,11 @@ void CodeEditor::setup_cpp_colors(Array node_array)
         else if (node_name == String("comment"))
         {
             ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region(keyword, "", color, false);
+        }
+        else if (node_name.ends_with(statement) == true)
+        {
+            color = cpp_colors["statement"];
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region(keyword,  "", color, false);
         }
         else
         {

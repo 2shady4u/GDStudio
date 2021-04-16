@@ -1,7 +1,17 @@
 #include <iostream>
+#include "godot.hpp"
 
-//this is not a comment
+//this is a comment
 int main()
 {
-	int s = 1;
+	return 0;
+}
+
+TestClass::TestClass()
+{
+	integer = 1;
+}
+
+TestClass::~TestClass()
+{
 }
