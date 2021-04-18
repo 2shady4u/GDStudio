@@ -50,8 +50,6 @@ void CodeEditor::set_initial_content(String content)
     this->current_content = content;
     ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_line(0);
     ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_column(1);
-    node_array = test_parse(((TextEdit *)get_node("Container/CodeEditor"))->get_text());
-    setup_cpp_colors(node_array);
 }
 
 void CodeEditor::setup_language(String lang)
@@ -103,6 +101,8 @@ void CodeEditor::setup_language(String lang)
     {
         ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(operators[i], cpp_colors["keywords"]);
     }
+    node_array = parse_text(((TextEdit *)get_node("Container/CodeEditor"))->get_text(), this->language);
+    setup_cpp_colors(node_array);
 }
 
 void CodeEditor::setup_cpp_colors(Array node_array)
@@ -275,7 +275,7 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
             }
             ((TextEdit *)get_node("Container/CodeEditor"))->select(line, column, line, column);
             ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_column(column);
-            node_array = test_parse(((TextEdit *)get_node("Container/CodeEditor"))->get_text());
+            node_array = parse_text(((TextEdit *)get_node("Container/CodeEditor"))->get_text(), this->language);
             if (this->language == "cpp")
             {
                 setup_cpp_colors(node_array);

@@ -6,6 +6,7 @@
 using namespace godot;
 
 extern "C" TSLanguage *tree_sitter_cpp();
+extern "C" TSLanguage *tree_sitter_rust();
 
 Array get_child_array(TSNode root_node)
 {
@@ -34,10 +35,17 @@ Array get_child_array(TSNode root_node)
     return array;
 }
 
-Array test_parse(String text)
+Array parse_text(String text, String language)
 {
     TSParser *parser = ts_parser_new();
-    ts_parser_set_language(parser, tree_sitter_cpp());
+    if (language == "cpp")
+    {
+        ts_parser_set_language(parser, tree_sitter_cpp());
+    }
+    else if (language == "rust")
+    {
+        ts_parser_set_language(parser, tree_sitter_rust());
+    }
     const char *source_code = text.utf8().get_data();
     TSTree *tree = ts_parser_parse_string(
         parser,
