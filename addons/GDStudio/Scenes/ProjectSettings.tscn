@@ -1,0 +1,575 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://addons/GDStudio/Icons/rust-plain.svg" type="Texture" id=1]
+[ext_resource path="res://addons/GDStudio/Icons/cplusplus-original.svg" type="Texture" id=2]
+[ext_resource path="res://addons/GDStudio/Scripts/native/project_settings.gdns" type="Script" id=3]
+
+[node name="ProjectSettings" type="WindowDialog"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -320.0
+margin_bottom = -180.0
+window_title = "Project Settings"
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 953.0
+margin_bottom = 533.0
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ProjectName" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+margin_right = 946.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/ProjectName"]
+margin_right = 471.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/ProjectName/CenterContainer"]
+margin_left = 192.0
+margin_top = 5.0
+margin_right = 279.0
+margin_bottom = 19.0
+text = "Project Name"
+
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/ProjectName"]
+margin_left = 475.0
+margin_right = 946.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+editable = false
+
+[node name="ProjectPath" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+margin_top = 28.0
+margin_right = 946.0
+margin_bottom = 52.0
+size_flags_horizontal = 3
+
+[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/ProjectPath"]
+margin_right = 471.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/ProjectPath/CenterContainer"]
+margin_left = 197.0
+margin_top = 5.0
+margin_right = 274.0
+margin_bottom = 19.0
+text = "Project Path"
+
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/ProjectPath"]
+margin_left = 475.0
+margin_right = 946.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="ProjectLang" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+margin_top = 56.0
+margin_right = 946.0
+margin_bottom = 80.0
+size_flags_horizontal = 3
+
+[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/ProjectLang"]
+margin_right = 471.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/ProjectLang/CenterContainer"]
+margin_left = 181.0
+margin_top = 5.0
+margin_right = 289.0
+margin_bottom = 19.0
+text = "Project Language"
+
+[node name="OptionButton" type="OptionButton" parent="PanelContainer/VBoxContainer/ProjectLang"]
+margin_left = 475.0
+margin_right = 946.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+text = "C++"
+icon = ExtResource( 2 )
+items = [ "C++", ExtResource( 2 ), false, 0, null, "Rust", ExtResource( 1 ), false, 1, null ]
+selected = 0
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/VBoxContainer"]
+margin_top = 84.0
+margin_right = 946.0
+margin_bottom = 88.0
+
+[node name="CPP" type="ScrollContainer" parent="PanelContainer/VBoxContainer"]
+visible = false
+margin_top = 92.0
+margin_right = 946.0
+margin_bottom = 502.0
+rect_min_size = Vector2( 0, 128 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/CPP"]
+margin_right = 946.0
+margin_bottom = 476.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="UseMingw" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
+margin_right = 934.0
+margin_bottom = 40.0
+
+[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/UseMingw"]
+margin_right = 465.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/UseMingw/CenterContainer"]
+margin_left = 197.0
+margin_top = 13.0
+margin_right = 267.0
+margin_bottom = 27.0
+text = "Use Mingw"
+
+[node name="CheckButton" type="CheckButton" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/UseMingw"]
+margin_left = 469.0
+margin_right = 934.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+text = "Active"
+
+[node name="Sources" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
+margin_top = 44.0
+margin_right = 934.0
+margin_bottom = 68.0
+size_flags_horizontal = 3
+
+[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Sources"]
+margin_right = 465.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Sources/CenterContainer"]
+margin_left = 185.0
+margin_top = 5.0
+margin_right = 279.0
+margin_bottom = 19.0
+text = "Sources Folder"
+
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Sources"]
+margin_left = 469.0
+margin_right = 934.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Bindings" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
+margin_top = 72.0
+margin_right = 934.0
+margin_bottom = 96.0
+
+[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Bindings"]
+margin_right = 465.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Bindings/CenterContainer"]
+margin_left = 154.0
+margin_top = 5.0
+margin_right = 310.0
+margin_bottom = 19.0
+text = "godot_cpp Bindings Path"
+
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Bindings"]
+margin_left = 469.0
+margin_right = 934.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="LabelsContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
+margin_top = 100.0
+margin_right = 934.0
+margin_bottom = 114.0
+size_flags_horizontal = 3
+
+[node name="IncludePaths" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LabelsContainer"]
+margin_right = 465.0
+margin_bottom = 14.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LabelsContainer/IncludePaths"]
+margin_left = 189.0
+margin_right = 276.0
+margin_bottom = 14.0
+text = "Include Paths"
+
+[node name="LinkerPaths" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LabelsContainer"]
+margin_left = 469.0
+margin_right = 934.0
+margin_bottom = 14.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LabelsContainer/LinkerPaths"]
+margin_left = 193.0
+margin_right = 271.0
+margin_bottom = 14.0
+text = "Linker Paths"
+
+[node name="PanelsContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
+margin_top = 118.0
+margin_right = 934.0
+margin_bottom = 258.0
+
+[node name="Include" type="PanelContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer"]
+margin_right = 465.0
+margin_bottom = 140.0
+rect_min_size = Vector2( 0, 140 )
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 458.0
+margin_bottom = 133.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ItemList" type="ItemList" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer"]
+margin_right = 451.0
+margin_bottom = 102.0
+size_flags_vertical = 3
+
+[node name="Buttons" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer"]
+margin_top = 106.0
+margin_right = 451.0
+margin_bottom = 126.0
+size_flags_horizontal = 3
+
+[node name="AddPath" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/Buttons"]
+margin_right = 109.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Add"
+
+[node name="Edit" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/Buttons"]
+margin_left = 113.0
+margin_right = 223.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Edit"
+
+[node name="RemovePath" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/Buttons"]
+margin_left = 227.0
+margin_right = 337.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Remove"
+
+[node name="Clear" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/Buttons"]
+margin_left = 341.0
+margin_right = 451.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Clear All"
+
+[node name="Linker" type="PanelContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer"]
+margin_left = 469.0
+margin_right = 934.0
+margin_bottom = 140.0
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 458.0
+margin_bottom = 133.0
+size_flags_vertical = 3
+
+[node name="ItemList" type="ItemList" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer"]
+margin_right = 451.0
+margin_bottom = 102.0
+size_flags_vertical = 3
+
+[node name="Buttons" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer"]
+margin_top = 106.0
+margin_right = 451.0
+margin_bottom = 126.0
+
+[node name="AddPath" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer/Buttons"]
+margin_right = 109.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Add"
+
+[node name="EditPath" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer/Buttons"]
+margin_left = 113.0
+margin_right = 223.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Edit"
+
+[node name="RemovePath" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer/Buttons"]
+margin_left = 227.0
+margin_right = 337.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Remove"
+
+[node name="Clear" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Linker/VBoxContainer/Buttons"]
+margin_left = 341.0
+margin_right = 451.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+text = "Clear"
+
+[node name="LinkerLabel" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
+margin_top = 262.0
+margin_right = 934.0
+margin_bottom = 276.0
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LinkerLabel"]
+margin_left = 420.0
+margin_right = 514.0
+margin_bottom = 14.0
+text = "Linker Settings"
+
+[node name="LinkerList" type="PanelContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
+margin_top = 280.0
+margin_right = 934.0
+margin_bottom = 420.0
+rect_min_size = Vector2( 0, 140 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LinkerList"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 927.0
+margin_bottom = 133.0
+
+[node name="ItemList" type="ItemList" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LinkerList/VBoxContainer"]
+margin_right = 920.0
+margin_bottom = 102.0
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LinkerList/VBoxContainer"]
+margin_top = 106.0
+margin_right = 920.0
+margin_bottom = 126.0
+
+[node name="AddButton" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LinkerList/VBoxContainer/HBoxContainer"]
+margin_right = 90.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 90, 0 )
+text = "Add"
+
+[node name="EditButton" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LinkerList/VBoxContainer/HBoxContainer"]
+margin_left = 94.0
+margin_right = 184.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 90, 0 )
+text = "Edit"
+
+[node name="RemoveButton" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LinkerList/VBoxContainer/HBoxContainer"]
+margin_left = 188.0
+margin_right = 278.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 90, 0 )
+text = "Remove"
+
+[node name="ClearButton" type="Button" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/LinkerList/VBoxContainer/HBoxContainer"]
+margin_left = 282.0
+margin_right = 372.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 90, 0 )
+text = "Clear"
+
+[node name="Build" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
+margin_top = 424.0
+margin_right = 934.0
+margin_bottom = 448.0
+
+[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Build"]
+margin_right = 465.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Build/CenterContainer"]
+margin_left = 181.0
+margin_top = 5.0
+margin_right = 283.0
+margin_bottom = 19.0
+text = "Build Command"
+
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Build"]
+margin_left = 469.0
+margin_right = 934.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Clean" type="HBoxContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer"]
+margin_top = 452.0
+margin_right = 934.0
+margin_bottom = 476.0
+
+[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Clean"]
+margin_right = 465.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Clean/CenterContainer"]
+margin_left = 180.0
+margin_top = 5.0
+margin_right = 284.0
+margin_bottom = 19.0
+text = "Clean Command"
+
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/CPP/VBoxContainer/Clean"]
+margin_left = 469.0
+margin_right = 934.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Rust" type="ScrollContainer" parent="PanelContainer/VBoxContainer"]
+visible = false
+margin_top = 92.0
+margin_right = 946.0
+margin_bottom = 502.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/Rust"]
+margin_right = 946.0
+margin_bottom = 410.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GDNativeVersion" type="HBoxContainer" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer"]
+margin_right = 946.0
+margin_bottom = 24.0
+
+[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer/GDNativeVersion"]
+margin_right = 471.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer/GDNativeVersion/CenterContainer"]
+margin_left = 179.0
+margin_top = 5.0
+margin_right = 292.0
+margin_bottom = 19.0
+text = "GDNative Version"
+
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer/GDNativeVersion"]
+margin_left = 475.0
+margin_right = 946.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Build" type="HBoxContainer" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer"]
+margin_top = 28.0
+margin_right = 946.0
+margin_bottom = 52.0
+
+[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer/Build"]
+margin_right = 471.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer/Build/CenterContainer"]
+margin_left = 184.0
+margin_top = 5.0
+margin_right = 286.0
+margin_bottom = 19.0
+text = "Build Command"
+
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer/Build"]
+margin_left = 475.0
+margin_right = 946.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Clean" type="HBoxContainer" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer"]
+margin_top = 56.0
+margin_right = 946.0
+margin_bottom = 80.0
+
+[node name="CenterContainer" type="CenterContainer" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer/Clean"]
+margin_right = 471.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer/Clean/CenterContainer"]
+margin_left = 183.0
+margin_top = 5.0
+margin_right = 287.0
+margin_bottom = 19.0
+text = "Clean Command"
+
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/Rust/VBoxContainer/Clean"]
+margin_left = 475.0
+margin_right = 946.0
+margin_bottom = 24.0
+size_flags_horizontal = 3
+
+[node name="Confirm" type="CenterContainer" parent="PanelContainer/VBoxContainer"]
+margin_top = 92.0
+margin_right = 946.0
+margin_bottom = 112.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ConfirmSettings" type="Button" parent="PanelContainer/VBoxContainer/Confirm"]
+margin_left = 442.0
+margin_right = 504.0
+margin_bottom = 20.0
+text = "Confirm"
+
+[node name="OpenFolder" type="FileDialog" parent="."]
+margin_right = 720.0
+margin_bottom = 360.0
+window_title = "Abrir un Directorio"
+mode = 2
+access = 2
+current_dir = "/Work/Godot/Code-Editor"
+current_path = "/Work/Godot/Code-Editor/"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OpenFile" type="FileDialog" parent="."]
+margin_right = 720.0
+margin_bottom = 360.0
+window_title = "Abrir un Archivo"
+mode = 0
+access = 2
+current_dir = "/Work/Godot/Code-Editor"
+current_path = "/Work/Godot/Code-Editor/"
+
+[connection signal="pressed" from="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/Buttons/AddPath" to="." method="_on_AddIncludePath_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/Buttons/Edit" to="." method="_on_EditIncludePath_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/Buttons/RemovePath" to="." method="_on_RemoveIncludePath_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/CPP/VBoxContainer/PanelsContainer/Include/VBoxContainer/Buttons/Clear" to="." method="_on_ClearIncludePath_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Confirm/ConfirmSettings" to="." method="_on_ConfirmSettings_pressed"]
+[connection signal="dir_selected" from="OpenFolder" to="." method="_on_OpenFolder_dir_selected"]

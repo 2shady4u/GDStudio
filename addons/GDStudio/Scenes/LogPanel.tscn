@@ -1,0 +1,57 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://addons/GDStudio/Scripts/native/bottom_panel.gdns" type="Script" id=1]
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+margin_bottom = 130.0
+rect_min_size = Vector2( 0, 164 )
+size_flags_horizontal = 3
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TabContainer" type="TabContainer" parent="."]
+anchor_right = 1.0
+margin_bottom = 164.0
+size_flags_horizontal = 3
+tab_align = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Log" type="VBoxContainer" parent="TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="TabContainer/Log"]
+margin_right = 1272.0
+margin_bottom = 128.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextEdit" type="RichTextLabel" parent="TabContainer/Log/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+scroll_following = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="tab_selected" from="TabContainer" to="." method="_on_TabContainer_tab_selected"]

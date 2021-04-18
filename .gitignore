@@ -3,7 +3,7 @@
 .import/
 export.cfg
 export_presets.cfg
-addons/cpp_file_editor/Scripts/bin/
+addons/GDStudio/Scripts/bin/
 *.obj
 *.obj.import
 *.bat

@@ -11,7 +11,7 @@ config_version=4
 [application]
 
 config/name="GDStudio"
-run/main_scene="res://addons/cpp_file_editor/Scenes/File.tscn"
+run/main_scene="res://addons/GDStudio/Scenes/File.tscn"
 config/icon="res://icon.png"
 
 [display]
