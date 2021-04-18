@@ -6,3 +6,11 @@
 	path = addons/cpp_file_editor/Scripts/tree-sitter
 	url = https://github.com/tree-sitter/tree-sitter
 	ignore = dirty
+[submodule "addons/cpp_file_editor/Scripts/tree-sitter-lang/tree-sitter-cpp"]
+	path = addons/cpp_file_editor/Scripts/tree-sitter-lang/tree-sitter-cpp
+	url = https://github.com/tree-sitter/tree-sitter-cpp
+	ignore = dirty
+[submodule "addons/cpp_file_editor/Scripts/tree-sitter-lang/tree-sitter-rust"]
+	path = addons/cpp_file_editor/Scripts/tree-sitter-lang/tree-sitter-rust
+	url = https://github.com/tree-sitter/tree-sitter-rust
+	ignore = dirty
