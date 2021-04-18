@@ -313,32 +313,78 @@ margin_top = 32.0
 margin_right = -4.0
 margin_bottom = -4.0
 
-[node name="Functions" type="HBoxContainer" parent="VBoxContainer/Settings/CPPTree/Syntax"]
+[node name="Identifiers" type="HBoxContainer" parent="VBoxContainer/Settings/CPPTree/Syntax"]
 margin_right = 640.0
 margin_bottom = 20.0
 
-[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/CPPTree/Syntax/Functions"]
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/CPPTree/Syntax/Identifiers"]
 margin_right = 318.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="VBoxContainer/Settings/CPPTree/Syntax/Functions/CenterContainer"]
-margin_left = 128.0
+[node name="Label" type="Label" parent="VBoxContainer/Settings/CPPTree/Syntax/Identifiers/CenterContainer"]
+margin_left = 126.0
 margin_top = 3.0
-margin_right = 190.0
+margin_right = 192.0
 margin_bottom = 17.0
-text = "Functions"
+text = "Identifiers"
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/Settings/CPPTree/Syntax/Functions"]
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/Settings/CPPTree/Syntax/Identifiers"]
+margin_left = 322.0
+margin_right = 640.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Namespace" type="HBoxContainer" parent="VBoxContainer/Settings/CPPTree/Syntax"]
+margin_top = 24.0
+margin_right = 640.0
+margin_bottom = 44.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/CPPTree/Syntax/Namespace"]
+margin_right = 318.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/CPPTree/Syntax/Namespace/CenterContainer"]
+margin_left = 86.0
+margin_top = 3.0
+margin_right = 231.0
+margin_bottom = 17.0
+text = "Namespace Identifiers"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/Settings/CPPTree/Syntax/Namespace"]
+margin_left = 322.0
+margin_right = 640.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Numbers" type="HBoxContainer" parent="VBoxContainer/Settings/CPPTree/Syntax"]
+margin_top = 48.0
+margin_right = 640.0
+margin_bottom = 68.0
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/CPPTree/Syntax/Numbers"]
+margin_right = 318.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/Settings/CPPTree/Syntax/Numbers/CenterContainer"]
+margin_left = 129.0
+margin_top = 3.0
+margin_right = 188.0
+margin_bottom = 17.0
+text = "Numbers"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="VBoxContainer/Settings/CPPTree/Syntax/Numbers"]
 margin_left = 322.0
 margin_right = 640.0
 margin_bottom = 20.0
 size_flags_horizontal = 3
 
 [node name="Strings" type="HBoxContainer" parent="VBoxContainer/Settings/CPPTree/Syntax"]
-margin_top = 24.0
+margin_top = 72.0
 margin_right = 640.0
-margin_bottom = 44.0
+margin_bottom = 92.0
 
 [node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/CPPTree/Syntax/Strings"]
 margin_right = 318.0
@@ -359,9 +405,9 @@ margin_bottom = 20.0
 size_flags_horizontal = 3
 
 [node name="Comments" type="HBoxContainer" parent="VBoxContainer/Settings/CPPTree/Syntax"]
-margin_top = 48.0
+margin_top = 96.0
 margin_right = 640.0
-margin_bottom = 68.0
+margin_bottom = 116.0
 
 [node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/CPPTree/Syntax/Comments"]
 margin_right = 318.0
@@ -382,9 +428,9 @@ margin_bottom = 20.0
 size_flags_horizontal = 3
 
 [node name="Preprocessor" type="HBoxContainer" parent="VBoxContainer/Settings/CPPTree/Syntax"]
-margin_top = 72.0
+margin_top = 120.0
 margin_right = 640.0
-margin_bottom = 92.0
+margin_bottom = 140.0
 
 [node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/CPPTree/Syntax/Preprocessor"]
 margin_right = 318.0
@@ -405,9 +451,9 @@ margin_bottom = 20.0
 size_flags_horizontal = 3
 
 [node name="Keywords" type="HBoxContainer" parent="VBoxContainer/Settings/CPPTree/Syntax"]
-margin_top = 96.0
+margin_top = 144.0
 margin_right = 640.0
-margin_bottom = 116.0
+margin_bottom = 164.0
 
 [node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/Settings/CPPTree/Syntax/Keywords"]
 margin_right = 318.0

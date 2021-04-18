@@ -58,16 +58,16 @@ void CodeEditor::setup_language(String lang)
 {
     if (lang == "cpp")
     {
-        PoolStringArray keys = Array::make("functions", "strings", "comments", "preprocessor", "keywords");
+        PoolStringArray keys = Array::make("identifiers", "namespace", "numbers", "strings", "comments", "preprocessor", "keywords");
         PoolColorArray cpp_colors_array = cast_to<EditorFile>(this->get_parent())->load_config("user://syntax.cfg", "C++", keys);
-        cpp_colors["preproc"] = cpp_colors_array[3];
-        cpp_colors["comment"] = cpp_colors_array[2];
-        cpp_colors["keywords"] = cpp_colors_array[4];
+        cpp_colors["preproc"] = cpp_colors_array[5];
+        cpp_colors["comment"] = cpp_colors_array[4];
+        cpp_colors["keywords"] = cpp_colors_array[6];
         cpp_colors["identifier"] = cpp_colors_array[0];
-        cpp_colors["namespace_identifier"] = Color(0.25, 0.91, 0.46, 1.0);
-        cpp_colors["number_literal"] = cpp_colors_array[1];
-        cpp_colors["string_literal"] = cpp_colors_array[1];
-        cpp_colors["system_lib_string"] = cpp_colors_array[1];
+        cpp_colors["namespace_identifier"] = cpp_colors_array[1];
+        cpp_colors["number_literal"] = cpp_colors_array[2];
+        cpp_colors["string_literal"] = cpp_colors_array[3];
+        cpp_colors["system_lib_string"] = cpp_colors_array[3];
         this->language = "cpp";
     }
     else if (lang == "rust")

@@ -96,14 +96,16 @@ void Settings::set_cpp_data()
     ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/GlobalBuild/LineEdit")))->set_text(settings[2]);
     ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/CPPTree/General/GlobalClean/LineEdit")))->set_text(settings[3]);
 
-    keys = Array::make("functions", "strings", "comments", "preprocessor", "keywords");
+    keys = Array::make("identifiers", "namespace", "numbers", "strings", "comments", "preprocessor", "keywords");
     PoolColorArray cpp_colors = cast_to<EditorFile>(this->get_parent())->load_config("user://syntax.cfg", "C++", keys);
     
-    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Functions/ColorPickerButton")))->set_pick_color(cpp_colors[0]);
-    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Strings/ColorPickerButton")))->set_pick_color(cpp_colors[1]);
-    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Comments/ColorPickerButton")))->set_pick_color(cpp_colors[2]);
-    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Preprocessor/ColorPickerButton")))->set_pick_color(cpp_colors[3]);
-    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Keywords/ColorPickerButton")))->set_pick_color(cpp_colors[4]);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Identifiers/ColorPickerButton")))->set_pick_color(cpp_colors[0]);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Namespace/ColorPickerButton")))->set_pick_color(cpp_colors[1]);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Numbers/ColorPickerButton")))->set_pick_color(cpp_colors[2]);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Strings/ColorPickerButton")))->set_pick_color(cpp_colors[3]);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Comments/ColorPickerButton")))->set_pick_color(cpp_colors[4]);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Preprocessor/ColorPickerButton")))->set_pick_color(cpp_colors[5]);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Keywords/ColorPickerButton")))->set_pick_color(cpp_colors[6]);
 }
 
 void Settings::set_rust_data()
@@ -199,8 +201,14 @@ void Settings::save_cpp_data()
     config_file = ConfigFile::_new();
     config_file->load("user://syntax.cfg");
 
-    Color functions = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Functions/ColorPickerButton")))->get_pick_color();
-    config_file->set_value("C++", "functions", functions);
+    Color identifiers = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Identifiers/ColorPickerButton")))->get_pick_color();
+    config_file->set_value("C++", "identifiers", identifiers);
+    
+    Color namesp = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Namespace/ColorPickerButton")))->get_pick_color();
+    config_file->set_value("C++", "namespace", namesp);
+    
+    Color number = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Strings/ColorPickerButton")))->get_pick_color();
+    config_file->set_value("C++", "numbers", number);
     
     Color strings = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/CPPTree/Syntax/Strings/ColorPickerButton")))->get_pick_color();
     config_file->set_value("C++", "strings", strings);
