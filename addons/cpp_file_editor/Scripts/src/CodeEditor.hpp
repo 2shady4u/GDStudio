@@ -22,7 +22,6 @@ public:
     void set_initial_content(String);
     void setup_language(String);
     void setup_cpp_colors(Array);
-    void highlight_constants(String);
     String get_content();
     String get_language();
     void save_contents();
@@ -34,7 +33,7 @@ public:
     void _on_CodeEditor_symbol_lookup(String, int, int);
 
     bool get_text_changed();
-    void _on_CodeEditor_gui_input(InputEvent*);
+    void _on_CodeEditor_gui_input(InputEvent *);
 
     static void _register_methods();
 
@@ -68,6 +67,20 @@ private:
         comment,
         illegal,
     };
+    Array cpp_keywords = Array::make("auto", "short", "struct", "unsigned",
+                                 "break", "continue", "else", "for", "long", "signed", "switch", "void",
+                                 "case", "default", "enum", "goto", "register", "sizeof", "typedef", "volatile",
+                                 "do", "extern", "if", "return", "static", "union", "while",
+                                 "asm", "dynamic_cast", "namespace", "reinterpret_cast", "try",
+                                 "bool", "explicit", "new", "static_cast", "typeid",
+                                 "catch", "false", "operator", "template", "typename",
+                                 "class", "friend", "private", "this", "using",
+                                 "const_cast", "inline", "public", "throw", "virtual",
+                                 "delete", "mutable", "protected", "true", "wchar_t",
+                                 "const", "int", "float", "double", "char", "string");
+    Array operators = Array::make("+", "-", "*", "/", "=", "+=", "-=", "*=", "/=", "==", "++", "--",
+                                      "!", "!=", "%", "%=", "<", ">", "<=", ">=", "&&", "||", "&", "|", "^", "~", "<<", ">>");
+
 };
 
 #endif
