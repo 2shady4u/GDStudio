@@ -15,11 +15,6 @@ RobotoSlab Font
 -License: Apache 2.0
 -Location: Fonts/
 
-tree-sitter
--https://github.com/tree-sitter/tree-sitter
--License: MIT
--Location: Scripts/tree-sitter/
-
 tree-sitter-cpp
 -https://github.com/tree-sitter/tree-sitter-cpp
 -License: MIT
