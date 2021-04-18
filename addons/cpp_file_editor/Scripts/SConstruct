@@ -50,7 +50,10 @@ def add_languages(sources, dir):
 	for folder in os.listdir(dir):
 		env.Append(CPPPATH=[dir + folder + "/src/"])
 		sources.append(dir + folder + "/src/parser.c")
-		sources.append(dir + folder + "/src/scanner.cc")
+		if (os.path.exists(dir + folder + "/src/scanner.cc")):
+			sources.append(dir + folder + "/src/scanner.cc")
+		elif (os.path.exists(dir + folder + "/src/scanner.c")):
+			sources.append(dir + folder + "/src/scanner.c")
 		
 env.Append(
     CPPPATH=[

@@ -18,4 +18,9 @@ RobotoSlab Font
 tree-sitter-cpp
 -https://github.com/tree-sitter/tree-sitter-cpp
 -License: MIT
--Location: Scripts/tree-sitter-cpp/
+-Location: Scripts/tree-sitter-lang/tree-sitter-cpp/
+
+tree-sitter-rust
+-https://github.com/tree-sitter/tree-sitter-rust
+-License: MIT
+-Location: Scripts/tree-sitter-lang/tree-sitter-rust/
