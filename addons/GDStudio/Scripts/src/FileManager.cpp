@@ -142,7 +142,7 @@ void EditorFile::load_editor_settings()
         for (int i = 0; i < this->tab_number; i++)
         {
             cast_to<CodeEditor>(((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/Editor"))->get_children()[i])->set_custom_font(this->custom_font);
-            cast_to<CodeEditor>(((Tabs *)get_node("VBoxContainer/Editor"))->get_children()[i])->set_font_size(this->font_size);
+            cast_to<CodeEditor>(((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/Editor"))->get_children()[i])->set_font_size(this->font_size);
         }
     }
 
