@@ -1,7 +1,7 @@
 # GDStudio (WIP)
-GDNative Code editor made in Godot. Still missing a lot of features.
+GDNative Code editor made in Godot.
 
-Latest Versión: 0.1
+Latest Versión: 0.2
 
 ## Compiling
 I hace only tested this on Windows, but un theory It should work on other systems
@@ -10,4 +10,4 @@ I hace only tested this on Windows, but un theory It should work on other system
 - Copy the repo to "addons/cpp_file_editor/Scripts" and open there a cmd/shell.
 - Type "scons platform=Windows" without the quotes.
 
-Open an issue if there are any problems.
+Please, open an issue if you encounter any bugs
