@@ -1,3 +1,6 @@
 [submodule "addons/cpp_file_editor/Scripts/godot-cpp"]
 	path = addons/cpp_file_editor/Scripts/godot-cpp
 	url = https://github.com/godotengine/godot-cpp
+[submodule "addons/cpp_file_editor/Scripts/tree-sitter"]
+	path = addons/cpp_file_editor/Scripts/tree-sitter
+	url = https://github.com/tree-sitter/tree-sitter
