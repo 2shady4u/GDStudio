@@ -64,6 +64,7 @@ void EditorFile::open_file(String path)
     this->tab_number = ((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/Editor"))->get_child_count();
     this->file_path = path;
 
+    this->current_editor_instance->set_initial_content(content);
     this->file_name = path.get_file();
     String file_extension = this->file_name.get_extension();
 
@@ -82,7 +83,6 @@ void EditorFile::open_file(String path)
         PoolStringArray keys = Array::make("path");
         this->change_project_path(this->load_config(path, "settings", keys)[0]);
     }
-    this->current_editor_instance->set_initial_content(content);
     
     ((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/TabContainer"))->add_tab(this->file_name, icon);
     ((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/TabContainer"))->set_current_tab(this->tab_number - 1);
