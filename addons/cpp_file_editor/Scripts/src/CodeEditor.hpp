@@ -22,6 +22,7 @@ public:
     void set_initial_content(String);
     void setup_language(String);
     void setup_cpp_colors(Array);
+    void highlight_constants(String);
     String get_content();
     String get_language();
     void save_contents();

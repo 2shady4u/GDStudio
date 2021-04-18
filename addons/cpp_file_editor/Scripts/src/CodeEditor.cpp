@@ -62,13 +62,12 @@ void CodeEditor::setup_language(String lang)
         PoolColorArray cpp_colors_array = cast_to<EditorFile>(this->get_parent())->load_config("user://syntax.cfg", "C++", keys);
         cpp_colors["preproc"] = cpp_colors_array[3];
         cpp_colors["comment"] = cpp_colors_array[2];
-        cpp_colors["primitive_type"] = cpp_colors_array[4];
-        cpp_colors["type_identifier"] = cpp_colors_array[4];
+        cpp_colors["keywords"] = cpp_colors_array[4];
         cpp_colors["identifier"] = cpp_colors_array[0];
-        cpp_colors["statement"] = Color(1.0, 0.0, 0.0, 1.0);
-        cpp_colors["scoped_identifier"] = Color(0.0, 0.75, 0.25, 1.0);
+        cpp_colors["namespace_identifier"] = Color(0.25, 0.91, 0.46, 1.0);
         cpp_colors["number_literal"] = cpp_colors_array[1];
         cpp_colors["string_literal"] = cpp_colors_array[1];
+        cpp_colors["system_lib_string"] = cpp_colors_array[1];
         this->language = "cpp";
     }
     else if (lang == "rust")
@@ -113,30 +112,67 @@ void CodeEditor::setup_cpp_colors(Array node_array)
             color = cpp_colors[current_node[0]];
         }
         String node_name = current_node[0];
-        String statement = "statement";
-        //Godot::print(keyword + ": " + node_name);
-        if (current_node[3] != String(""))
-        {
-            this->setup_cpp_colors(current_node[3]);
-        }
         if (node_name.substr(0, 7) == String("preproc"))
         {
             color = cpp_colors["preproc"];
-            ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(keyword, color);
+            keyword = ((TextEdit *)get_node("Container/CodeEditor"))->get_text().substr(start+1, len-1);
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region(keyword, "", color, false);
         }
         else if (node_name == String("comment"))
         {
             ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region(keyword, "", color, false);
         }
-        else if (node_name.ends_with(statement) == true)
+        else if (node_name == String("identifier") || node_name == String("field_identifier"))
         {
-            color = cpp_colors["statement"];
-            ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region(keyword,  "", color, false);
+            color = cpp_colors["identifier"];
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(keyword, color);
         }
-        else
+        else if (node_name == String("namespace_identifier"))
         {
             ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(keyword, color);
         }
+        else if (node_name == String("system_lib_string"))
+        {
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region(keyword, "", color, false);
+        }
+        else if (node_name == String("number_literal"))
+        {
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(keyword, color);
+        }
+        if (current_node[3] != String(""))
+        {
+            this->setup_cpp_colors(current_node[3]);
+        }
+    }
+    highlight_constants("cpp");
+}
+
+void CodeEditor::highlight_constants(String lang)
+{
+    if (lang == "cpp")
+    {
+        Array keywords = Array::make("auto", "short", "struct", "unsigned",
+                                     "break", "continue", "else", "for", "long", "signed", "switch", "void",
+                                     "case", "default", "enum", "goto", "register", "sizeof", "typedef", "volatile",
+                                     "do", "extern", "if", "return", "static", "union", "while",
+                                     "asm", "dynamic_cast", "namespace", "reinterpret_cast", "try",
+                                     "bool", "explicit", "new", "static_cast", "typeid",
+                                     "catch", "false", "operator", "template", "typename",
+                                     "class", "friend", "private", "this", "using",
+                                     "const_cast", "inline", "public", "throw", "virtual",
+                                     "delete", "mutable", "protected", "true", "wchar_t",
+                                     "const", "int", "float", "double", "char", "string");
+        Array operators = Array::make("+", "-", "*", "/", "=", "+=", "-=", "*=", "/=", "==", "++", "--",
+        "!", "!=", "%", "%=", "<", ">", "<=", ">=", "&&", "||", "&", "|", "^", "~", "<<", ">>");
+        for (int i = 0; i < keywords.size(); i++)
+        {
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(keywords[i], cpp_colors["keywords"]);
+        }
+        for (int i = 0; i < operators.size(); i++)
+        {
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(keywords[i], cpp_colors["keywords"]);
+        }
+        ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("\"", "\"", cpp_colors["string_literal"], false);
     }
 }
 
@@ -275,6 +311,7 @@ void CodeEditor::_register_methods()
     register_method((char *)"set_initial_content", &CodeEditor::set_initial_content);
     register_method((char *)"setup_language", &CodeEditor::setup_language);
     register_method((char *)"setup_cpp_colors", &CodeEditor::setup_cpp_colors);
+    register_method((char *)"highlight_constants", &CodeEditor::highlight_constants);
     register_method((char *)"get_content", &CodeEditor::get_content);
     register_method((char *)"save_contents", &CodeEditor::save_contents);
     register_method((char *)"get_text_changed", &CodeEditor::get_text_changed);
