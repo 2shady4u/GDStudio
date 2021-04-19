@@ -137,13 +137,14 @@ void Settings::set_rust_data()
     ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/General/GlobalBuild/LineEdit")))->set_text(global_options[0]);
     ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/RustTree/General/General/GlobalClean/LineEdit")))->set_text(global_options[1]);
 
-    keys = Array::make("functions", "strings", "comments", "keywords", "types");
+    keys = Array::make("identifiers", "types", "comments", "strings", "numbers", "keywords");
     PoolColorArray rust_colors = cast_to<EditorFile>(this->get_parent())->load_config("user://syntax.cfg", "Rust", keys);
-    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Functions/ColorPickerButton")))->set_pick_color(rust_colors[0]);
-    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Strings/ColorPickerButton")))->set_pick_color(rust_colors[1]);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Identifiers/ColorPickerButton")))->set_pick_color(rust_colors[0]);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Types/ColorPickerButton")))->set_pick_color(rust_colors[1]);
     ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Comments/ColorPickerButton")))->set_pick_color(rust_colors[2]);
-    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Keywords/ColorPickerButton")))->set_pick_color(rust_colors[3]);
-    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Types/ColorPickerButton")))->set_pick_color(rust_colors[4]);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Strings/ColorPickerButton")))->set_pick_color(rust_colors[3]);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Numbers/ColorPickerButton")))->set_pick_color(rust_colors[4]);
+    ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Keywords/ColorPickerButton")))->set_pick_color(rust_colors[5]);
 }
 
 void Settings::save_editor_data()
@@ -254,20 +255,23 @@ void Settings::save_rust_data()
     config_file = ConfigFile::_new();
     config_file->load("user://syntax.cfg");
 
-    Color functions = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Functions/ColorPickerButton")))->get_pick_color();
-    config_file->set_value("Rust", "functions", functions);
+    Color identifiers = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Identifiers/ColorPickerButton")))->get_pick_color();
+    config_file->set_value("Rust", "identifiers", identifiers);
     
-    Color strings = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Strings/ColorPickerButton")))->get_pick_color();
-    config_file->set_value("Rust", "strings", strings);
+    Color types = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Types/ColorPickerButton")))->get_pick_color();
+    config_file->set_value("Rust", "types", types);
     
     Color comments = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Comments/ColorPickerButton")))->get_pick_color();
     config_file->set_value("Rust", "comments", comments);
 
+    Color strings = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Strings/ColorPickerButton")))->get_pick_color();
+    config_file->set_value("Rust", "strings", strings);
+    
+    Color numbers = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Numbers/ColorPickerButton")))->get_pick_color();
+    config_file->set_value("Rust", "numbers", numbers);
+
     Color keywords = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Keywords/ColorPickerButton")))->get_pick_color();
     config_file->set_value("Rust", "keywords", keywords);
-    
-    Color types = ((ColorPickerButton *)get_node(NodePath("VBoxContainer/Settings/RustTree/Syntax/Types/ColorPickerButton")))->get_pick_color();
-    config_file->set_value("Rust", "types", types);
 
     config_file->save("user://syntax.cfg");
     config_file->free();
