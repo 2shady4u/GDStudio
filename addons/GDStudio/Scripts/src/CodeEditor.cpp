@@ -84,17 +84,17 @@ void CodeEditor::setup_language(String lang)
         PoolColorArray rust_colors_array = cast_to<EditorFile>(this->get_parent())->load_config("user://syntax.cfg", "Rust", keys);
         rust_colors["use_declaration"] = rust_colors_array[0];
         rust_colors["identifier"] = rust_colors_array[1];
+        rust_colors["type_identifier"] = Color(0.24, 0.84, 0.24, 1.0);
+        rust_colors["line_comment"] = rust_colors_array[2];
+        rust_colors["meta_arguments"] = rust_colors_array[4];
+        rust_colors["boolean_literal"] = Color(0.64, 0.4, 0.0, 1.0);
+        rust_colors["number_literal"] = Color(0.64, 0.4, 0.0, 1.0);
+        rust_colors["string_literal"] =Color(0.64, 0.4, 0.0, 1.0);
 
-        /*Array types = Array::make("bool", "char", "f32", "f64", "i8", "i16", "i32", "i64",
-                                  "str", "u8", "u16", "u32", "u64", "Self");*/
         for (int i = 0; i < rust_keywords.size(); i++)
         {
             ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(rust_keywords[i], rust_colors_array[3]);
         }
-        /*for (int i = 0; i < types.size(); i++)
-        {
-            ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(types[i], rust_colors[4]);
-        }*/
         node_array = parse_text(((TextEdit *)get_node("Container/CodeEditor"))->get_text(), lang);
         setup_rust_colors(node_array);
         this->language = "rust";
@@ -176,6 +176,32 @@ void CodeEditor::setup_rust_colors(Array node_array)
         {
             ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region(keyword, "", color, false);
         }
+        else if (node_name == String("meta_arguments"))
+        {
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region(keyword, "", color, false);
+        }
+        else if (node_name == String("line_comment") || node_name == String("block_comment"))
+        {
+            color = rust_colors["line_comment"];
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region(keyword, "", color, false);
+        }
+        else if (node_name == String("meta_arguments"))
+        {
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(keyword, color);
+        }
+        else if (node_name == String("type_identifier"))
+        {
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(keyword, color);
+        }
+        else if (node_name == String("boolean_literal"))
+        {
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(keyword, color);
+        }
+        else if (node_name == String("integer_literal") || node_name == String("float_literal"))
+        {
+            color = rust_colors["number_literal"];
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(keyword, color);
+        }
         else if (node_name == String("identifier") || node_name == String("field_identifier"))
         {
             if (!rust_keywords.has(keyword))
@@ -189,6 +215,7 @@ void CodeEditor::setup_rust_colors(Array node_array)
             this->setup_rust_colors(current_node[3]);
         }
     }
+    ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("\'", "\'", rust_colors["string_literal"], false);
     ((TextEdit *)get_node("Container/CodeEditor"))->add_color_region("\"", "\"", rust_colors["string_literal"], false);
 }
 
@@ -310,6 +337,10 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
             if (this->language == "cpp")
             {
                 setup_cpp_colors(node_array);
+            }
+            else if (this->language == "rust")
+            {
+                setup_rust_colors(node_array);
             }
         }
     }

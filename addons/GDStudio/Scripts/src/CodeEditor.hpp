@@ -85,7 +85,7 @@ private:
                                  "match", "mod", "mut", "offsetof", "once", "priv", "proc", "pub", "pure", "ref", "return", "self",
                                  "sizeof", "static", "struct", "super", "trait", "true", "type", "typeof", "unsafe", "unsized",
                                  "use", "virtual", "while", "yield", "bool", "char", "f32", "f64", "i8", "i16", "i32", "i64",
-                                 "str", "u8", "u16", "u32", "u64", "Self");
+                                 "str", "u8", "u16", "u32", "u64", "Self", "self");
     Array operators = Array::make("+", "-", "*", "/", "=", "+=", "-=", "*=", "/=", "==", "++", "--",
                                   "!", "!=", "%", "%=", "<", ">", "<=", ">=", "&&", "||", "&", "|", "^", "~", "<<", ">>");
 };
