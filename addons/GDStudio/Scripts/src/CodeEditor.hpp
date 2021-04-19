@@ -22,6 +22,7 @@ public:
     void set_initial_content(String);
     void setup_language(String);
     void setup_cpp_colors(Array);
+    void setup_rust_colors(Array);
     String get_content();
     String get_language();
     void save_contents();
@@ -40,6 +41,7 @@ public:
 private:
     Array node_array;
     Dictionary cpp_colors;
+    Dictionary rust_colors;
     String language = "";
     String error_text = "";
     String current_content = "";
@@ -68,19 +70,24 @@ private:
         illegal,
     };
     Array cpp_keywords = Array::make("auto", "short", "struct", "unsigned",
-                                 "break", "continue", "else", "for", "long", "signed", "switch", "void",
-                                 "case", "default", "enum", "goto", "register", "sizeof", "typedef", "volatile",
-                                 "do", "extern", "if", "return", "static", "union", "while",
-                                 "asm", "dynamic_cast", "namespace", "reinterpret_cast", "try",
-                                 "bool", "explicit", "new", "static_cast", "typeid",
-                                 "catch", "false", "operator", "template", "typename",
-                                 "class", "friend", "private", "this", "using",
-                                 "const_cast", "inline", "public", "throw", "virtual",
-                                 "delete", "mutable", "protected", "true", "wchar_t",
-                                 "const", "int", "float", "double", "char", "string");
+                                     "break", "continue", "else", "for", "long", "signed", "switch", "void",
+                                     "case", "default", "enum", "goto", "register", "sizeof", "typedef", "volatile",
+                                     "do", "extern", "if", "return", "static", "union", "while",
+                                     "asm", "dynamic_cast", "namespace", "reinterpret_cast", "try",
+                                     "bool", "explicit", "new", "static_cast", "typeid",
+                                     "catch", "false", "operator", "template", "typename",
+                                     "class", "friend", "private", "this", "using",
+                                     "const_cast", "inline", "public", "throw", "virtual",
+                                     "delete", "mutable", "protected", "true", "wchar_t",
+                                     "const", "int", "float", "double", "char", "string");
+    Array rust_keywords = Array::make("alignof", "as", "be", "box", "break", "const", "continue", "crate",
+                                 "do", "else", "enum", "extern", "false", "fn", "for", "if", "impl", "in", "let", "loop",
+                                 "match", "mod", "mut", "offsetof", "once", "priv", "proc", "pub", "pure", "ref", "return", "self",
+                                 "sizeof", "static", "struct", "super", "trait", "true", "type", "typeof", "unsafe", "unsized",
+                                 "use", "virtual", "while", "yield", "bool", "char", "f32", "f64", "i8", "i16", "i32", "i64",
+                                 "str", "u8", "u16", "u32", "u64", "Self");
     Array operators = Array::make("+", "-", "*", "/", "=", "+=", "-=", "*=", "/=", "==", "++", "--",
-                                      "!", "!=", "%", "%=", "<", ">", "<=", ">=", "&&", "||", "&", "|", "^", "~", "<<", ">>");
-
+                                  "!", "!=", "%", "%=", "<", ">", "<=", ">=", "&&", "||", "&", "|", "^", "~", "<<", ">>");
 };
 
 #endif

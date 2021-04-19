@@ -1,5 +1,6 @@
 use std::io;
 
+//Comment
 fn main() {
     println!("Hello, world!");
 }
