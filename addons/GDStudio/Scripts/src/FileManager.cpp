@@ -284,7 +284,7 @@ void EditorFile::create_user_data()
         file->open("user://syntax.cfg", File::WRITE);
         file->store_string("[Global]\nexit_success=Color(0,0.15,0.85,1)\nexit_error=Color(0.85,0.15,0.0,1)\n"
                            "[C++]\nidentifiers=Color(0.4,0.64,0.81,1)\nnamespace=Color(0.25, 0.91, 0.46, 1.0)\nnumbers=Color(0.43, 0.36, 0.65, 1.0)\nstrings=Color(0.5, 0.5, 0.5,1)\ncomments=Color(0, 0.5, 0,1)\npreprocessor=Color(0.5, 0.25, 0,1)\nkeywords=Color(0.5, 0, 0.5,1)\n"
-                           "[Rust]\nfunctions=Color(0.4,0.64,0.81,1)\nstrings=Color(0.5, 0.5, 0.5,1)\ncomments=Color(0, 0.5, 0,1)\nkeywords=Color(0, 0, 0.5,1)\ntypes=Color(0, 0, 0.5,1)");
+                           "[Rust]\nidentifiers=Color(0.4,0.64,0.81,1)\ntypes=Color(0.24, 0.84, 0.24, 1.0)\ncomments=Color(0, 0.5, 0,1)\nstrings=Color(0.5, 0.5, 0.5,1)\nnumbers=Color(0.43, 0.36, 0.65, 1.0)\nkeywords=Color(0, 0, 0.5,1)");
         file->close();
     }
     file->free();

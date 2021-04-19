@@ -80,20 +80,20 @@ void CodeEditor::setup_language(String lang)
     }
     else if (lang == "rust")
     {
-        PoolStringArray keys = Array::make("functions", "strings", "comments", "keywords", "types");
+        PoolStringArray keys = Array::make("identifiers", "types", "comments", "strings", "numbers", "keywords");
         PoolColorArray rust_colors_array = cast_to<EditorFile>(this->get_parent())->load_config("user://syntax.cfg", "Rust", keys);
         rust_colors["use_declaration"] = rust_colors_array[0];
-        rust_colors["identifier"] = rust_colors_array[1];
-        rust_colors["type_identifier"] = Color(0.24, 0.84, 0.24, 1.0);
+        rust_colors["identifier"] = rust_colors_array[0];
+        rust_colors["type_identifier"] = rust_colors_array[1];
         rust_colors["line_comment"] = rust_colors_array[2];
-        rust_colors["meta_arguments"] = rust_colors_array[4];
-        rust_colors["boolean_literal"] = Color(0.64, 0.4, 0.0, 1.0);
-        rust_colors["number_literal"] = Color(0.64, 0.4, 0.0, 1.0);
-        rust_colors["string_literal"] =Color(0.64, 0.4, 0.0, 1.0);
+        rust_colors["meta_arguments"] = rust_colors_array[5];
+        rust_colors["boolean_literal"] =  rust_colors_array[5];
+        rust_colors["number_literal"] = rust_colors_array[4];
+        rust_colors["string_literal"] = rust_colors_array[3];
 
         for (int i = 0; i < rust_keywords.size(); i++)
         {
-            ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(rust_keywords[i], rust_colors_array[3]);
+            ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(rust_keywords[i], rust_colors_array[5]);
         }
         node_array = parse_text(((TextEdit *)get_node("Container/CodeEditor"))->get_text(), lang);
         setup_rust_colors(node_array);
