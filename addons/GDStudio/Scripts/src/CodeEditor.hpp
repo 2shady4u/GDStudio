@@ -24,7 +24,7 @@ public:
     void parse_text(String, String);
     void setup_language(String);
     void setup_cpp_colors(TSNode);
-    void setup_rust_colors(Array);
+    void setup_rust_colors(TSNode);
     String get_content();
     String get_language();
     void save_contents();
