@@ -5,7 +5,7 @@
 
 [node name="Settings" type="WindowDialog"]
 margin_right = 810.0
-margin_bottom = 430.0
+margin_bottom = 436.0
 window_title = "Settings"
 script = ExtResource( 1 )
 __meta__ = {
@@ -807,20 +807,32 @@ size_flags_horizontal = 3
 [node name="CenterConfig" type="CenterContainer" parent="VBoxContainer"]
 margin_top = 399.0
 margin_right = 798.0
-margin_bottom = 419.0
+margin_bottom = 423.0
 size_flags_horizontal = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ConfirmSettings" type="Button" parent="VBoxContainer/CenterConfig"]
-margin_left = 368.0
-margin_right = 430.0
-margin_bottom = 20.0
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/CenterConfig"]
+margin_left = 289.0
+margin_right = 509.0
+margin_bottom = 24.0
+
+[node name="ConfirmSettings" type="Button" parent="VBoxContainer/CenterConfig/HBoxContainer"]
+margin_right = 108.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 108, 0 )
 text = "Confirm"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="ResetSettings" type="Button" parent="VBoxContainer/CenterConfig/HBoxContainer"]
+margin_left = 112.0
+margin_right = 220.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 108, 24 )
+text = "Reset Settings"
 
 [node name="OpenFile" type="FileDialog" parent="."]
 margin_right = 682.0
@@ -834,5 +846,5 @@ current_path = "/Work/Godot/GDStudio/"
 [connection signal="item_selected" from="VBoxContainer/Settings/CategoryTree" to="." method="_on_CategoryTree_item_selected"]
 [connection signal="pressed" from="VBoxContainer/Settings/EditorTree/General/FontName/SearchFont" to="." method="_on_SearchFont_pressed"]
 [connection signal="pressed" from="VBoxContainer/Settings/EditorTree/General/CustomTheme/SearchTheme" to="." method="_on_SearchTheme_pressed"]
-[connection signal="pressed" from="VBoxContainer/CenterConfig/ConfirmSettings" to="." method="_on_ConfirmSettings_pressed"]
+[connection signal="pressed" from="VBoxContainer/CenterConfig/HBoxContainer/ConfirmSettings" to="." method="_on_ConfirmSettings_pressed"]
 [connection signal="file_selected" from="OpenFile" to="." method="_on_OpenFile_file_selected"]

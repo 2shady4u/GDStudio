@@ -274,7 +274,7 @@ void EditorFile::create_user_data()
     if (file->file_exists("user://editor.cfg") == false)
     {
         file->open("user://editor.cfg", File::WRITE);
-        file->store_string("[Editor]\ncustom_font=\"res://addons/GDStudio/Fonts/RobotoSlab-VariableFont_wght.ttf\"\nfont_size=12\ncustom_theme=\"res://addons/GDStudio/Themes/godot_theme.tres\"\n"
+        file->store_string("[Editor]\ncustom_font=\"res://addons/GDStudio/Fonts/RobotoSlab-VariableFont_wght.ttf\"\nfont_size=16\ncustom_theme=\"res://addons/GDStudio/Themes/godot_theme.tres\"\n"
                            "[C++]\ncpp_standard=0\noptimization=2\nglobal_build=\"-Q\"\nglobal_clean=\"\"\n"
                            "[Rust]\ncheck_on_save=false\npass_target_all=false\npass_offline=false\nglobal_build=\"\"\nglobal_clean=\"\"");
         file->close();
