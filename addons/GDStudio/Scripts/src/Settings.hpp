@@ -22,6 +22,7 @@ public:
     void save_rust_data();
 
     void _on_ConfirmSettings_pressed();
+    void _on_ResetSettings_pressed();
     void _on_SearchFont_pressed();
     void _on_SearchTheme_pressed();
     void _on_OpenFile_file_selected(String);

@@ -15,6 +15,8 @@
 #include <OS.hpp>
 #include <ColorPickerButton.hpp>
 #include <ItemList.hpp>
+#include <File.hpp>
+#include <Directory.hpp>
 
 #include "Settings.hpp"
 #include "FileManager.hpp"
@@ -299,6 +301,25 @@ void Settings::_on_ConfirmSettings_pressed()
     this->hide();
 }
 
+void Settings::_on_ResetSettings_pressed()
+{
+    File *file = File::_new();
+    Directory *dir = Directory::_new();
+    if (file->file_exists("user://editor.cfg") == true)
+    {
+        dir->remove("user://editor.cfg");
+    }
+    file->close();
+    if (file->file_exists("user://syntax.cfg") == true)
+    {
+        dir->remove("user://syntax.cfg");
+    }
+    file->close();
+    dir->free();
+    file->free();
+    cast_to<EditorFile>(this->get_parent())->create_user_data();
+}
+
 void Settings::_on_SearchFont_pressed()
 {
     selected_id = 0;
@@ -370,6 +391,7 @@ void Settings::_register_methods()
     register_method((char *)"save_rust_data", &Settings::save_rust_data);
 
     register_method((char *)"_on_ConfirmSettings_pressed", &Settings::_on_ConfirmSettings_pressed);
+    register_method((char *)"_on_ResetSettings_pressed", &Settings::_on_ResetSettings_pressed);
     register_method((char *)"_on_SearchFont_pressed", &Settings::_on_SearchFont_pressed);
     register_method((char *)"_on_SearchTheme_pressed", &Settings::_on_SearchTheme_pressed);
     register_method((char *)"_on_OpenFile_file_selected", &Settings::_on_OpenFile_file_selected);

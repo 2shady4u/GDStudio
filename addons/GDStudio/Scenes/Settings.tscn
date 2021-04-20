@@ -847,4 +847,5 @@ current_path = "/Work/Godot/GDStudio/"
 [connection signal="pressed" from="VBoxContainer/Settings/EditorTree/General/FontName/SearchFont" to="." method="_on_SearchFont_pressed"]
 [connection signal="pressed" from="VBoxContainer/Settings/EditorTree/General/CustomTheme/SearchTheme" to="." method="_on_SearchTheme_pressed"]
 [connection signal="pressed" from="VBoxContainer/CenterConfig/HBoxContainer/ConfirmSettings" to="." method="_on_ConfirmSettings_pressed"]
+[connection signal="pressed" from="VBoxContainer/CenterConfig/HBoxContainer/ResetSettings" to="." method="_on_ResetSettings_pressed"]
 [connection signal="file_selected" from="OpenFile" to="." method="_on_OpenFile_file_selected"]
