@@ -6,6 +6,7 @@
 #include <InputEvent.hpp>
 #include <TreeItem.hpp>
 
+#include <tree_sitter/api.h>
 using namespace godot;
 
 #ifndef CodeEditor_HEADER
@@ -20,8 +21,9 @@ public:
     void _init();
     void _ready();
     void set_initial_content(String);
+    void parse_text(String, String);
     void setup_language(String);
-    void setup_cpp_colors(Array);
+    void setup_cpp_colors(TSNode);
     void setup_rust_colors(Array);
     String get_content();
     String get_language();
@@ -39,7 +41,6 @@ public:
     static void _register_methods();
 
 private:
-    Array node_array;
     Dictionary cpp_colors;
     Dictionary rust_colors;
     String language = "";

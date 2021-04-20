@@ -35,7 +35,7 @@ Array get_child_array(TSNode root_node)
     return array;
 }
 
-Array parse_text(String text, String language)
+TSNode parse_text(String text, String language)
 {
     TSParser *parser = ts_parser_new();
     if (language == "cpp")
@@ -53,8 +53,8 @@ Array parse_text(String text, String language)
         source_code,
         strlen(source_code));
     TSNode root_node = ts_tree_root_node(tree);
-    Array node_array = get_child_array(root_node);
+    //Array node_array = get_child_array(root_node);
     ts_tree_delete(tree);
     ts_parser_delete(parser);
-    return node_array;
+    return root_node;
 }
