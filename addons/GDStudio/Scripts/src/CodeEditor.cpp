@@ -59,7 +59,7 @@ void CodeEditor::parse_text(String language)
         ts_parser_set_language(parser, tree_sitter_rust());
     }
     const char *source_code = ((TextEdit *)get_node("Container/CodeEditor"))->get_text().utf8().get_data();
-    TSTree *tree = ts_parser_parse_string(
+    tree = ts_parser_parse_string(
         parser,
         NULL,
         source_code,

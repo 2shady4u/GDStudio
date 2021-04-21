@@ -41,6 +41,7 @@ public:
     static void _register_methods();
 
 private:
+    TSTree *tree;
     Dictionary cpp_colors;
     Dictionary rust_colors;
     String language = "";
