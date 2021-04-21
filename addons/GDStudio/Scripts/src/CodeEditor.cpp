@@ -19,6 +19,7 @@
 #include <String.hpp>
 #include <PoolArrays.hpp>
 #include <VisualServer.hpp>
+#include <OS.hpp>
 #include <thread>
 #include <future>
 
@@ -46,7 +47,7 @@ void CodeEditor::_ready()
     ((TextEdit *)get_node("Container/CodeEditor"))->get_meta("custom_colors");
 }
 
-void CodeEditor::parse_text(String text, String language)
+void CodeEditor::parse_text(String language)
 {
     TSParser *parser = ts_parser_new();
     if (language == "cpp")
@@ -57,7 +58,7 @@ void CodeEditor::parse_text(String text, String language)
     {
         ts_parser_set_language(parser, tree_sitter_rust());
     }
-    const char *source_code = text.utf8().get_data();
+    const char *source_code = ((TextEdit *)get_node("Container/CodeEditor"))->get_text().utf8().get_data();
     TSTree *tree = ts_parser_parse_string(
         parser,
         NULL,
@@ -67,11 +68,11 @@ void CodeEditor::parse_text(String text, String language)
     
     if (language == "cpp")
     {
-        setup_cpp_colors(node_array);
+        std::future<void> th = std::async(std::launch::async, &CodeEditor::setup_cpp_colors, this, node_array);
     }
     else if (language == "rust")
     {
-        setup_rust_colors(node_array);
+        std::future<void> th = std::async(std::launch::async, &CodeEditor::setup_rust_colors, this, node_array);
     }
 
     ts_tree_delete(tree);
@@ -108,7 +109,7 @@ void CodeEditor::setup_language(String lang)
         {
             ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(operators[i], cpp_colors["keywords"]);
         }
-        parse_text(((TextEdit *)get_node("Container/CodeEditor"))->get_text(), lang);
+        parse_text(lang);
         this->language = "cpp";
     }
     else if (lang == "rust")
@@ -128,7 +129,7 @@ void CodeEditor::setup_language(String lang)
         {
             ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(rust_keywords[i], rust_colors_array[5]);
         }
-        parse_text(((TextEdit *)get_node("Container/CodeEditor"))->get_text(), lang);
+        parse_text(lang);
         this->language = "rust";
     }
 }
@@ -365,7 +366,7 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
             }
             ((TextEdit *)get_node("Container/CodeEditor"))->select(line, column, line, column);
             ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_column(column);
-            parse_text(((TextEdit *)get_node("Container/CodeEditor"))->get_text(), this->language);
+            parse_text(this->language);
         }
     }
 }

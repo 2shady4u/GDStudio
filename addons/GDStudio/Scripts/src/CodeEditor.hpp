@@ -21,7 +21,7 @@ public:
     void _init();
     void _ready();
     void set_initial_content(String);
-    void parse_text(String, String);
+    void parse_text(String);
     void setup_language(String);
     void setup_cpp_colors(TSNode);
     void setup_rust_colors(TSNode);
