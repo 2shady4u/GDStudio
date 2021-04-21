@@ -362,11 +362,11 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
 
                     ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_line(line);
                 }
+                parse_text(this->language);
                 break;
             }
             ((TextEdit *)get_node("Container/CodeEditor"))->select(line, column, line, column);
             ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_column(column);
-            parse_text(this->language);
         }
     }
 }
