@@ -48,6 +48,7 @@ private:
     String error_text = "";
     String current_content = "";
     String file_name = "";
+    bool use_tree_sitter = true;
     bool text_changed = false;
     enum variable_types
     {

@@ -65,7 +65,7 @@ void CodeEditor::parse_text(String language)
         source_code,
         strlen(source_code));
     TSNode node_array = ts_tree_root_node(tree);
-    
+
     if (language == "cpp")
     {
         std::future<void> th = std::async(std::launch::async, &CodeEditor::setup_cpp_colors, this, node_array);
@@ -85,6 +85,9 @@ void CodeEditor::set_initial_content(String content)
     this->current_content = content;
     ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_line(0);
     ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_column(1);
+    PoolStringArray keys = Array::make("use_treesitter");
+    Array settings = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Editor", keys);
+    this->use_tree_sitter = settings[0];
 }
 
 void CodeEditor::setup_language(String lang)
@@ -109,7 +112,10 @@ void CodeEditor::setup_language(String lang)
         {
             ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(operators[i], cpp_colors["keywords"]);
         }
-        parse_text(lang);
+        if (this->use_tree_sitter)
+        {
+            parse_text(lang);
+        }
         this->language = "cpp";
     }
     else if (lang == "rust")
@@ -121,7 +127,7 @@ void CodeEditor::setup_language(String lang)
         rust_colors["type_identifier"] = rust_colors_array[1];
         rust_colors["line_comment"] = rust_colors_array[2];
         rust_colors["meta_arguments"] = rust_colors_array[5];
-        rust_colors["boolean_literal"] =  rust_colors_array[5];
+        rust_colors["boolean_literal"] = rust_colors_array[5];
         rust_colors["number_literal"] = rust_colors_array[4];
         rust_colors["string_literal"] = rust_colors_array[3];
 
@@ -362,7 +368,11 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
 
                     ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_line(line);
                 }
-                parse_text(this->language);
+                if (this->use_tree_sitter)
+                {
+                    parse_text(this->language);
+                }
+                
                 break;
             }
             ((TextEdit *)get_node("Container/CodeEditor"))->select(line, column, line, column);
