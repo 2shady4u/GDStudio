@@ -63,14 +63,19 @@ void Settings::_ready()
     rust->set_text(0, "Rust");
 
     tree->set_hide_root(true);
-    this->set_editor_data();
-    this->set_cpp_data();
-    this->set_rust_data();
+    this->set_initial_values();
 }
 
 void Settings::show_window()
 {
     cast_to<WindowDialog>(this)->popup_centered();
+}
+
+void Settings::set_initial_values()
+{
+    this->set_editor_data();
+    this->set_cpp_data();
+    this->set_rust_data();
 }
 
 void Settings::set_editor_data()
@@ -318,6 +323,7 @@ void Settings::_on_ResetSettings_pressed()
     dir->free();
     file->free();
     cast_to<EditorFile>(this->get_parent())->create_user_data();
+    this->set_initial_values();
 }
 
 void Settings::_on_SearchFont_pressed()
@@ -383,6 +389,7 @@ void Settings::_register_methods()
     register_method((char *)"_init", &Settings::_init);
     register_method((char *)"_ready", &Settings::_ready);
     register_method((char *)"show", &Settings::show_window);
+    register_method((char *)"set_initial_values", &Settings::set_initial_values);
     register_method((char *)"set_editor_data", &Settings::set_editor_data);
     register_method((char *)"set_cpp_data", &Settings::set_cpp_data);
     register_method((char *)"set_rust_data", &Settings::set_rust_data);

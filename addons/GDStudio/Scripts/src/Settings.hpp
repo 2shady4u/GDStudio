@@ -14,6 +14,7 @@ public:
     void _init();
     void _ready();
     void show_window();
+    void set_initial_values();
     void set_editor_data();
     void set_cpp_data();
     void set_rust_data();
