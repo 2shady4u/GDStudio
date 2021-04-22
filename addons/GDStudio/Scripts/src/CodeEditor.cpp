@@ -68,11 +68,11 @@ void CodeEditor::parse_text(String language)
 
     if (language == "cpp")
     {
-        std::future<void> th = std::async(std::launch::async, &CodeEditor::setup_cpp_colors, this, node_array);
+        setup_cpp_colors(node_array);
     }
     else if (language == "rust")
     {
-        std::future<void> th = std::async(std::launch::async, &CodeEditor::setup_rust_colors, this, node_array);
+        setup_rust_colors(node_array);
     }
 
     ts_tree_delete(tree);
