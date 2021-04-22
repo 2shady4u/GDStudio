@@ -4,6 +4,7 @@
 #include <TextEdit.hpp>
 #include <Color.hpp>
 #include <InputEvent.hpp>
+#include <InputEventMouseButton.hpp>
 #include <InputEventKey.hpp>
 #include <GlobalConstants.hpp>
 #include <Input.hpp>
@@ -82,6 +83,8 @@ void CodeEditor::parse_text(String language)
 
 void CodeEditor::set_initial_content(String content)
 {
+    font_size = cast_to<DynamicFont>(*((TextEdit *)get_node("Container/CodeEditor"))->get_font("font"))->get_height();
+    line_space = ((TextEdit *)get_node("Container/CodeEditor"))->get_meta("custom_constants/line_spacing");
     ((TextEdit *)get_node("Container/CodeEditor"))->set_text(content);
     this->current_content = content;
     ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_line(0);
@@ -335,6 +338,7 @@ bool CodeEditor::get_text_changed()
 void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
 {
     InputEventKey *event_key = cast_to<InputEventKey>(event);
+    InputEventMouseButton *mouse_key = cast_to<InputEventMouseButton>(event);
     if (event_key)
     {
         if (event_key->is_pressed())
@@ -404,6 +408,9 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
             String word = get_current_word();
             if (word != "" && word != " " && !word.empty())
             {
+                int x = column * (font_size + line_space);
+                int y = (line + 2) * (font_size + line_space);
+                ((ItemList *)get_node(NodePath("Container/Autocomplete")))->set_position(Vector2(x, 0));
                 ((ItemList *)get_node(NodePath("Container/Autocomplete")))->clear();
                 for (int i = 0; i < autocomplete.size(); i++)
                 {
@@ -413,7 +420,12 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
                     }
                 }
                 ((ItemList *)get_node(NodePath("Container/Autocomplete")))->sort_items_by_text();
-                if (((ItemList *)get_node(NodePath("Container/Autocomplete")))->get_item_count() > 0)
+                ((ItemList *)get_node(NodePath("Container/Autocomplete")))->select(0);
+                if (((ItemList *)get_node(NodePath("Container/Autocomplete")))->get_item_count() == 1 && word == ((ItemList *)get_node(NodePath("Container/Autocomplete")))->get_item_text(0))
+                {
+                    ((ItemList *)get_node(NodePath("Container/Autocomplete")))->hide();
+                }
+                else if (((ItemList *)get_node(NodePath("Container/Autocomplete")))->get_item_count() > 0)
                 {
                     ((ItemList *)get_node(NodePath("Container/Autocomplete")))->show();
                 }
@@ -426,6 +438,13 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
             {
                 ((ItemList *)get_node(NodePath("Container/Autocomplete")))->hide();
             }
+        }
+    }
+    if (mouse_key)
+    {
+        if (mouse_key->is_pressed())
+        {
+            ((ItemList *)get_node(NodePath("Container/Autocomplete")))->hide();
         }
     }
 }
