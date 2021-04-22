@@ -27,6 +27,7 @@ public:
     void setup_rust_colors(TSNode);
     String get_content();
     String get_language();
+    String get_current_word();
     void save_contents();
     void set_custom_font(String);
     void set_font_size(int);
@@ -72,6 +73,8 @@ private:
         comment,
         illegal,
     };
+    String current_word = "";
+    PoolStringArray autocomplete;
     Array cpp_keywords = Array::make("auto", "short", "struct", "unsigned",
                                      "break", "continue", "else", "for", "long", "signed", "switch", "void",
                                      "case", "default", "enum", "goto", "register", "sizeof", "typedef", "volatile",

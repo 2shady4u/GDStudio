@@ -20,6 +20,7 @@
 #include <PoolArrays.hpp>
 #include <VisualServer.hpp>
 #include <OS.hpp>
+#include <ItemList.hpp>
 #include <thread>
 #include <future>
 
@@ -112,6 +113,7 @@ void CodeEditor::setup_language(String lang)
         {
             ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(operators[i], cpp_colors["keywords"]);
         }
+        autocomplete.append_array(cpp_keywords);
         if (this->use_tree_sitter)
         {
             parse_text(lang);
@@ -135,7 +137,11 @@ void CodeEditor::setup_language(String lang)
         {
             ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(rust_keywords[i], rust_colors_array[5]);
         }
-        parse_text(lang);
+        autocomplete.append_array(rust_keywords);
+        if (this->use_tree_sitter)
+        {
+            parse_text(lang);
+        }
         this->language = "rust";
     }
 }
@@ -268,6 +274,24 @@ String CodeEditor::get_language()
     return this->language;
 }
 
+String CodeEditor::get_current_word()
+{
+    String word = "";
+    int64_t column = ((TextEdit *)get_node("Container/CodeEditor"))->cursor_get_column();
+    int64_t line = ((TextEdit *)get_node("Container/CodeEditor"))->cursor_get_line();
+    int64_t start = column;
+    String line_text = ((TextEdit *)get_node("Container/CodeEditor"))->get_line(line);
+    while (!line_text.empty() && line_text[start] != ' ' && line_text[start] != '\n' && line_text[start] != '\t')
+    {
+        start -= 1;
+    }
+    ((TextEdit *)get_node("Container/CodeEditor"))->select(line, start, line, column);
+    word = ((TextEdit *)get_node("Container/CodeEditor"))->get_selection_text();
+    word = word.strip_edges(true);
+    ((TextEdit *)get_node("Container/CodeEditor"))->select(line, column, line, column);
+    return word;
+}
+
 void CodeEditor::save_contents()
 {
     this->current_content = ((TextEdit *)get_node("Container/CodeEditor"))->get_text();
@@ -372,11 +396,36 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
                 {
                     parse_text(this->language);
                 }
-                
+
                 break;
             }
             ((TextEdit *)get_node("Container/CodeEditor"))->select(line, column, line, column);
             ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_column(column);
+            String word = get_current_word();
+            if (word != "" && word != " " && !word.empty())
+            {
+                ((ItemList *)get_node(NodePath("Container/Autocomplete")))->clear();
+                for (int i = 0; i < autocomplete.size(); i++)
+                {
+                    if (autocomplete[i].find(word, 0) == 0)
+                    {
+                        ((ItemList *)get_node(NodePath("Container/Autocomplete")))->add_item(autocomplete[i]);
+                    }
+                }
+                ((ItemList *)get_node(NodePath("Container/Autocomplete")))->sort_items_by_text();
+                if (((ItemList *)get_node(NodePath("Container/Autocomplete")))->get_item_count() > 0)
+                {
+                    ((ItemList *)get_node(NodePath("Container/Autocomplete")))->show();
+                }
+                else
+                {
+                    ((ItemList *)get_node(NodePath("Container/Autocomplete")))->hide();
+                }
+            }
+            else
+            {
+                ((ItemList *)get_node(NodePath("Container/Autocomplete")))->hide();
+            }
         }
     }
 }
@@ -395,6 +444,7 @@ void CodeEditor::_register_methods()
     //register_method((char *)"setup_cpp_colors", &CodeEditor::setup_cpp_colors);
     //register_method((char *)"setup_rust_colors", &CodeEditor::setup_rust_colors);
     register_method((char *)"get_content", &CodeEditor::get_content);
+    register_method((char *)"get_current_word", &CodeEditor::get_current_word);
     register_method((char *)"save_contents", &CodeEditor::save_contents);
     register_method((char *)"get_text_changed", &CodeEditor::get_text_changed);
     register_method((char *)"set_custom_font", &CodeEditor::set_custom_font);
