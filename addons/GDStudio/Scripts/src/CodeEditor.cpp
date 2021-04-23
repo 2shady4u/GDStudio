@@ -420,8 +420,9 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
             String word = get_current_word(column, line);
             if (word != "" && word != " " && !word.empty())
             {
+                int v_scroll = ((TextEdit *)get_node("Container/CodeEditor"))->get_v_scroll();
                 int x = column * (font_size + line_space);
-                int y = (line + 1) * (font_size + line_space) + 8;
+                int y = (line + 1 - v_scroll) * (font_size + line_space) + 8;
                 if (y + 196 >= editor_height)
                 {
                     y -= 196 + (font_size + line_space);
