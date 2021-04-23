@@ -421,21 +421,28 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
             if (word != "" && word != " " && !word.empty())
             {
                 int v_scroll = ((TextEdit *)get_node("Container/CodeEditor"))->get_v_scroll();
-                int x = column * (font_size + line_space);
-                int y = (line + 1 - v_scroll) * (font_size + line_space) + 8;
-                if (y + 196 >= editor_height)
-                {
-                    y -= 196 + (font_size + line_space);
-                }
-                ((ItemList *)get_node(NodePath("Container/Autocomplete")))->set_position(Vector2(x, y));
                 ((ItemList *)get_node(NodePath("Container/Autocomplete")))->clear();
                 for (int i = 0; i < autocomplete.size(); i++)
                 {
                     if (autocomplete[i].find(word, 0) == 0)
                     {
+                        //((ItemList *)get_node(NodePath("Container/Autocomplete")))->add_item("Keyword", nullptr, false);
                         ((ItemList *)get_node(NodePath("Container/Autocomplete")))->add_item(autocomplete[i]);
                     }
                 }
+                if (((ItemList *)get_node(NodePath("Container/Autocomplete")))->get_size()[1] > 196)
+                {
+                    ((ItemList *)get_node(NodePath("Container/Autocomplete")))->set_size(Vector2(256, 196));
+                }
+                int v_size = ((ItemList *)get_node(NodePath("Container/Autocomplete")))->get_size()[1];
+                int x = column * (font_size + line_space);
+                int y = (line + 1 - v_scroll) * (font_size + line_space) + 8;
+                if (y + v_size >= editor_height)
+                {
+                    y -= v_size + (font_size + line_space);
+                }
+                ((ItemList *)get_node(NodePath("Container/Autocomplete")))->set_position(Vector2(x, y));
+                
                 ((ItemList *)get_node(NodePath("Container/Autocomplete")))->sort_items_by_text();
                 ((ItemList *)get_node(NodePath("Container/Autocomplete")))->select(0);
                 if (((ItemList *)get_node(NodePath("Container/Autocomplete")))->get_item_count() == 1 && word == ((ItemList *)get_node(NodePath("Container/Autocomplete")))->get_item_text(0))
