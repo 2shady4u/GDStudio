@@ -27,17 +27,19 @@ public:
     void setup_rust_colors(TSNode);
     String get_content();
     String get_language();
-    String get_current_word();
+    String get_current_word(int64_t, int64_t);
     void save_contents();
     void set_custom_font(String);
     void set_font_size(int);
     void set_custom_theme(String);
+    int select_current_word();
 
     void _on_CodeEditor_text_changed();
     void _on_CodeEditor_symbol_lookup(String, int, int);
 
     bool get_text_changed();
     void _on_CodeEditor_gui_input(InputEvent *);
+    void _on_Autocomplete_item_activated(int);
 
     static void _register_methods();
 

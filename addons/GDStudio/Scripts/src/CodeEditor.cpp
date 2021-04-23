@@ -277,11 +277,9 @@ String CodeEditor::get_language()
     return this->language;
 }
 
-String CodeEditor::get_current_word()
+String CodeEditor::get_current_word(int64_t column, int64_t line)
 {
     String word = "";
-    int64_t column = ((TextEdit *)get_node("Container/CodeEditor"))->cursor_get_column();
-    int64_t line = ((TextEdit *)get_node("Container/CodeEditor"))->cursor_get_line();
     int64_t start = column;
     String line_text = ((TextEdit *)get_node("Container/CodeEditor"))->get_line(line);
     while (!line_text.empty() && line_text[start] != ' ' && line_text[start] != '\n' && line_text[start] != '\t')
@@ -317,6 +315,19 @@ void CodeEditor::set_custom_theme(String path)
 {
     Ref<Theme> theme = ResourceLoader::get_singleton()->load(path);
     cast_to<Control>(this->get_parent()->get_parent())->set_theme(theme);
+}
+int CodeEditor::select_current_word()
+{
+    int64_t column = ((TextEdit *)get_node("Container/CodeEditor"))->cursor_get_column();
+    int64_t line = ((TextEdit *)get_node("Container/CodeEditor"))->cursor_get_line();
+    int64_t start = column;
+    String line_text = ((TextEdit *)get_node("Container/CodeEditor"))->get_line(line);
+    while (!line_text.empty() && line_text[start] != ' ' && line_text[start] != '\n' && line_text[start] != '\t')
+    {
+        start -= 1;
+    }
+    ((TextEdit *)get_node("Container/CodeEditor"))->select(line, start, line, column);
+    return column - start;
 }
 
 void CodeEditor::_on_CodeEditor_text_changed()
@@ -406,7 +417,7 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
             }
             ((TextEdit *)get_node("Container/CodeEditor"))->select(line, column, line, column);
             ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_column(column);
-            String word = get_current_word();
+            String word = get_current_word(column, line);
             if (word != "" && word != " " && !word.empty())
             {
                 int x = column * (font_size + line_space);
@@ -459,6 +470,19 @@ void CodeEditor::_on_CodeEditor_symbol_lookup(String symbol, int row, int column
     Godot::print(symbol);
 }
 
+void CodeEditor::_on_Autocomplete_item_activated(int index)
+{
+    int size = this->select_current_word();
+    int64_t column = ((TextEdit *)get_node("Container/CodeEditor"))->cursor_get_column();
+    int64_t line = ((TextEdit *)get_node("Container/CodeEditor"))->cursor_get_line();
+    String sub = ((ItemList *)get_node(NodePath("Container/Autocomplete")))->get_item_text(index);
+    ((TextEdit *)get_node("Container/CodeEditor"))->insert_text_at_cursor(sub);
+    ((ItemList *)get_node(NodePath("Container/Autocomplete")))->hide();
+    ((TextEdit *)get_node("Container/CodeEditor"))->grab_focus();
+    ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_line(line);
+    ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_column(column + size);
+}
+
 void CodeEditor::_register_methods()
 {
     register_method((char *)"_init", &CodeEditor::_init);
@@ -474,7 +498,9 @@ void CodeEditor::_register_methods()
     register_method((char *)"set_custom_font", &CodeEditor::set_custom_font);
     register_method((char *)"set_font_size", &CodeEditor::set_font_size);
     register_method((char *)"set_custom_theme", &CodeEditor::set_custom_theme);
+    register_method((char *)"select_current_word", &CodeEditor::select_current_word);
 
     register_method((char *)"_on_CodeEditor_text_changed", &CodeEditor::_on_CodeEditor_text_changed);
     register_method((char *)"_on_CodeEditor_gui_input", &CodeEditor::_on_CodeEditor_gui_input);
+    register_method((char *)"_on_Autocomplete_item_activated", &CodeEditor::_on_Autocomplete_item_activated);
 }
