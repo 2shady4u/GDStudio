@@ -338,10 +338,10 @@ margin_right = -5.0
 margin_bottom = -5.0
 
 [node name="ProjectType" type="Label" parent="ProjectManager/TabContainer/NewProject"]
-margin_left = 196.0
+margin_left = 126.0
 margin_top = 40.0
-margin_right = 241.0
-margin_bottom = 54.0
+margin_right = 173.0
+margin_bottom = 65.0
 text = "Project"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -352,12 +352,28 @@ margin_left = 60.0
 margin_top = -8.0
 margin_right = 206.0
 margin_bottom = 20.0
-text = "GDNative C++"
+text = "C++"
 icon = ExtResource( 4 )
 align = 1
 expand_icon = true
-items = [ "GDNative C++", ExtResource( 4 ), false, 0, null, "GDNative Rust", ExtResource( 3 ), false, 1, null ]
+items = [ "C++", ExtResource( 4 ), false, 0, null, "Rust", ExtResource( 3 ), false, 1, null ]
 selected = 0
+
+[node name="GDNative" type="Label" parent="ProjectManager/TabContainer/NewProject"]
+margin_left = 358.0
+margin_top = 36.0
+margin_right = 419.0
+margin_bottom = 61.0
+text = "GDNative"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CheckBox" type="CheckBox" parent="ProjectManager/TabContainer/NewProject/GDNative"]
+margin_left = 72.0
+margin_right = 96.0
+margin_bottom = 25.0
+pressed = true
 
 [node name="PathLabel" type="Label" parent="ProjectManager/TabContainer/NewProject"]
 margin_left = 82.0

@@ -428,6 +428,7 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
                     {
                         //((ItemList *)get_node(NodePath("Container/Autocomplete")))->add_item("Keyword", nullptr, false);
                         ((ItemList *)get_node(NodePath("Container/Autocomplete")))->add_item(autocomplete[i]);
+                        ((ItemList *)get_node(NodePath("Container/Autocomplete")))->set_item_tooltip(i, "Keyword");
                     }
                 }
                 if (((ItemList *)get_node(NodePath("Container/Autocomplete")))->get_size()[1] > 196)
