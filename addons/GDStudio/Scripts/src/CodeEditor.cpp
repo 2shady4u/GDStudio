@@ -83,8 +83,7 @@ void CodeEditor::parse_text(String language)
 
 void CodeEditor::set_initial_content(String content)
 {
-    font_size = cast_to<DynamicFont>(*((TextEdit *)get_node("Container/CodeEditor"))->get_font("font"))->get_height();
-    line_space = ((TextEdit *)get_node("Container/CodeEditor"))->get_meta("custom_constants/line_spacing");
+    line_space = ((TextEdit *)get_node("Container/CodeEditor"))->get("custom_constants/line_spacing");
     ((TextEdit *)get_node("Container/CodeEditor"))->set_text(content);
     this->current_content = content;
     ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_line(0);
@@ -92,6 +91,7 @@ void CodeEditor::set_initial_content(String content)
     PoolStringArray keys = Array::make("use_treesitter");
     Array settings = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Editor", keys);
     this->use_tree_sitter = settings[0];
+    editor_height = this->get_size()[1];
 }
 
 void CodeEditor::setup_language(String lang)
@@ -310,6 +310,7 @@ void CodeEditor::set_custom_font(String path)
 void CodeEditor::set_font_size(int size)
 {
     cast_to<DynamicFont>(*((TextEdit *)get_node("Container/CodeEditor"))->get_font("font"))->set_size(size);
+    font_size = cast_to<DynamicFont>(*((TextEdit *)get_node("Container/CodeEditor"))->get_font("font"))->get_height();
 }
 
 void CodeEditor::set_custom_theme(String path)
@@ -409,8 +410,12 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
             if (word != "" && word != " " && !word.empty())
             {
                 int x = column * (font_size + line_space);
-                int y = (line + 2) * (font_size + line_space);
-                ((ItemList *)get_node(NodePath("Container/Autocomplete")))->set_position(Vector2(x, 0));
+                int y = (line + 1) * (font_size + line_space) + 8;
+                if (y + 196 >= editor_height)
+                {
+                    y -= 196 + (font_size + line_space);
+                }
+                ((ItemList *)get_node(NodePath("Container/Autocomplete")))->set_position(Vector2(x, y));
                 ((ItemList *)get_node(NodePath("Container/Autocomplete")))->clear();
                 for (int i = 0; i < autocomplete.size(); i++)
                 {

@@ -49,6 +49,7 @@ private:
     String error_text = "";
     String current_content = "";
     String file_name = "";
+    int editor_height = 0;
     int font_size = 12;
     int line_space = 8;
     bool use_tree_sitter = true;
