@@ -22,7 +22,7 @@ public:
     String build_rust_project(String,String,String);
     void create_new_class();
     void create_new_project();
-    void create_rust_project(String);
+    void create_rust_project(String, bool);
     void check_thread();
 
     void _on_OkButton_pressed();

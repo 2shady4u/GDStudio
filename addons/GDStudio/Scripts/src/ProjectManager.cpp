@@ -195,7 +195,14 @@ String ProjectManager::build_cpp_project(String path, String selected_platform, 
 
     if (cast_to<EditorFile>(this->get_parent())->get_selected_profile() == true)
     {
-        command += "target=release";
+        if (is_gdnative)
+        {
+            command += "-g";
+        }
+        else
+        {
+            command += "target=release";
+        }
     }
 
     return command;
@@ -315,7 +322,7 @@ void ProjectManager::create_new_project()
     String path = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/PathLabel/FilePath")))->get_text();
     String cpp_path = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/CPP/cppPath/cppPath")))->get_text();
     bool gdnative = ((CheckBox *)get_node(NodePath("TabContainer/NewProject/GDNative/CheckBox")))->is_pressed();
-            
+
     switch (((OptionButton *)get_node(NodePath("TabContainer/NewProject/ProjectType/ProjectType")))->get_selected_id())
     {
     case 0:
@@ -490,8 +497,9 @@ void ProjectManager::create_new_project()
                                                    "include_folders=\"\"\n"
                                                    "linker_folders=\"\"\n"
                                                    "linker_settings=\"\"\n"
-                                                   "build_command=\"g++ {path}" + "/" + source_folder + "/main.cpp {standard} {optimization} -I{include} -L{linker} -L{libs} -o {path}" + "/" + source_folder + "/main.exe\"\n"
-                                                   "clean_command=\"\"");
+                                                   "build_command=\"g++ {path}" +
+                                   "/" + source_folder + "/main.cpp {standard} {optimization} -I{include} -L{linker} -L{libs} -o {path}" + "/" + source_folder + "/main.exe\"\n"
+                                                                                                                                                                 "clean_command=\"\"");
                 file->close();
             }
 
@@ -506,15 +514,31 @@ void ProjectManager::create_new_project()
     case 1:
         this->check_thread();
         String project_name = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/Rust/Name/Name")))->get_text();
+        int project_type = ((OptionButton *)get_node(NodePath("TabContainer/NewProject/Rust/Type/OptionButton")))->get_selected_id();
+        bool gdnative = ((CheckBox *)get_node(NodePath("TabContainer/NewProject/GDNative/CheckBox")))->is_pressed();
+        
+        String lib = "--lib ";
+        if (gdnative == false && project_type == 1)
+        {
+            lib = "";
+        }
 
-        std::future<void> th = std::async(std::launch::async, &EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()), "cargo init --lib " + path + "/" + project_name);
+        std::future<void> th = std::async(std::launch::async, &EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()), "cargo init " + lib + path + "/" + project_name);;
         while (true)
         {
             if (th.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
             {
                 this->check_thread();
-                this->create_rust_project(path);
-                cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/src/lib.rs");
+                this->create_rust_project(path, gdnative);
+                if (gdnative == false && project_type == 1)
+                {
+                    cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/src/main.rs");
+                }
+                else
+                {
+                    cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/src/lib.rs");
+                }
+                
                 cast_to<EditorFile>(this->get_parent())->change_project_path(path + "/" + project_name);
                 break;
             }
@@ -524,66 +548,84 @@ void ProjectManager::create_new_project()
     }
 }
 
-void ProjectManager::create_rust_project(String path)
+void ProjectManager::create_rust_project(String path, bool gdnative)
 {
     String gdn_version = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/Rust/Version/Version")))->get_text();
     String project_name = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/Rust/Name/Name")))->get_text();
-
+    
     File *file = File::_new();
-    file->open(path + "/" + project_name + "/Cargo.toml", File::READ);
-    int index = 1;
-    String final_string;
-    while (file->eof_reached() == false)
+    if (gdnative)
     {
-        String line = file->get_line();
-        if (index == 8)
+        file->open(path + "/" + project_name + "/Cargo.toml", File::READ);
+        int index = 1;
+        String final_string;
+        while (file->eof_reached() == false)
         {
-            line += "[lib]\ncrate-type = [\"cdylib\"]\n";
+            String line = file->get_line();
+            if (index == 8)
+            {
+                line += "[lib]\ncrate-type = [\"cdylib\"]\n";
+            }
+            if (line == "[dependencies]")
+            {
+                line += "\ngdnative = \"" + gdn_version + "\"";
+            }
+            final_string += line;
+            final_string += "\n";
+            index += 1;
         }
-        if (line == "[dependencies]")
-        {
-            line += "\ngdnative = \"" + gdn_version + "\"";
-        }
-        final_string += line;
-        final_string += "\n";
-        index += 1;
+        file->close();
+        file->open(path + "/" + project_name + "/Cargo.toml", File::WRITE);
+        file->store_string(final_string);
+        file->close();
+
+        file->open(path + "/" + project_name + "/src/lib.rs", File::WRITE);
+        file->store_string("use gdnative::prelude::*;\n\n"
+                           "#[derive(NativeClass)]\n"
+                           "#[inherit(Node)]\n"
+                           "struct HelloWorld;\n\n"
+                           "#[gdnative::methods]\n"
+                           "impl HelloWorld {\n\t"
+                           "fn new(_owner: &Node) -> Self {\n\t\t"
+                           "HelloWorld\n\t"
+                           "}\n\n\t"
+                           "#[export]\n\t"
+                           "fn _ready(&self, _owner: &Node) {\n\t\t"
+                           "godot_print!(\"hello, world.\")\n\t"
+                           "}\n"
+                           "}\n\n"
+                           "fn init(handle: InitHandle) {\n\t"
+                           "handle.add_class::<HelloWorld>();\n"
+                           "}\n\n");
+        file->close();
+
+        file->open(path + "/" + project_name + "/settings.gdnproj", File::WRITE);
+        file->store_string("[settings]\n"
+                           "language=\"rust\"\n\n"
+                           "gdnative=true\n"
+                           "path=\"" +
+                           path + "/" + project_name + "\"\n"
+                                                       "gdnative_version=\"" +
+                           gdn_version + "\"\n"
+                                         "build_command=\"cargo build --manifest-path={path}\"\n"
+                                         "clean_command=\"cargo clean --manifest-path={path}\"");
+        file->close();
     }
-    file->close();
+    else
+    {
 
-    file->open(path + "/" + project_name + "/Cargo.toml", File::WRITE);
-    file->store_string(final_string);
-    file->close();
+        file->open(path + "/" + project_name + "/settings.gdnproj", File::WRITE);
+        file->store_string("[settings]\n"
+                           "language=\"rust\"\n\n"
+                           "gdnative=false\n"
+                           "path=\"" +
+                           path + "/" + project_name + "\"\n"
+                                                       "gdnative_version=\"\"\n"
+                                         "build_command=\"cargo build --manifest-path={path}\"\n"
+                                         "clean_command=\"cargo clean --manifest-path={path}\"");
+        file->close();
+    }
 
-    file->open(path + "/" + project_name + "/src/lib.rs", File::WRITE);
-    file->store_string("use gdnative::prelude::*;\n\n"
-                       "#[derive(NativeClass)]\n"
-                       "#[inherit(Node)]\n"
-                       "struct HelloWorld;\n\n"
-                       "#[gdnative::methods]\n"
-                       "impl HelloWorld {\n\t"
-                       "fn new(_owner: &Node) -> Self {\n\t\t"
-                       "HelloWorld\n\t"
-                       "}\n\n\t"
-                       "#[export]\n\t"
-                       "fn _ready(&self, _owner: &Node) {\n\t\t"
-                       "godot_print!(\"hello, world.\")\n\t"
-                       "}\n"
-                       "}\n\n"
-                       "fn init(handle: InitHandle) {\n\t"
-                       "handle.add_class::<HelloWorld>();\n"
-                       "}\n\n");
-    file->close();
-
-    file->open(path + "/" + project_name + "/settings.gdnproj", File::WRITE);
-    file->store_string("[settings]\n"
-                       "language=\"rust\"\n\n"
-                       "path=\"" +
-                       path + "/" + project_name + "\"\n"
-                                                   "gdnative_version=\"" +
-                       gdn_version + "\"\n"
-                                     "build_command=\"cargo build --manifest-path={path}\"\n"
-                                     "clean_command=\"cargo clean --manifest-path={path}\"");
-    file->close();
     file->free();
 }
 
