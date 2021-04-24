@@ -515,6 +515,21 @@ margin_right = 227.0
 margin_bottom = 20.0
 text = "gdnproj"
 
+[node name="Type" type="Label" parent="ProjectManager/TabContainer/NewProject/Rust"]
+margin_left = 133.0
+margin_top = 238.0
+margin_right = 169.0
+margin_bottom = 263.0
+text = "Type"
+
+[node name="OptionButton" type="OptionButton" parent="ProjectManager/TabContainer/NewProject/Rust/Type"]
+margin_left = 54.0
+margin_right = 182.0
+margin_bottom = 26.0
+text = "Library"
+items = [ "Library", null, false, 0, null, "Binary", null, false, 1, null ]
+selected = 0
+
 [node name="Settings" parent="." instance=ExtResource( 7 )]
 margin_left = -3.0
 margin_right = 807.0
