@@ -111,8 +111,10 @@ String ProjectManager::build_cpp_project(String path, String selected_platform, 
     keys = Array::make("cpp_standard", "optimization");
     PoolIntArray global_settings = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "C++", keys);
 
-    keys = Array::make("use_mingw");
-    bool use_mingw = cast_to<EditorFile>(this->get_parent())->load_config(load_file, "settings", keys)[0];
+    keys = Array::make("use_mingw", "gdnative");
+    PoolByteArray bool_settings = cast_to<EditorFile>(this->get_parent())->load_config(load_file, "settings", keys);
+    bool use_mingw = bool_settings[0];
+    bool is_gdnative = bool_settings[1];
 
     String bindings = settings[0];
     String include_folders = settings[1];
@@ -151,9 +153,30 @@ String ProjectManager::build_cpp_project(String path, String selected_platform, 
     command = command.replace("{platform}", selected_platform);
     command = command.replace("{path}", path);
     command = command.replace("{bindings_path}", bindings);
-    command = command.replace("{include}", include_folders);
-    command = command.replace("{linker}", linker_folders);
-    command = command.replace("{libs}", linker_settings);
+    if (include_folders != "")
+    {
+        command = command.replace("{include}", include_folders);
+    }
+    else
+    {
+        command = command.replace("-I{include}", "");
+    }
+    if (linker_folders != "")
+    {
+        command = command.replace("{linker}", linker_folders);
+    }
+    else
+    {
+        command = command.replace("-L{linker}", "");
+    }
+    if (linker_settings != "")
+    {
+        command = command.replace("{libs}", linker_settings);
+    }
+    else
+    {
+        command = command.replace("-L{libs}", "");
+    }
     command = command.replace("{standard}", standard);
     command = command.replace("{optimization}", optimization);
     if (use_mingw == true)
@@ -164,6 +187,11 @@ String ProjectManager::build_cpp_project(String path, String selected_platform, 
     {
         command = command.replace("{mingw}", "false");
     }
+
+    /*if (bool_settings[1] == false)
+    {
+        command = command.replace("{mingw}", "true");
+    }*/
 
     if (cast_to<EditorFile>(this->get_parent())->get_selected_profile() == true)
     {
@@ -462,7 +490,7 @@ void ProjectManager::create_new_project()
                                                    "include_folders=\"\"\n"
                                                    "linker_folders=\"\"\n"
                                                    "linker_settings=\"\"\n"
-                                                   "build_command=\"g++ {path}" + "/" + source_folder + "/main.cpp {standard} {optimization} -I{include} -I{linker} -L{libs} -o {path}" + "/" + source_folder + "/main.exe\"\n"
+                                                   "build_command=\"g++ {path}" + "/" + source_folder + "/main.cpp {standard} {optimization} -I{include} -L{linker} -L{libs} -o {path}" + "/" + source_folder + "/main.exe\"\n"
                                                    "clean_command=\"\"");
                 file->close();
             }
