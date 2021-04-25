@@ -457,6 +457,11 @@ void EditorFile::_on_TabContainer_tab_close(int tab)
     ((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/TabContainer"))->remove_tab(tab);
 }
 
+void EditorFile::_on_About_pressed()
+{
+    Godot::print("sd");
+}
+
 void EditorFile::_process()
 {
     if (this->instance_defined == true)
@@ -501,5 +506,6 @@ void EditorFile::_register_methods()
     register_method((char *)"_on_OpenFile_file_selected", &EditorFile::_on_OpenFile_file_selected);
     register_method((char *)"_on_TabContainer_tab_changed", &EditorFile::_on_TabContainer_tab_changed);
     register_method((char *)"_on_TabContainer_tab_close", &EditorFile::_on_TabContainer_tab_close);
+    register_method((char *)"_on_About_pressed", &EditorFile::_on_About_pressed);
     register_method((char *)"_process", &EditorFile::_process);
 }
