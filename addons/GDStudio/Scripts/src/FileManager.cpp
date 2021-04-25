@@ -274,7 +274,7 @@ void EditorFile::create_user_data()
     if (file->file_exists("user://editor.cfg") == false)
     {
         file->open("user://editor.cfg", File::WRITE);
-        file->store_string("[Editor]\ncustom_font=\"res://addons/GDStudio/Fonts/RobotoSlab-VariableFont_wght.ttf\"\nfont_size=16\ncustom_theme=\"res://addons/GDStudio/Themes/godot_theme.tres\"\nuse_treesitter=true\n"
+        file->store_string("[Editor]\nwindow_width=1280\nwindow_height=720\ncustom_font=\"res://addons/GDStudio/Fonts/RobotoSlab-VariableFont_wght.ttf\"\nfont_size=16\ncustom_theme=\"res://addons/GDStudio/Themes/godot_theme.tres\"\nuse_treesitter=true\n"
                            "[C++]\ncpp_standard=0\noptimization=2\nglobal_build=\"-Q\"\nglobal_clean=\"\"\n"
                            "[Rust]\ncheck_on_save=false\npass_target_all=false\npass_offline=false\nglobal_build=\"\"\nglobal_clean=\"\"");
         file->close();
@@ -287,7 +287,14 @@ void EditorFile::create_user_data()
                            "[Rust]\nidentifiers=Color(0.4,0.64,0.81,1)\ntypes=Color(0.24, 0.84, 0.24, 1.0)\ncomments=Color(0, 0.5, 0,1)\nstrings=Color(0.5, 0.5, 0.5,1)\nnumbers=Color(0.43, 0.36, 0.65, 1.0)\nkeywords=Color(0, 0, 0.5,1)");
         file->close();
     }
+    Vector2 monitor_size = OS::get_singleton()->get_screen_size();
+    ConfigFile *config = ConfigFile::_new();
+    int width = config->get_value("Editor", "window_width", 1280);
+    int height = config->get_value("Editor", "window_height", 720);
+    OS::get_singleton()->set_window_size(Vector2(width, height));
+    OS::get_singleton()->set_window_position(Vector2((monitor_size[0] - width) / 2, (monitor_size[1] - height) / 2));
     file->free();
+    config->free();
 
     this->load_editor_settings();
 }
