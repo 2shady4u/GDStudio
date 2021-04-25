@@ -130,12 +130,16 @@ Array EditorFile::load_config(String file, String section, PoolStringArray key)
 
 void EditorFile::load_editor_settings()
 {
-    PoolStringArray keys = Array::make("custom_font", "font_size", "custom_theme");
+    PoolStringArray keys = Array::make("custom_font", "font_size", "custom_theme", "window_width", "window_height");
     Array settings = this->load_config("user://editor.cfg", "Editor", keys);
 
     this->custom_font = settings[0];
     this->font_size = settings[1];
     this->custom_theme = settings[2];
+
+    Vector2 monitor_size = OS::get_singleton()->get_screen_size();
+    OS::get_singleton()->set_window_size(Vector2(settings[3], settings[4]));
+    OS::get_singleton()->set_window_position(Vector2((monitor_size[0] - int(settings[3])) / 2, (monitor_size[1] - int(settings[4])) / 2));
 
     if (this->tab_number > 0)
     {
@@ -287,14 +291,7 @@ void EditorFile::create_user_data()
                            "[Rust]\nidentifiers=Color(0.4,0.64,0.81,1)\ntypes=Color(0.24, 0.84, 0.24, 1.0)\ncomments=Color(0, 0.5, 0,1)\nstrings=Color(0.5, 0.5, 0.5,1)\nnumbers=Color(0.43, 0.36, 0.65, 1.0)\nkeywords=Color(0, 0, 0.5,1)");
         file->close();
     }
-    Vector2 monitor_size = OS::get_singleton()->get_screen_size();
-    ConfigFile *config = ConfigFile::_new();
-    int width = config->get_value("Editor", "window_width", 1280);
-    int height = config->get_value("Editor", "window_height", 720);
-    OS::get_singleton()->set_window_size(Vector2(width, height));
-    OS::get_singleton()->set_window_position(Vector2((monitor_size[0] - width) / 2, (monitor_size[1] - height) / 2));
     file->free();
-    config->free();
 
     this->load_editor_settings();
 }

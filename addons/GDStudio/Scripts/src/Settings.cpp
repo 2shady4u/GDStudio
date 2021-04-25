@@ -81,13 +81,15 @@ void Settings::set_initial_values()
 
 void Settings::set_editor_data()
 {
-    PoolStringArray keys = Array::make("custom_font", "font_size", "custom_theme", "use_treesitter");
+    PoolStringArray keys = Array::make("window_width", "window_height", "custom_font", "font_size", "custom_theme", "use_treesitter");
     Array settings = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Editor", keys);
     
-    ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/FontName/LineEdit")))->set_text(settings[0]);
-    ((SpinBox *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/FontSize/SpinBox")))->set_value(settings[1]);
-    ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/CustomTheme/LineEdit")))->set_text(settings[2]);
-    ((CheckBox *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/TreeSitter/CheckBox")))->set_pressed(settings[3]);
+    ((SpinBox *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/Resolution/CenterContainer/HBoxContainer/Width")))->set_value(settings[0]);
+    ((SpinBox *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/Resolution/CenterContainer/HBoxContainer/Height")))->set_value(settings[1]);
+    ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/FontName/LineEdit")))->set_text(settings[2]);
+    ((SpinBox *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/FontSize/SpinBox")))->set_value(settings[3]);
+    ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/CustomTheme/LineEdit")))->set_text(settings[4]);
+    ((CheckBox *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/TreeSitter/CheckBox")))->set_pressed(settings[5]);
 
     keys = Array::make("exit_success", "exit_error");
     PoolColorArray global_colors = cast_to<EditorFile>(this->get_parent())->load_config("user://syntax.cfg", "Global", keys);
@@ -160,6 +162,12 @@ void Settings::save_editor_data()
 {
     ConfigFile *config_file = ConfigFile::_new();
     config_file->load("user://editor.cfg");
+
+    int width = ((SpinBox *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/Resolution/CenterContainer/HBoxContainer/Width")))->get_value();
+    config_file->set_value("Editor", "window_width", width);
+
+    int height = ((SpinBox *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/Resolution/CenterContainer/HBoxContainer/Height")))->get_value();
+    config_file->set_value("Editor", "window_height", height);
 
     String custom_font = ((LineEdit *)get_node(NodePath("VBoxContainer/Settings/EditorTree/General/FontName/LineEdit")))->get_text();
     config_file->set_value("Editor", "custom_font", custom_font);
