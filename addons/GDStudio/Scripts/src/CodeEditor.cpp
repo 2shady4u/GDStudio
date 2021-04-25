@@ -329,18 +329,21 @@ void CodeEditor::set_custom_theme(String path)
     cast_to<Control>(this->get_parent()->get_parent())->set_theme(theme);
 }
 
-int CodeEditor::select_current_word()
+void CodeEditor::select_current_word()
 {
     int64_t column = ((TextEdit *)get_node("Container/CodeEditor"))->cursor_get_column();
     int64_t line = ((TextEdit *)get_node("Container/CodeEditor"))->cursor_get_line();
     int64_t start = column;
     String line_text = ((TextEdit *)get_node("Container/CodeEditor"))->get_line(line);
-    while (!line_text.empty() && line_text[start] != ' ' && line_text[start] != '\n' && line_text[start] != '\t')
+    while (true)
     {
         start -= 1;
+        if (!line_text.empty() || line_text[start] != ' ' || line_text[start] != '\n' || line_text[start] != '\t')
+        {
+            break;
+        }
     }
     ((TextEdit *)get_node("Container/CodeEditor"))->select(line, start, line, column);
-    return column - start;
 }
 
 void CodeEditor::_on_CodeEditor_text_changed()
@@ -520,15 +523,16 @@ void CodeEditor::_on_CodeEditor_symbol_lookup(String symbol, int row, int column
 
 void CodeEditor::_on_Autocomplete_item_activated(int index)
 {
-    int size = this->select_current_word();
     int64_t column = ((TextEdit *)get_node("Container/CodeEditor"))->cursor_get_column();
     int64_t line = ((TextEdit *)get_node("Container/CodeEditor"))->cursor_get_line();
+    this->select_current_word();
     String sub = ((ItemList *)get_node(NodePath("Container/Autocomplete")))->get_item_text(index);
+    int sub_size = sub.length();
     ((TextEdit *)get_node("Container/CodeEditor"))->insert_text_at_cursor(sub);
     ((ItemList *)get_node(NodePath("Container/Autocomplete")))->hide();
     ((TextEdit *)get_node("Container/CodeEditor"))->grab_focus();
     ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_line(line);
-    ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_column(column + size);
+    ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_column(column + sub_size);
 }
 
 void CodeEditor::_register_methods()

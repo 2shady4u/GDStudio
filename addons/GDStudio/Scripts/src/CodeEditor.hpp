@@ -32,7 +32,7 @@ public:
     void set_custom_font(String);
     void set_font_size(int);
     void set_custom_theme(String);
-    int select_current_word();
+    void select_current_word();
 
     void _on_CodeEditor_text_changed();
     void _on_CodeEditor_symbol_lookup(String, int, int);
