@@ -80,7 +80,7 @@ private:
     };
     String current_word = "";
     PoolStringArray autocomplete;
-    PoolStringArray identifiers;
+    Array identifiers;
     Array cpp_keywords = Array::make("auto", "short", "struct", "unsigned",
                                      "break", "continue", "else", "for", "long", "signed", "switch", "void",
                                      "case", "default", "enum", "goto", "register", "sizeof", "typedef", "volatile",

@@ -178,6 +178,10 @@ void CodeEditor::setup_cpp_colors(TSNode root_node)
         {
             if (!cpp_keywords.has(keyword))
             {
+                if (!identifiers.has(keyword))
+                {
+                    identifiers.append(keyword);
+                }
                 color = cpp_colors["identifier"];
                 ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(keyword, color);
             }
@@ -186,6 +190,10 @@ void CodeEditor::setup_cpp_colors(TSNode root_node)
         {
             if (!cpp_keywords.has(keyword))
             {
+                if (!identifiers.has(keyword))
+                {
+                    identifiers.append(keyword);
+                }
                 ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(keyword, color);
             }
         }
@@ -254,6 +262,10 @@ void CodeEditor::setup_rust_colors(TSNode root_node)
         {
             if (!rust_keywords.has(keyword))
             {
+                if (!identifiers.has(keyword))
+                {
+                    identifiers.append(keyword);
+                }
                 color = rust_colors["identifier"];
                 ((TextEdit *)get_node("Container/CodeEditor"))->add_keyword_color(keyword, color);
             }
@@ -419,6 +431,7 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
                 }
                 if (this->use_tree_sitter)
                 {
+                    identifiers = Array::make();
                     parse_text(this->language);
                 }
 
@@ -444,8 +457,8 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
                     }
                     for (int i = 0; i < identifiers.size(); i++)
                     {
-                        Godot::print(identifiers[i]);
-                        if (identifiers[i].find(word, 0) == 0)
+                        String ident = identifiers[i];
+                        if (ident.find(word, 0) == 0)
                         {
                             //((ItemList *)get_node(NodePath("Container/Autocomplete")))->add_item("Keyword", nullptr, false);
                             ((ItemList *)get_node(NodePath("Container/Autocomplete")))->add_item(identifiers[i]);
