@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://addons/GDStudio/Scripts/native/editor_file.gdns" type="Script" id=1]
 [ext_resource path="res://addons/GDStudio/Fonts/RobotoSlab-VariableFont_wght.ttf" type="DynamicFontData" id=2]
@@ -10,9 +10,14 @@
 [ext_resource path="res://addons/GDStudio/Scenes/ProjectSettings.tscn" type="PackedScene" id=8]
 [ext_resource path="res://addons/GDStudio/Scenes/LogPanel.tscn" type="PackedScene" id=9]
 [ext_resource path="res://addons/GDStudio/Scenes/Sidebar.tscn" type="PackedScene" id=10]
+[ext_resource path="res://addons/GDStudio/Icons/github-original-wordmark.svg" type="Texture" id=11]
 
 [sub_resource type="DynamicFont" id=1]
 size = 14
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 26
 font_data = ExtResource( 2 )
 
 [node name="Control" type="Control"]
@@ -546,6 +551,89 @@ margin_left = -3.0
 margin_right = 807.0
 
 [node name="ProjectSettings" parent="." instance=ExtResource( 8 )]
+
+[node name="About" type="AcceptDialog" parent="."]
+margin_right = 719.0
+margin_bottom = 541.0
+window_title = "About"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="About"]
+anchor_right = 1.0
+anchor_bottom = 0.9
+margin_left = 8.0
+margin_top = 8.0
+margin_right = -8.0
+margin_bottom = 13.1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Top" type="CenterContainer" parent="About/VBoxContainer"]
+margin_right = 703.0
+margin_bottom = 44.0
+
+[node name="Label" type="Label" parent="About/VBoxContainer/Top"]
+margin_left = 292.0
+margin_right = 411.0
+margin_bottom = 44.0
+custom_fonts/font = SubResource( 2 )
+text = "GDStudio"
+
+[node name="1" type="CenterContainer" parent="About/VBoxContainer"]
+margin_top = 48.0
+margin_right = 703.0
+margin_bottom = 73.0
+
+[node name="Label" type="Label" parent="About/VBoxContainer/1"]
+margin_left = 196.0
+margin_right = 506.0
+margin_bottom = 25.0
+text = "An open source Code Editor made with Godot Engine"
+
+[node name="CenterContainer" type="CenterContainer" parent="About/VBoxContainer"]
+margin_top = 77.0
+margin_right = 703.0
+margin_bottom = 173.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="About/VBoxContainer/CenterContainer"]
+margin_left = 192.0
+margin_right = 511.0
+margin_bottom = 96.0
+
+[node name="Github" type="TextureRect" parent="About/VBoxContainer/CenterContainer/HBoxContainer"]
+margin_right = 96.0
+margin_bottom = 96.0
+texture = ExtResource( 11 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="About/VBoxContainer/CenterContainer/HBoxContainer"]
+margin_left = 100.0
+margin_right = 319.0
+margin_bottom = 96.0
+
+[node name="Label" type="Label" parent="About/VBoxContainer/CenterContainer/HBoxContainer/VBoxContainer"]
+margin_right = 219.0
+margin_bottom = 25.0
+
+[node name="CenterContainer" type="CenterContainer" parent="About/VBoxContainer/CenterContainer/HBoxContainer/VBoxContainer"]
+margin_top = 29.0
+margin_right = 219.0
+margin_bottom = 54.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="About/VBoxContainer/CenterContainer/HBoxContainer/VBoxContainer/CenterContainer"]
+margin_left = 15.0
+margin_right = 203.0
+margin_bottom = 25.0
+text = "This project is hosted on Github"
+
+[node name="LinkButton" type="LinkButton" parent="About/VBoxContainer/CenterContainer/HBoxContainer/VBoxContainer"]
+margin_top = 58.0
+margin_right = 219.0
+margin_bottom = 75.0
+text = "https://github.com/sdtv9507/GDStudio"
 
 [connection signal="pressed" from="VBoxContainer/TopBar/About" to="." method="_on_About_pressed"]
 [connection signal="tab_changed" from="VBoxContainer/HBoxContainer/VBoxContainer/TabContainer" to="." method="_on_TabContainer_tab_changed"]
