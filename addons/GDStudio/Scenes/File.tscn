@@ -552,13 +552,10 @@ margin_right = 807.0
 
 [node name="ProjectSettings" parent="." instance=ExtResource( 8 )]
 
-[node name="About" type="AcceptDialog" parent="."]
+[node name="About" type="WindowDialog" parent="."]
 margin_right = 719.0
 margin_bottom = 541.0
 window_title = "About"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="About"]
 anchor_right = 1.0

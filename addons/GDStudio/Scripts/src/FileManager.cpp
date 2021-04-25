@@ -459,7 +459,7 @@ void EditorFile::_on_TabContainer_tab_close(int tab)
 
 void EditorFile::_on_About_pressed()
 {
-    Godot::print("sd");
+    ((WindowDialog *)get_node(NodePath("About")))->popup_centered();
 }
 
 void EditorFile::_process()
