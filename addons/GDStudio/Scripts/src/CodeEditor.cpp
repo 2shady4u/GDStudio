@@ -316,6 +316,7 @@ void CodeEditor::set_custom_theme(String path)
     Ref<Theme> theme = ResourceLoader::get_singleton()->load(path);
     cast_to<Control>(this->get_parent()->get_parent())->set_theme(theme);
 }
+
 int CodeEditor::select_current_word()
 {
     int64_t column = ((TextEdit *)get_node("Container/CodeEditor"))->cursor_get_column();
@@ -408,6 +409,14 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
 
                     ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_line(line);
                 }
+                ((TextEdit *)get_node("Container/CodeEditor"))->select(line-1, column-1, line, column);
+                text = ((TextEdit *)get_node("Container/CodeEditor"))->get_selection_text();
+                if (text == "{\n")
+                {
+                    ((TextEdit *)get_node("Container/CodeEditor"))->insert_text_at_cursor("{\n\t");
+                    column = ((TextEdit *)get_node("Container/CodeEditor"))->cursor_get_column();
+                    ((TextEdit *)get_node("Container/CodeEditor"))->cursor_set_line(line);
+                }
                 if (this->use_tree_sitter)
                 {
                     parse_text(this->language);
@@ -430,6 +439,16 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
                         {
                             //((ItemList *)get_node(NodePath("Container/Autocomplete")))->add_item("Keyword", nullptr, false);
                             ((ItemList *)get_node(NodePath("Container/Autocomplete")))->add_item(autocomplete[i]);
+                            //((ItemList *)get_node(NodePath("Container/Autocomplete")))->set_item_tooltip(i, "Keyword");
+                        }
+                    }
+                    for (int i = 0; i < identifiers.size(); i++)
+                    {
+                        Godot::print(identifiers[i]);
+                        if (identifiers[i].find(word, 0) == 0)
+                        {
+                            //((ItemList *)get_node(NodePath("Container/Autocomplete")))->add_item("Keyword", nullptr, false);
+                            ((ItemList *)get_node(NodePath("Container/Autocomplete")))->add_item(identifiers[i]);
                             //((ItemList *)get_node(NodePath("Container/Autocomplete")))->set_item_tooltip(i, "Keyword");
                         }
                     }
