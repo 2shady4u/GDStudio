@@ -133,3 +133,4 @@ size_flags_vertical = 3
 [connection signal="pressed" from="Build/BuildButtons/Build" to="." method="_on_Build_pressed"]
 [connection signal="pressed" from="Build/BuildButtons/Clean" to="." method="_on_Clean_pressed"]
 [connection signal="pressed" from="Build/Command/Execute" to="." method="_on_ExecuteCustomCommandButton_pressed"]
+[connection signal="item_activated" from="Explorer/VBoxContainer/Tree" to="." method="_on_Tree_item_activated"]

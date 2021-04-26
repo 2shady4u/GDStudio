@@ -2,6 +2,7 @@
 #include <OptionButton.hpp>
 #include <Directory.hpp>
 #include <Texture.hpp>
+#include <File.hpp>
 #include <thread>
 #include <future>
 
@@ -199,6 +200,34 @@ void Sidebar::_on_ExecuteCustomCommandButton_pressed()
     std::future<void> th = std::async(std::launch::async, &EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()->get_parent()->get_parent()), command);
 }
 
+void Sidebar::_on_Tree_item_activated()
+{
+    File *file = File::_new();
+    String root = ((LineEdit *)get_node(NodePath("Explorer/VBoxContainer/Root")))->get_text();
+    TreeItem *tree = ((Tree *)get_node(NodePath("Explorer/VBoxContainer/Tree")))->get_selected();
+    String file_name = tree->get_text(0);
+    String directories = "";
+    TreeItem *up = tree->get_parent();
+    while (up)
+    {
+        if (up->get_text(0) != root)
+        {
+            directories += up->get_text(0) + "/";
+            up = up->get_parent();
+        }
+        else
+        {
+            break;
+        }
+        
+    }
+    if (file->file_exists(root+"/"+directories+file_name))
+    {
+        cast_to<EditorFile>(this->get_parent()->get_parent()->get_parent())->open_file(root+"/"+directories+file_name);
+    }
+    file->free();
+}
+
 void Sidebar::_register_methods()
 {
     register_method((char *)"_init", &Sidebar::_init);
@@ -212,4 +241,5 @@ void Sidebar::_register_methods()
     register_method((char *)"_on_Build_pressed", &Sidebar::_on_Build_pressed);
     register_method((char *)"_on_Clean_pressed", &Sidebar::_on_Clean_pressed);
     register_method((char *)"_on_ExecuteCustomCommandButton_pressed", &Sidebar::_on_ExecuteCustomCommandButton_pressed);
+    register_method((char *)"_on_Tree_item_activated", &Sidebar::_on_Tree_item_activated);
 }

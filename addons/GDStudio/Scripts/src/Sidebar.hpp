@@ -26,6 +26,7 @@ public:
     void _on_Build_pressed();
     void _on_Clean_pressed();
     void _on_ExecuteCustomCommandButton_pressed();
+    void _on_Tree_item_activated();
 
     static void _register_methods();
 };
