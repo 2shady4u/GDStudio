@@ -22,6 +22,12 @@
 #include "ProjectManager.hpp"
 #include "Settings.hpp"
 #include "ProjectSettings.hpp"
+
+#ifdef _WIN32
+#define popen _popen
+#define pclose _pclose
+#endif
+
 using namespace godot;
 
 EditorFile::EditorFile()
@@ -323,11 +329,6 @@ void EditorFile::execute_command(String string_command)
     cast_to<Sidebar>(get_node(NodePath("VBoxContainer/HBoxContainer/Sidebar")))->disable_build_buttons(true);
     ((RichTextLabel *)get_node(NodePath("VBoxContainer/HBoxContainer/VBoxContainer/Control/TabContainer/Log/Panel/TextEdit")))->add_text("Executing: " + string_command + "\n");
     const char *command = (string_command + " 2>&1").utf8().get_data();
-    if (OS::get_singleton()->get_name() == "windows")
-    {
-#define popen _popen
-#define pclose _pclose
-    }
     FILE *pipe = popen(command, "r");
     if (!pipe)
     {
