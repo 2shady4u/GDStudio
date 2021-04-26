@@ -83,7 +83,7 @@ void EditorFile::open_file(String path)
         PoolStringArray keys = Array::make("path");
         this->change_project_path(this->load_config(path, "settings", keys)[0]);
     }
-    
+
     ((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/TabContainer"))->add_tab(this->file_name, icon);
     ((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/TabContainer"))->set_current_tab(this->tab_number - 1);
 }
@@ -164,7 +164,6 @@ void EditorFile::load_color_settings()
             cast_to<CodeEditor>(((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/Editor"))->get_children()[i])->setup_language(lang);
         }
     }
-
 }
 
 CodeEditor *EditorFile::get_editor_instance()
@@ -301,7 +300,7 @@ void EditorFile::change_project_path(String path)
     this->project_config = path;
     if (this->instance_defined == true)
     {
-       cast_to<Sidebar>(get_node(NodePath("VBoxContainer/HBoxContainer/Sidebar")))->list_directories(path);
+        cast_to<Sidebar>(get_node(NodePath("VBoxContainer/HBoxContainer/Sidebar")))->list_directories(path);
     }
 }
 
@@ -350,7 +349,7 @@ void EditorFile::execute_command(String string_command)
         text = "[color=red]Process returned: " + String::num_int64(status) + "[/color]\n";
     }
     ((RichTextLabel *)get_node(NodePath("VBoxContainer/HBoxContainer/VBoxContainer/Control/TabContainer/Log/Panel/TextEdit")))->append_bbcode(text);
-    
+
     ((MenuButton *)get_node(NodePath("VBoxContainer/TopBar/Project")))->get_popup()->set_item_disabled(0, false);
     ((MenuButton *)get_node(NodePath("VBoxContainer/TopBar/Project")))->get_popup()->set_item_disabled(1, false);
     cast_to<Sidebar>(get_node(NodePath("VBoxContainer/HBoxContainer/Sidebar")))->disable_build_buttons(false);
@@ -466,6 +465,37 @@ void EditorFile::_on_About_pressed()
     ((WindowDialog *)get_node(NodePath("About")))->popup_centered();
 }
 
+void EditorFile::_on_NameList_item_selected(int index)
+{
+    switch (index)
+    {
+    case 0:
+        ((TextEdit *)get_node(NodePath("About/VBoxContainer/TabContainer/ThirdParty/brackets")))->hide();
+        ((TextEdit *)get_node(NodePath("About/VBoxContainer/TabContainer/ThirdParty/roboto")))->hide();
+        ((TextEdit *)get_node(NodePath("About/VBoxContainer/TabContainer/ThirdParty/tree-sitter")))->hide();
+        ((TextEdit *)get_node(NodePath("About/VBoxContainer/TabContainer/ThirdParty/devicon")))->show();
+        break;
+    case 1:
+        ((TextEdit *)get_node(NodePath("About/VBoxContainer/TabContainer/ThirdParty/roboto")))->hide();
+        ((TextEdit *)get_node(NodePath("About/VBoxContainer/TabContainer/ThirdParty/tree-sitter")))->hide();
+        ((TextEdit *)get_node(NodePath("About/VBoxContainer/TabContainer/ThirdParty/devicon")))->hide();
+        ((TextEdit *)get_node(NodePath("About/VBoxContainer/TabContainer/ThirdParty/brackets")))->show();
+        break;
+    case 2:
+        ((TextEdit *)get_node(NodePath("About/VBoxContainer/TabContainer/ThirdParty/tree-sitter")))->hide();
+        ((TextEdit *)get_node(NodePath("About/VBoxContainer/TabContainer/ThirdParty/devicon")))->hide();
+        ((TextEdit *)get_node(NodePath("About/VBoxContainer/TabContainer/ThirdParty/brackets")))->hide();
+        ((TextEdit *)get_node(NodePath("About/VBoxContainer/TabContainer/ThirdParty/roboto")))->show();
+        break;
+    case 3:
+        ((TextEdit *)get_node(NodePath("About/VBoxContainer/TabContainer/ThirdParty/devicon")))->hide();
+        ((TextEdit *)get_node(NodePath("About/VBoxContainer/TabContainer/ThirdParty/brackets")))->hide();
+        ((TextEdit *)get_node(NodePath("About/VBoxContainer/TabContainer/ThirdParty/roboto")))->hide();
+        ((TextEdit *)get_node(NodePath("About/VBoxContainer/TabContainer/ThirdParty/tree-sitter")))->show();
+        break;
+    }
+}
+
 void EditorFile::_process()
 {
     if (this->instance_defined == true)
@@ -511,5 +541,6 @@ void EditorFile::_register_methods()
     register_method((char *)"_on_TabContainer_tab_changed", &EditorFile::_on_TabContainer_tab_changed);
     register_method((char *)"_on_TabContainer_tab_close", &EditorFile::_on_TabContainer_tab_close);
     register_method((char *)"_on_About_pressed", &EditorFile::_on_About_pressed);
+    register_method((char *)"_on_NameList_item_selected", &EditorFile::_on_NameList_item_selected);
     register_method((char *)"_process", &EditorFile::_process);
 }
