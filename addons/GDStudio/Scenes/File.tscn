@@ -145,6 +145,9 @@ margin_bottom = 691.0
 margin_right = 650.0
 margin_bottom = 350.0
 window_title = "Guardar un Archivo"
+access = 2
+current_dir = "/Work/Godot/GDStudio"
+current_path = "/Work/Godot/GDStudio/"
 __meta__ = {
 "_edit_use_anchors_": false
 }
