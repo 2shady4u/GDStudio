@@ -103,6 +103,25 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="HSeparator" type="HSeparator" parent="Build"]
+margin_top = 142.0
+margin_right = 307.0
+margin_bottom = 146.0
+
+[node name="GDNative" type="CenterContainer" parent="Build"]
+margin_top = 150.0
+margin_right = 307.0
+margin_bottom = 170.0
+
+[node name="Label" type="Label" parent="Build/GDNative"]
+margin_left = 93.0
+margin_right = 213.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 120, 20 )
+text = "GDNative"
+align = 1
+valign = 1
+
 [node name="Explorer" type="Control" parent="."]
 visible = false
 anchor_right = 1.0

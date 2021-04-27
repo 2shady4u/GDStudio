@@ -478,7 +478,7 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
                         ((ItemList *)get_node(NodePath("Container/Autocomplete")))->set_size(Vector2(256, 196));
                     }
                     int v_size = ((ItemList *)get_node(NodePath("Container/Autocomplete")))->get_size()[1];
-                    int x = (column - h_scroll) * (font_size);
+                    int x = (column - h_scroll) * (line_space) + 8;
                     int y = (line + 1 - v_scroll) * (font_size + line_space) + 8;
                     if (y + v_size >= editor_height)
                     {
