@@ -452,11 +452,11 @@ void EditorFile::_on_TabContainer_tab_close(int tab)
         {
             this->_on_TabContainer_tab_changed(tab - 1);
         }
+        this->instance_defined = true;
     }
     ((Panel *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/Editor"))->get_child(tab)->queue_free();
     this->tab_number = ((Panel *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/Editor"))->get_child_count();
     ((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/TabContainer"))->remove_tab(tab);
-    this->instance_defined = true;
 }
 
 void EditorFile::_on_About_pressed()
