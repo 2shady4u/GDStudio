@@ -402,7 +402,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ProjectType3" type="OptionButton" parent="ProjectManager/TabContainer/NewProject/VBoxContainer/ProjectTypes/ProjectTypes"]
+[node name="OptionButton" type="OptionButton" parent="ProjectManager/TabContainer/NewProject/VBoxContainer/ProjectTypes/ProjectTypes"]
 margin_left = 51.0
 margin_right = 201.0
 margin_bottom = 28.0
@@ -563,7 +563,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Source2" type="LineEdit" parent="ProjectManager/TabContainer/NewProject/VBoxContainer/CPP/Source/HBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="ProjectManager/TabContainer/NewProject/VBoxContainer/CPP/Source/HBoxContainer"]
 margin_left = 89.0
 margin_right = 239.0
 margin_bottom = 25.0
@@ -591,7 +591,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Name2" type="LineEdit" parent="ProjectManager/TabContainer/NewProject/VBoxContainer/CPP/Name/HBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="ProjectManager/TabContainer/NewProject/VBoxContainer/CPP/Name/HBoxContainer"]
 margin_left = 46.0
 margin_right = 206.0
 margin_bottom = 25.0
@@ -656,7 +656,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Version2" type="LineEdit" parent="ProjectManager/TabContainer/NewProject/VBoxContainer/Rust/Version/HBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="ProjectManager/TabContainer/NewProject/VBoxContainer/Rust/Version/HBoxContainer"]
 margin_left = 146.0
 margin_right = 210.0
 margin_bottom = 25.0
@@ -681,7 +681,7 @@ margin_right = 84.0
 margin_bottom = 25.0
 text = "Project Name"
 
-[node name="Name2" type="LineEdit" parent="ProjectManager/TabContainer/NewProject/VBoxContainer/Rust/Name/HBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="ProjectManager/TabContainer/NewProject/VBoxContainer/Rust/Name/HBoxContainer"]
 margin_left = 88.0
 margin_right = 248.0
 margin_bottom = 25.0
@@ -1128,7 +1128,7 @@ readonly = true
 [connection signal="text_changed" from="ProjectManager/TabContainer/NewClass/ClassName/ClassName" to="ProjectManager" method="_on_ClassName_text_changed"]
 [connection signal="pressed" from="ProjectManager/TabContainer/NewClass/PathLabel/Button" to="ProjectManager" method="_on_NewClassButton_pressed"]
 [connection signal="dir_selected" from="ProjectManager/TabContainer/NewProject/cppPathSearch" to="ProjectManager" method="_on_cppPathSearch_dir_selected"]
-[connection signal="item_selected" from="ProjectManager/TabContainer/NewProject/VBoxContainer/ProjectTypes/ProjectTypes/ProjectType3" to="ProjectManager" method="_on_ProjectType_item_selected"]
+[connection signal="item_selected" from="ProjectManager/TabContainer/NewProject/VBoxContainer/ProjectTypes/ProjectTypes/OptionButton" to="ProjectManager" method="_on_ProjectType_item_selected"]
 [connection signal="pressed" from="ProjectManager/TabContainer/NewProject/VBoxContainer/Path/HBoxContainer/PathButton" to="ProjectManager" method="_on_PathButton_pressed"]
 [connection signal="pressed" from="ProjectManager/TabContainer/NewProject/VBoxContainer/CPP/GDNative/cppPath/HBoxContainer/SearchButton" to="ProjectManager" method="_on_SearchCPPButton_pressed"]
 [connection signal="item_selected" from="About/VBoxContainer/TabContainer/ThirdParty/NameList" to="." method="_on_NameList_item_selected"]

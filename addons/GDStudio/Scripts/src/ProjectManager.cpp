@@ -315,24 +315,24 @@ void ProjectManager::create_new_class()
 
 void ProjectManager::create_new_project()
 {
-    String path = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/PathLabel/FilePath")))->get_text();
-    String cpp_path = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/CPP/cppPath/cppPath")))->get_text();
-    bool gdnative = ((CheckBox *)get_node(NodePath("TabContainer/NewProject/GDNative/CheckBox")))->is_pressed();
+    String path = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/Path/HBoxContainer/FilePath")))->get_text();
+    String cpp_path = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/CPP/GDNative/cppPath/HBoxContainer/cppPath2")))->get_text();
+    bool gdnative = ((CheckBox *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/ProjectTypes/ProjectTypes/CheckBox")))->is_pressed();
 
-    switch (((OptionButton *)get_node(NodePath("TabContainer/NewProject/ProjectType/ProjectType")))->get_selected_id())
+    switch (((OptionButton *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/ProjectTypes/ProjectTypes/OptionButton")))->get_selected_id())
     {
     case 0:
         if (path == "" || cpp_path == "" && gdnative)
         {
-            ((AcceptDialog *)get_node(NodePath("TabContainer/NewProject/CPP/Warning")))->popup_centered();
+            ((AcceptDialog *)get_node(NodePath("TabContainer/NewProject/Warning")))->popup_centered();
         }
         else
         {
             String current_platform = "";
             String get_platform = OS::get_singleton()->get_name();
 
-            String source_folder = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/CPP/Source/Source")))->get_text();
-            String project_name = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/CPP/Name/Name")))->get_text();
+            String source_folder = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/CPP/Source/HBoxContainer/LineEdit")))->get_text();
+            String project_name = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/CPP/Name/HBoxContainer/LineEdit")))->get_text();
 
             if (get_platform == "Windows")
             {
@@ -509,9 +509,9 @@ void ProjectManager::create_new_project()
         break;
     case 1:
         this->check_thread();
-        String project_name = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/Rust/Name/Name")))->get_text();
-        int project_type = ((OptionButton *)get_node(NodePath("TabContainer/NewProject/Rust/Type/OptionButton")))->get_selected_id();
-        bool gdnative = ((CheckBox *)get_node(NodePath("TabContainer/NewProject/GDNative/CheckBox")))->is_pressed();
+        String project_name = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/Rust/Name/HBoxContainer/LineEdit")))->get_text();
+        int project_type = ((OptionButton *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/Rust/Type/HBoxContainer/OptionButton")))->get_selected_id();
+        bool gdnative = ((CheckBox *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/ProjectTypes/ProjectTypes/CheckBox")))->is_pressed();
         
         String lib = "--lib ";
         if (gdnative == false && project_type == 1)
@@ -546,8 +546,8 @@ void ProjectManager::create_new_project()
 
 void ProjectManager::create_rust_project(String path, bool gdnative)
 {
-    String gdn_version = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/Rust/Version/Version")))->get_text();
-    String project_name = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/Rust/Name/Name")))->get_text();
+    String gdn_version = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/Rust/Version/HBoxContainer/LineEdit")))->get_text();
+    String project_name = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/Rust/Name/HBoxContainer/LineEdit")))->get_text();
     
     File *file = File::_new();
     if (gdnative)
@@ -686,7 +686,7 @@ void ProjectManager::_on_FolderPath_dir_selected(String path)
         }
         break;
     case 1:
-        ((LineEdit *)get_node(NodePath("TabContainer/NewProject/PathLabel/FilePath")))->set_text(path);
+        ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/Path/HBoxContainer/FilePath")))->set_text(path);
         break;
     }
     file->free();
@@ -718,12 +718,12 @@ void ProjectManager::_on_ProjectType_item_selected(int index)
     switch (index)
     {
     case 0:
-        ((Control *)get_node(NodePath("TabContainer/NewProject/Rust")))->hide();
-        ((Control *)get_node(NodePath("TabContainer/NewProject/CPP")))->show();
+        ((Control *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/Rust")))->hide();
+        ((Control *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/CPP")))->show();
         break;
     case 1:
-        ((Control *)get_node(NodePath("TabContainer/NewProject/CPP")))->hide();
-        ((Control *)get_node(NodePath("TabContainer/NewProject/Rust")))->show();
+        ((Control *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/CPP")))->hide();
+        ((Control *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/Rust")))->show();
         break;
     }
 }
@@ -735,12 +735,12 @@ void ProjectManager::_on_PathButton_pressed()
 
 void ProjectManager::_on_SearchCPPButton_pressed()
 {
-    ((FileDialog *)get_node(NodePath("TabContainer/NewProject/CPP/cppPathSearch")))->popup_centered();
+    ((FileDialog *)get_node(NodePath("TabContainer/NewProject/cppPathSearch")))->popup_centered();
 }
 
 void ProjectManager::_on_cppPathSearch_dir_selected(String path)
 {
-    ((LineEdit *)get_node(NodePath("TabContainer/NewProject/CPP/cppPath/cppPath")))->set_text(path);
+    ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/CPP/GDNative/cppPath/HBoxContainer/cppPath2")))->set_text(path);
 }
 
 void ProjectManager::_register_methods()
