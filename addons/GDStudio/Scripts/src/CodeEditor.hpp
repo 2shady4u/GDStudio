@@ -26,10 +26,12 @@ public:
     String get_content();
     String get_language();
     String get_current_word(int64_t, int64_t);
+    String get_file_path();
     void save_contents();
     void set_custom_font(String);
     void set_font_size(int);
     void set_custom_theme(String);
+    void set_file_path(String);
     void select_current_word();
 
     void _on_CodeEditor_text_changed();
@@ -49,6 +51,7 @@ private:
     String error_text = "";
     String current_content = "";
     String file_name = "";
+    String file_path = "";
     int editor_height = 0;
     int font_size = 12;
     int line_space = 8;

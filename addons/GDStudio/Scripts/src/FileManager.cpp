@@ -65,6 +65,7 @@ void EditorFile::open_file(String path)
     this->current_editor_instance->set_custom_theme(this->custom_theme);
     this->tab_number = ((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/Editor"))->get_child_count();
     this->file_path = path;
+    this->current_editor_instance->set_file_path(path);
 
     this->current_editor_instance->set_initial_content(content);
     this->file_name = path.get_file();
@@ -93,7 +94,7 @@ void EditorFile::open_file(String path)
 void EditorFile::save_file()
 {
     File *file = File::_new();
-    file->open(file_path, File::WRITE);
+    file->open(this->current_editor_instance->get_file_path(), File::WRITE);
     file->store_string(this->current_editor_instance->get_content());
     this->current_editor_instance->save_contents();
     file->close();
@@ -441,8 +442,6 @@ void EditorFile::_on_TabContainer_tab_close(int tab)
     this->instance_defined = false;
     this->file_name = "";
     this->file_path = "";
-    ((Panel *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/Editor"))->get_child(tab)->queue_free();
-    this->tab_number = ((Panel *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/Editor"))->get_child_count();
     if (this->tab_number > 1)
     {
         if (tab == 0)
@@ -454,7 +453,10 @@ void EditorFile::_on_TabContainer_tab_close(int tab)
             this->_on_TabContainer_tab_changed(tab - 1);
         }
     }
+    ((Panel *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/Editor"))->get_child(tab)->queue_free();
+    this->tab_number = ((Panel *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/Editor"))->get_child_count();
     ((Tabs *)get_node("VBoxContainer/HBoxContainer/VBoxContainer/TabContainer"))->remove_tab(tab);
+    this->instance_defined = true;
 }
 
 void EditorFile::_on_About_pressed()

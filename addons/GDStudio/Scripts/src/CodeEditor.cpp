@@ -299,6 +299,11 @@ String CodeEditor::get_current_word(int64_t column, int64_t line)
     return word;
 }
 
+String CodeEditor::get_file_path()
+{
+    return this->file_path;
+}
+
 void CodeEditor::save_contents()
 {
     this->current_content = ((TextEdit *)get_node("Container/CodeEditor"))->get_text();
@@ -321,6 +326,11 @@ void CodeEditor::set_custom_theme(String path)
 {
     Ref<Theme> theme = ResourceLoader::get_singleton()->load(path);
     cast_to<Control>(this->get_parent()->get_parent())->set_theme(theme);
+}
+
+void CodeEditor::set_file_path(String path)
+{
+    this->file_path = path;
 }
 
 void CodeEditor::select_current_word()
@@ -441,6 +451,7 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
             {
                 if (event_key->get_scancode() != GlobalConstants::KEY_DOWN && event_key->get_scancode() != GlobalConstants::KEY_UP && event_key->get_scancode() != GlobalConstants::KEY_LEFT && event_key->get_scancode() != GlobalConstants::KEY_RIGHT)
                 {
+                    int h_scroll = ((TextEdit *)get_node("Container/CodeEditor"))->get_h_scroll();
                     int v_scroll = ((TextEdit *)get_node("Container/CodeEditor"))->get_v_scroll();
                     ((ItemList *)get_node(NodePath("Container/Autocomplete")))->clear();
                     for (int i = 0; i < autocomplete.size(); i++)
@@ -467,7 +478,7 @@ void CodeEditor::_on_CodeEditor_gui_input(InputEvent *event)
                         ((ItemList *)get_node(NodePath("Container/Autocomplete")))->set_size(Vector2(256, 196));
                     }
                     int v_size = ((ItemList *)get_node(NodePath("Container/Autocomplete")))->get_size()[1];
-                    int x = column * (font_size + line_space);
+                    int x = (column - h_scroll) * (font_size);
                     int y = (line + 1 - v_scroll) * (font_size + line_space) + 8;
                     if (y + v_size >= editor_height)
                     {
