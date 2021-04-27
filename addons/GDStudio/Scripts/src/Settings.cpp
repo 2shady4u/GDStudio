@@ -1,9 +1,6 @@
-#include <Godot.hpp>
-#include <Control.hpp>
 #include <ConfigFile.hpp>
 #include <TreeItem.hpp>
 #include <FileDialog.hpp>
-#include <WindowDialog.hpp>
 #include <PoolArrays.hpp>
 #include <Texture.hpp>
 #include <Reference.hpp>

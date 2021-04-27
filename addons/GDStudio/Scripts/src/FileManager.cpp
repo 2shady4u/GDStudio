@@ -1,16 +1,12 @@
-#include <Godot.hpp>
-#include <Control.hpp>
 #include <stdio.h>
 #include <File.hpp>
 #include <FileDialog.hpp>
-#include <WindowDialog.hpp>
 #include <MenuButton.hpp>
 #include <PopupMenu.hpp>
 #include <InputEventKey.hpp>
 #include <Texture.hpp>
 #include <ConfigFile.hpp>
 #include <Theme.hpp>
-#include <Array.hpp>
 #include <PoolArrays.hpp>
 #include <TextEdit.hpp>
 #include <Panel.hpp>

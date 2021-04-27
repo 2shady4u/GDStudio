@@ -1,9 +1,7 @@
 #include <Godot.hpp>
 #include <Control.hpp>
 #include <String.hpp>
-#include <Array.hpp>
 #include <Variant.hpp>
-#include <InputEvent.hpp>
 #include <TreeItem.hpp>
 
 #include <tree_sitter/api.h>

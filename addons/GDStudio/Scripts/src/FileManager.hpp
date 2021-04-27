@@ -1,5 +1,4 @@
 #include <Godot.hpp>
-#include <Control.hpp>
 #include <PackedScene.hpp>
 #include <ResourceLoader.hpp>
 #include <String.hpp>

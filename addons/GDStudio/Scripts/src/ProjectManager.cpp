@@ -1,15 +1,11 @@
-#include <Godot.hpp>
-#include <Control.hpp>
 #include <File.hpp>
 #include <Directory.hpp>
 #include <OS.hpp>
 #include <TabContainer.hpp>
 #include <LineEdit.hpp>
 #include <OptionButton.hpp>
-#include <AcceptDialog.hpp>
 #include <CheckBox.hpp>
 #include <FileDialog.hpp>
-#include <WindowDialog.hpp>
 
 #include "ProjectManager.hpp"
 #include "FileManager.hpp"

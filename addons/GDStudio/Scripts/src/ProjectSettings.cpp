@@ -1,11 +1,8 @@
-#include <Godot.hpp>
-#include <Control.hpp>
 #include <ScrollContainer.hpp>
 #include <ConfigFile.hpp>
 #include <LineEdit.hpp>
 #include <PoolArrays.hpp>
 #include <OptionButton.hpp>
-#include <Array.hpp>
 #include <ItemList.hpp>
 #include <Reference.hpp>
 #include <Texture.hpp>

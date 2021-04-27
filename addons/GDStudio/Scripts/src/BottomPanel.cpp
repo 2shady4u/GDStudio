@@ -1,6 +1,3 @@
-#include <Godot.hpp>
-#include <Control.hpp>
-
 #include "BottomPanel.hpp"
 using namespace godot;
 
