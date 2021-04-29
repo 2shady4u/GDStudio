@@ -1,5 +1,6 @@
 # GDStudio (WIP)
-Code editor made in Godot.
+A Code Editor made with Godot Engine. Can be used for C++ and Rust, and has
+helper functions to work with Godot's GDNative module.
 
 Latest Version: 0.2.1
 
@@ -19,7 +20,7 @@ the bugs I have found while testing.
 Please, open an issue if you encounter any bugs.
 
 ## Changelog
-# Version 0.2.1
+### Version 0.2.1
 - Add autocomplete for Keywords and identifiers for both Rust and C++
 - Add a button to Reset Global Settings to Default
 - Add an option to use custom resolutions
