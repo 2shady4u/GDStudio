@@ -357,9 +357,10 @@ margin_right = -5.0
 margin_bottom = -5.0
 
 [node name="cppPathSearch" type="FileDialog" parent="ProjectManager/TabContainer/NewProject"]
-margin_top = 224.0
-margin_right = 700.0
-margin_bottom = 424.0
+margin_left = -21.0
+margin_top = -24.0
+margin_right = 679.0
+margin_bottom = 301.0
 rect_min_size = Vector2( 200, 200 )
 window_title = "Abrir un Directorio"
 mode = 2
@@ -368,8 +369,8 @@ current_dir = "/Work/Godot/GDStudio"
 current_path = "/Work/Godot/GDStudio/"
 
 [node name="gdnlib" type="FileDialog" parent="ProjectManager/TabContainer/NewProject"]
-margin_right = 302.0
-margin_bottom = 152.0
+margin_right = 645.0
+margin_bottom = 297.0
 window_title = "Guardar un Archivo"
 access = 2
 filters = PoolStringArray( "*.gdnlib" )
@@ -1137,9 +1138,9 @@ readonly = true
 [connection signal="text_changed" from="ProjectManager/TabContainer/NewClass/ClassName/ClassName" to="ProjectManager" method="_on_ClassName_text_changed"]
 [connection signal="pressed" from="ProjectManager/TabContainer/NewClass/PathLabel/Button" to="ProjectManager" method="_on_NewClassButton_pressed"]
 [connection signal="dir_selected" from="ProjectManager/TabContainer/NewProject/cppPathSearch" to="ProjectManager" method="_on_cppPathSearch_dir_selected"]
-[connection signal="file_selected" from="ProjectManager/TabContainer/NewProject/gdnlib" to="." method="_on_gdnlib_file_selected"]
+[connection signal="file_selected" from="ProjectManager/TabContainer/NewProject/gdnlib" to="ProjectManager" method="_on_gdnlib_file_selected"]
 [connection signal="item_selected" from="ProjectManager/TabContainer/NewProject/VBoxContainer/ProjectTypes/ProjectTypes/OptionButton" to="ProjectManager" method="_on_ProjectType_item_selected"]
 [connection signal="pressed" from="ProjectManager/TabContainer/NewProject/VBoxContainer/Path/HBoxContainer/PathButton" to="ProjectManager" method="_on_PathButton_pressed"]
 [connection signal="pressed" from="ProjectManager/TabContainer/NewProject/VBoxContainer/CPP/GDNative/cppPath/HBoxContainer/SearchButton" to="ProjectManager" method="_on_SearchCPPButton_pressed"]
-[connection signal="pressed" from="ProjectManager/TabContainer/NewProject/VBoxContainer/CPP/GDNative/Library/HBoxContainer/Button" to="." method="_on_gdnlibButton_pressed"]
+[connection signal="pressed" from="ProjectManager/TabContainer/NewProject/VBoxContainer/CPP/GDNative/Library/HBoxContainer/Button" to="ProjectManager" method="_on_gdnlibButton_pressed"]
 [connection signal="item_selected" from="About/VBoxContainer/TabContainer/ThirdParty/NameList" to="." method="_on_NameList_item_selected"]

@@ -6,6 +6,7 @@
 #include <OptionButton.hpp>
 #include <CheckBox.hpp>
 #include <FileDialog.hpp>
+#include <ConfigFile.hpp>
 
 #include "ProjectManager.hpp"
 #include "FileManager.hpp"
@@ -333,7 +334,7 @@ void ProjectManager::create_new_project()
 
             String source_folder = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/CPP/Source/HBoxContainer/LineEdit")))->get_text();
             String project_name = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/CPP/Name/HBoxContainer/LineEdit")))->get_text();
-
+            String gdnlib_file = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/CPP/GDNative/Library/HBoxContainer/LineEdit")))->get_text();
             if (get_platform == "Windows")
             {
                 current_platform = "windows";
@@ -349,6 +350,7 @@ void ProjectManager::create_new_project()
 
             File *file = File::_new();
             Directory *dir = Directory::_new();
+            ConfigFile *config = ConfigFile::_new();
             dir->open(path);
             dir->make_dir(project_name);
             dir->open(path + "/" + project_name);
@@ -451,6 +453,17 @@ void ProjectManager::create_new_project()
                                                   "Default(library)");
                 file->close();
 
+                config->load(gdnlib_file);
+                config->set_value("general", "singleton", false);
+                config->set_value("general", "load_once", true);
+                config->set_value("general", "symbol_prefix", "godot_");
+                config->set_value("general", "reloadable", true);
+                config->set_value("entry", "Windows.64", "");
+                config->set_value("entry", "X11.64", "");
+                config->set_value("dependencies", "Windows.64", Array::make());
+                config->set_value("dependencies", "X11.64", Array::make());
+                config->save(gdnlib_file);
+
                 file->open(path + "/" + project_name + "/settings.gdnproj", File::WRITE);
                 file->store_string("[settings]\n"
                                    "language=\"c++\"\n\n"
@@ -461,6 +474,7 @@ void ProjectManager::create_new_project()
                                    source_folder + "\"\n\n"
                                                    "godot_cpp_folder=\"" +
                                    cpp_path + "\"\n"
+                                   "gdnlib_path=\""+gdnlib_file+"\"\n"
                                               "use_mingw=false\n"
                                               "include_folders=\"\"\n"
                                               "linker_folders=\"\"\n"
@@ -489,6 +503,7 @@ void ProjectManager::create_new_project()
                                                                "sources_folder=\"" +
                                    source_folder + "\"\n\n"
                                                    "godot_cpp_folder=\"\"\n"
+                                    "gdnlib_path=\"\"\n"
                                                    "use_mingw=true\n"
                                                    "include_folders=\"\"\n"
                                                    "linker_folders=\"\"\n"
@@ -501,6 +516,7 @@ void ProjectManager::create_new_project()
 
             cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/" + source_folder + "/main.cpp");
             cast_to<EditorFile>(this->get_parent())->change_project_path(path + "/" + project_name);
+            config->free();
             file->free();
             dir->free();
         }
@@ -750,7 +766,7 @@ void ProjectManager::_on_gdnlibButton_pressed()
 
 void ProjectManager::_on_gdnlib_file_selected(String path)
 {
-    ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/VBoxContainer/CPP/GDNative/Library/HBoxContainer/LineEdit")))->set_text(path);
+    ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/CPP/GDNative/Library/HBoxContainer/LineEdit")))->set_text(path);
 }
 
 void ProjectManager::_register_methods()
