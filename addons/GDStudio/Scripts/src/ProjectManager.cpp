@@ -46,7 +46,8 @@ void ProjectManager::build_task(int task = 0)
         PoolStringArray keys = Array::make("language", "path", "build_command", "clean_command");
         String load_file = cast_to<EditorFile>(this->get_parent())->get_project_path() + "/settings.gdnproj";
         PoolStringArray settings = cast_to<EditorFile>(this->get_parent())->load_config(load_file, "settings", keys);
-
+        keys = Array::make("gdnative");
+        bool gdnative = cast_to<EditorFile>(this->get_parent())->load_config(load_file, "settings", keys)[0];
         String execute_command = settings[2];
         if (task == 1)
         {
@@ -58,7 +59,7 @@ void ProjectManager::build_task(int task = 0)
 
         if (settings[0] == "c++")
         {
-            String command;
+            String command = "";
             keys = Array::make("global_build", "global_clean");
             PoolStringArray global_commands = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "C++", keys);
             if (task == 0)
@@ -69,7 +70,8 @@ void ProjectManager::build_task(int task = 0)
             {
                 command = this->build_cpp_project(settings[1], selected_os, execute_command) + " " + global_commands[1];
             }
-            thread = new std::thread(&EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()), command);
+            //thread = new std::thread(&EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()), command);
+            thread = new std::thread(&ProjectManager::execute, this, command, gdnative, load_file, selected_os);
         }
         else if (settings[0] == "rust")
         {
@@ -78,7 +80,6 @@ void ProjectManager::build_task(int task = 0)
             PoolStringArray global_commands = cast_to<EditorFile>(this->get_parent())->load_config("user://editor.cfg", "Rust", keys);
             if (task == 0)
             {
-                Godot::print(global_commands[2]);
                 command = this->build_rust_project(settings[1], selected_os, execute_command) + " " + global_commands[0];
                 if (global_commands[2] == "True")
                 {
@@ -150,29 +151,29 @@ String ProjectManager::build_cpp_project(String path, String selected_platform, 
     command = command.replace("{platform}", selected_platform);
     command = command.replace("{path}", path);
     command = command.replace("{bindings_path}", bindings);
-    if (include_folders != "")
-    {
-        command = command.replace("{include}", include_folders);
-    }
-    else
+    if (include_folders == "" && is_gdnative == false)
     {
         command = command.replace("-I{include}", "");
     }
-    if (linker_folders != "")
-    {
-        command = command.replace("{linker}", linker_folders);
-    }
     else
+    {
+        command = command.replace("{include}", include_folders);
+    }
+    if (linker_folders == "" && is_gdnative == false)
     {
         command = command.replace("-L{linker}", "");
     }
-    if (linker_settings != "")
+    else
     {
-        command = command.replace("{libs}", linker_settings);
+        command = command.replace("{linker}", linker_folders);
+    }
+    if (linker_settings == "" && is_gdnative == false)
+    {
+        command = command.replace("-L{libs}", "");
     }
     else
     {
-        command = command.replace("-L{libs}", "");
+        command = command.replace("{libs}", linker_settings);
     }
     command = command.replace("{standard}", standard);
     command = command.replace("{optimization}", optimization);
@@ -448,7 +449,7 @@ void ProjectManager::create_new_project()
                                    "sources = []\n"
                                    "add_sources(sources, \"" +
                                    source_folder + "\")\n\n"
-                                                   "library = env.SharedLibrary(target=\"bin/lib" +
+                                                   "library = env.SharedLibrary(target=\"bin/" +
                                    project_name + "\", source=sources)\n"
                                                   "Default(library)");
                 file->close();
@@ -474,13 +475,14 @@ void ProjectManager::create_new_project()
                                    source_folder + "\"\n\n"
                                                    "godot_cpp_folder=\"" +
                                    cpp_path + "\"\n"
-                                   "gdnlib_path=\""+gdnlib_file+"\"\n"
-                                              "use_mingw=false\n"
-                                              "include_folders=\"\"\n"
-                                              "linker_folders=\"\"\n"
-                                              "linker_settings=\"\"\n"
-                                              "build_command=\"scons -C {path} platform={platform} use_mingw={mingw} cpp_standard={standard} optimization={optimization} cpp_path={bindings_path} include_path={include} linker_path={linker} link_libs={libs}\"\n"
-                                              "clean_command=\"scons -C {path} --clean\"");
+                                              "gdnlib_path=\"" +
+                                   gdnlib_file + "\"\n"
+                                                 "use_mingw=false\n"
+                                                 "include_folders=\"\"\n"
+                                                 "linker_folders=\"\"\n"
+                                                 "linker_settings=\"\"\n"
+                                                 "build_command=\"scons -C {path} platform={platform} use_mingw={mingw} cpp_standard={standard} optimization={optimization} cpp_path={bindings_path} include_path={include} linker_path={linker} link_libs={libs}\"\n"
+                                                 "clean_command=\"scons -C {path} --clean\"");
                 file->close();
             }
             else
@@ -503,7 +505,7 @@ void ProjectManager::create_new_project()
                                                                "sources_folder=\"" +
                                    source_folder + "\"\n\n"
                                                    "godot_cpp_folder=\"\"\n"
-                                    "gdnlib_path=\"\"\n"
+                                                   "gdnlib_path=\"\"\n"
                                                    "use_mingw=true\n"
                                                    "include_folders=\"\"\n"
                                                    "linker_folders=\"\"\n"
@@ -528,14 +530,15 @@ void ProjectManager::create_new_project()
         String project_name = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/Rust/Name/HBoxContainer/LineEdit")))->get_text();
         int project_type = ((OptionButton *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/Rust/Type/HBoxContainer/OptionButton")))->get_selected_id();
         bool gdnative = ((CheckBox *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/ProjectTypes/ProjectTypes/CheckBox")))->is_pressed();
-        
+
         String lib = "--lib ";
         if (gdnative == false && project_type == 1)
         {
             lib = "";
         }
 
-        std::future<void> th = std::async(std::launch::async, &EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()), "cargo init " + lib + path + "/" + project_name);;
+        std::future<void> th = std::async(std::launch::async, &EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()), "cargo init " + lib + path + "/" + project_name);
+        ;
         while (true)
         {
             if (th.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
@@ -550,7 +553,7 @@ void ProjectManager::create_new_project()
                 {
                     cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/src/lib.rs");
                 }
-                
+
                 cast_to<EditorFile>(this->get_parent())->change_project_path(path + "/" + project_name);
                 break;
             }
@@ -564,7 +567,7 @@ void ProjectManager::create_rust_project(String path, bool gdnative)
 {
     String gdn_version = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/Rust/Version/HBoxContainer/LineEdit")))->get_text();
     String project_name = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/Rust/Name/HBoxContainer/LineEdit")))->get_text();
-    
+
     File *file = File::_new();
     if (gdnative)
     {
@@ -633,8 +636,8 @@ void ProjectManager::create_rust_project(String path, bool gdnative)
                            "path=\"" +
                            path + "/" + project_name + "\"\n"
                                                        "gdnative_version=\"\"\n"
-                                         "build_command=\"cargo build --manifest-path={path}\"\n"
-                                         "clean_command=\"cargo clean --manifest-path={path}\"");
+                                                       "build_command=\"cargo build --manifest-path={path}\"\n"
+                                                       "clean_command=\"cargo clean --manifest-path={path}\"");
         file->close();
     }
 
@@ -648,6 +651,37 @@ void ProjectManager::check_thread()
         thread->join();
         delete thread;
         thread = nullptr;
+    }
+}
+
+void ProjectManager::execute(String command, bool gdnative, String load_file, String selected_os)
+{
+    cast_to<EditorFile>(this->get_parent())->execute_command(command);
+    if (gdnative)
+    {
+        ConfigFile *config = ConfigFile::_new();
+        PoolStringArray keys = Array::make("gdnlib_path", "path");
+        PoolStringArray settings = cast_to<EditorFile>(this->get_parent())->load_config(load_file, "settings", keys);
+        if (settings[0] != "")
+        {
+            config->load(settings[0]);
+            int size = settings[1].split("/").size() - 1;
+            String name = settings[1].split("/")[size];
+            if (selected_os == "windows")
+            {
+                config->set_value("entry", "Windows.64", settings[1] + "/bin/" + name + ".dll");
+            }
+            else if (selected_os == "x11")
+            {
+                config->set_value("entry", "X11.64", settings[1] + "/bin/" + name + ".so");
+            }
+            else if (selected_os == "osx")
+            {
+                config->set_value("entry", "OSX.64", settings[1] + "/bin/" + name + ".dylib");
+            }
+            config->save(settings[0]);
+        }
+        config->free();
     }
 }
 

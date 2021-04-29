@@ -24,6 +24,7 @@ public:
     void create_new_project();
     void create_rust_project(String, bool);
     void check_thread();
+    void execute(String, bool, String, String);
 
     void _on_OkButton_pressed();
     void _on_CancelButton_pressed();
