@@ -367,6 +367,15 @@ access = 2
 current_dir = "/Work/Godot/GDStudio"
 current_path = "/Work/Godot/GDStudio/"
 
+[node name="gdnlib" type="FileDialog" parent="ProjectManager/TabContainer/NewProject"]
+margin_right = 302.0
+margin_bottom = 152.0
+window_title = "Guardar un Archivo"
+access = 2
+filters = PoolStringArray( "*.gdnlib" )
+current_dir = "/Work/Godot/GDStudio"
+current_path = "/Work/Godot/GDStudio/"
+
 [node name="Warning" type="AcceptDialog" parent="ProjectManager/TabContainer/NewProject"]
 margin_top = 101.0
 margin_right = 351.0
@@ -1128,7 +1137,9 @@ readonly = true
 [connection signal="text_changed" from="ProjectManager/TabContainer/NewClass/ClassName/ClassName" to="ProjectManager" method="_on_ClassName_text_changed"]
 [connection signal="pressed" from="ProjectManager/TabContainer/NewClass/PathLabel/Button" to="ProjectManager" method="_on_NewClassButton_pressed"]
 [connection signal="dir_selected" from="ProjectManager/TabContainer/NewProject/cppPathSearch" to="ProjectManager" method="_on_cppPathSearch_dir_selected"]
+[connection signal="file_selected" from="ProjectManager/TabContainer/NewProject/gdnlib" to="." method="_on_gdnlib_file_selected"]
 [connection signal="item_selected" from="ProjectManager/TabContainer/NewProject/VBoxContainer/ProjectTypes/ProjectTypes/OptionButton" to="ProjectManager" method="_on_ProjectType_item_selected"]
 [connection signal="pressed" from="ProjectManager/TabContainer/NewProject/VBoxContainer/Path/HBoxContainer/PathButton" to="ProjectManager" method="_on_PathButton_pressed"]
 [connection signal="pressed" from="ProjectManager/TabContainer/NewProject/VBoxContainer/CPP/GDNative/cppPath/HBoxContainer/SearchButton" to="ProjectManager" method="_on_SearchCPPButton_pressed"]
+[connection signal="pressed" from="ProjectManager/TabContainer/NewProject/VBoxContainer/CPP/GDNative/Library/HBoxContainer/Button" to="." method="_on_gdnlibButton_pressed"]
 [connection signal="item_selected" from="About/VBoxContainer/TabContainer/ThirdParty/NameList" to="." method="_on_NameList_item_selected"]

@@ -34,6 +34,8 @@ public:
     void _on_PathButton_pressed();
     void _on_SearchCPPButton_pressed();
     void _on_cppPathSearch_dir_selected(String);
+    void _on_gdnlibButton_pressed();
+    void _on_gdnlib_file_selected(String);
 
     static void _register_methods();
 

@@ -743,6 +743,16 @@ void ProjectManager::_on_cppPathSearch_dir_selected(String path)
     ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/CPP/GDNative/cppPath/HBoxContainer/cppPath2")))->set_text(path);
 }
 
+void ProjectManager::_on_gdnlibButton_pressed()
+{
+    ((FileDialog *)get_node(NodePath("TabContainer/NewProject/gdnlib")))->popup_centered();
+}
+
+void ProjectManager::_on_gdnlib_file_selected(String path)
+{
+    ((LineEdit *)get_node(NodePath("ProjectManager/TabContainer/NewProject/VBoxContainer/CPP/GDNative/Library/HBoxContainer/LineEdit")))->set_text(path);
+}
+
 void ProjectManager::_register_methods()
 {
     register_method((char *)"_init", &ProjectManager::_init);
@@ -764,4 +774,6 @@ void ProjectManager::_register_methods()
     register_method((char *)"_on_PathButton_pressed", &ProjectManager::_on_PathButton_pressed);
     register_method((char *)"_on_SearchCPPButton_pressed", &ProjectManager::_on_SearchCPPButton_pressed);
     register_method((char *)"_on_cppPathSearch_dir_selected", &ProjectManager::_on_cppPathSearch_dir_selected);
+    register_method((char *)"_on_gdnlibButton_pressed", &ProjectManager::_on_gdnlibButton_pressed);
+    register_method((char *)"_on_gdnlib_file_selected", &ProjectManager::_on_gdnlib_file_selected);
 }
