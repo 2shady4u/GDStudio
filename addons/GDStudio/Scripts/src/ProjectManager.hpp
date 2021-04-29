@@ -18,11 +18,11 @@ public:
     void _init();
     void _ready();
     void build_task(int);
-    String build_cpp_project(String,String,String);
-    String build_rust_project(String,String,String);
+    String build_cpp_project(String, String, String);
+    String build_rust_project(String, String, String);
     void create_new_class();
     void create_new_project();
-    void create_rust_project(String, bool);
+    void create_rust_project(String, bool, int, String, String);
     void check_thread();
     void execute(String, bool, String, String);
 

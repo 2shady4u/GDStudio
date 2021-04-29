@@ -70,7 +70,7 @@ void ProjectManager::build_task(int task = 0)
             {
                 command = this->build_cpp_project(settings[1], selected_os, execute_command) + " " + global_commands[1];
             }
-            //thread = new std::thread(&EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()), command);
+
             thread = new std::thread(&ProjectManager::execute, this, command, gdnative, load_file, selected_os);
         }
         else if (settings[0] == "rust")
@@ -537,37 +537,17 @@ void ProjectManager::create_new_project()
             lib = "";
         }
 
-        std::future<void> th = std::async(std::launch::async, &EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()), "cargo init " + lib + path + "/" + project_name);
-        ;
-        while (true)
-        {
-            if (th.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
-            {
-                this->check_thread();
-                this->create_rust_project(path, gdnative);
-                if (gdnative == false && project_type == 1)
-                {
-                    cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/src/main.rs");
-                }
-                else
-                {
-                    cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/src/lib.rs");
-                }
-
-                cast_to<EditorFile>(this->get_parent())->change_project_path(path + "/" + project_name);
-                break;
-            }
-        }
+        thread = new std::thread(&ProjectManager::create_rust_project, this, path, gdnative, project_type, lib, project_name);
         cast_to<EditorFile>(this->get_parent())->execute_command("cargo --version");
         break;
     }
 }
 
-void ProjectManager::create_rust_project(String path, bool gdnative)
+void ProjectManager::create_rust_project(String path, bool gdnative, int project_type, String lib, String project_name)
 {
+    cast_to<EditorFile>(this->get_parent())->execute_command("cargo init " + lib + path + "/" + project_name);
     String gdn_version = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/Rust/Version/HBoxContainer/LineEdit")))->get_text();
-    String project_name = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/Rust/Name/HBoxContainer/LineEdit")))->get_text();
-
+    
     File *file = File::_new();
     if (gdnative)
     {
@@ -640,6 +620,16 @@ void ProjectManager::create_rust_project(String path, bool gdnative)
                                                        "clean_command=\"cargo clean --manifest-path={path}\"");
         file->close();
     }
+    if (gdnative == false && project_type == 1)
+    {
+        cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/src/main.rs");
+    }
+    else
+    {
+        cast_to<EditorFile>(this->get_parent())->open_file(path + "/" + project_name + "/src/lib.rs");
+    }
+
+    cast_to<EditorFile>(this->get_parent())->change_project_path(path + "/" + project_name);
 
     file->free();
 }
