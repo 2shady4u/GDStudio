@@ -615,11 +615,10 @@ __meta__ = {
 visible = false
 margin_top = 85.0
 margin_right = 570.0
-margin_bottom = 192.0
+margin_bottom = 233.0
 custom_constants/separation = 16
 
 [node name="GDNative" type="VBoxContainer" parent="ProjectManager/TabContainer/NewProject/VBoxContainer/Rust"]
-visible = false
 margin_right = 570.0
 margin_bottom = 25.0
 
@@ -650,8 +649,9 @@ margin_bottom = 25.0
 rect_min_size = Vector2( 400, 0 )
 
 [node name="Version" type="CenterContainer" parent="ProjectManager/TabContainer/NewProject/VBoxContainer/Rust"]
+margin_top = 41.0
 margin_right = 570.0
-margin_bottom = 25.0
+margin_bottom = 66.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ProjectManager/TabContainer/NewProject/VBoxContainer/Rust/Version"]
 margin_left = 180.0
@@ -677,9 +677,9 @@ __meta__ = {
 }
 
 [node name="Name" type="CenterContainer" parent="ProjectManager/TabContainer/NewProject/VBoxContainer/Rust"]
-margin_top = 41.0
+margin_top = 82.0
 margin_right = 570.0
-margin_bottom = 66.0
+margin_bottom = 107.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ProjectManager/TabContainer/NewProject/VBoxContainer/Rust/Name"]
 margin_left = 161.0
@@ -702,9 +702,9 @@ __meta__ = {
 }
 
 [node name="Type" type="CenterContainer" parent="ProjectManager/TabContainer/NewProject/VBoxContainer/Rust"]
-margin_top = 82.0
+margin_top = 123.0
 margin_right = 570.0
-margin_bottom = 107.0
+margin_bottom = 148.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ProjectManager/TabContainer/NewProject/VBoxContainer/Rust/Type"]
 margin_left = 205.0
@@ -1143,4 +1143,5 @@ readonly = true
 [connection signal="pressed" from="ProjectManager/TabContainer/NewProject/VBoxContainer/Path/HBoxContainer/PathButton" to="ProjectManager" method="_on_PathButton_pressed"]
 [connection signal="pressed" from="ProjectManager/TabContainer/NewProject/VBoxContainer/CPP/GDNative/cppPath/HBoxContainer/SearchButton" to="ProjectManager" method="_on_SearchCPPButton_pressed"]
 [connection signal="pressed" from="ProjectManager/TabContainer/NewProject/VBoxContainer/CPP/GDNative/Library/HBoxContainer/Button" to="ProjectManager" method="_on_gdnlibButton_pressed"]
+[connection signal="pressed" from="ProjectManager/TabContainer/NewProject/VBoxContainer/Rust/GDNative/Library/HBoxContainer/Button" to="ProjectManager" method="_on_RustgdnlibButton_pressed"]
 [connection signal="item_selected" from="About/VBoxContainer/TabContainer/ThirdParty/NameList" to="." method="_on_NameList_item_selected"]

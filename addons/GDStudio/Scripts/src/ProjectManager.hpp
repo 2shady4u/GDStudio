@@ -37,10 +37,12 @@ public:
     void _on_cppPathSearch_dir_selected(String);
     void _on_gdnlibButton_pressed();
     void _on_gdnlib_file_selected(String);
+    void _on_RustgdnlibButton_pressed();
 
     static void _register_methods();
 
 private:
     std::thread *thread = nullptr;
+    int gdnproject = -1;
 };
 #endif

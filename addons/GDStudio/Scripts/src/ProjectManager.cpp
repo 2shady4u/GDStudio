@@ -547,10 +547,12 @@ void ProjectManager::create_rust_project(String path, bool gdnative, int project
 {
     cast_to<EditorFile>(this->get_parent())->execute_command("cargo init " + lib + path + "/" + project_name);
     String gdn_version = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/Rust/Version/HBoxContainer/LineEdit")))->get_text();
+    String gdnlib_file = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/Rust/GDNative/Library/HBoxContainer/LineEdit")))->get_text();
     
     File *file = File::_new();
     if (gdnative)
     {
+        ConfigFile *config = ConfigFile::_new();
         file->open(path + "/" + project_name + "/Cargo.toml", File::READ);
         int index = 1;
         String final_string;
@@ -594,6 +596,17 @@ void ProjectManager::create_rust_project(String path, bool gdnative, int project
                            "}\n\n");
         file->close();
 
+        config->load(gdnlib_file);
+        config->set_value("general", "singleton", false);
+        config->set_value("general", "load_once", true);
+        config->set_value("general", "symbol_prefix", "godot_");
+        config->set_value("general", "reloadable", true);
+        config->set_value("entry", "Windows.64", "");
+        config->set_value("entry", "X11.64", "");
+        config->set_value("dependencies", "Windows.64", Array::make());
+        config->set_value("dependencies", "X11.64", Array::make());
+        config->save(gdnlib_file);
+
         file->open(path + "/" + project_name + "/settings.gdnproj", File::WRITE);
         file->store_string("[settings]\n"
                            "language=\"rust\"\n\n"
@@ -605,6 +618,7 @@ void ProjectManager::create_rust_project(String path, bool gdnative, int project
                                          "build_command=\"cargo build --manifest-path={path}\"\n"
                                          "clean_command=\"cargo clean --manifest-path={path}\"");
         file->close();
+        config->free();
     }
     else
     {
@@ -785,12 +799,27 @@ void ProjectManager::_on_cppPathSearch_dir_selected(String path)
 
 void ProjectManager::_on_gdnlibButton_pressed()
 {
+    this->gdnproject = 0;
     ((FileDialog *)get_node(NodePath("TabContainer/NewProject/gdnlib")))->popup_centered();
 }
 
 void ProjectManager::_on_gdnlib_file_selected(String path)
 {
-    ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/CPP/GDNative/Library/HBoxContainer/LineEdit")))->set_text(path);
+    if (this->gdnproject == 0)
+    {
+        ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/CPP/GDNative/Library/HBoxContainer/LineEdit")))->set_text(path);
+    }
+    else if (this->gdnproject == 1)
+    {
+        ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/Rust/GDNative/Library/HBoxContainer/LineEdit")))->set_text(path);
+    }
+    this->gdnproject = -1;
+}
+
+void ProjectManager::_on_RustgdnlibButton_pressed()
+{
+    this->gdnproject = 1;
+    ((FileDialog *)get_node(NodePath("TabContainer/NewProject/gdnlib")))->popup_centered();
 }
 
 void ProjectManager::_register_methods()
@@ -816,4 +845,5 @@ void ProjectManager::_register_methods()
     register_method((char *)"_on_cppPathSearch_dir_selected", &ProjectManager::_on_cppPathSearch_dir_selected);
     register_method((char *)"_on_gdnlibButton_pressed", &ProjectManager::_on_gdnlibButton_pressed);
     register_method((char *)"_on_gdnlib_file_selected", &ProjectManager::_on_gdnlib_file_selected);
+    register_method((char *)"_on_RustgdnlibButton_pressed", &ProjectManager::_on_RustgdnlibButton_pressed);
 }
