@@ -71,7 +71,7 @@ void ProjectManager::build_task(int task = 0)
                 command = this->build_cpp_project(settings[1], selected_os, execute_command) + " " + global_commands[1];
             }
 
-            thread = new std::thread(&ProjectManager::execute, this, command, gdnative, load_file, selected_os);
+            thread = new std::thread(&ProjectManager::execute, this, command, gdnative, load_file, selected_os, "cpp");
         }
         else if (settings[0] == "rust")
         {
@@ -95,7 +95,7 @@ void ProjectManager::build_task(int task = 0)
                 command = this->build_rust_project(settings[1], selected_os, execute_command);
                 +" " + global_commands[1];
             }
-            thread = new std::thread(&EditorFile::execute_command, cast_to<EditorFile>(this->get_parent()), command);
+            thread = new std::thread(&ProjectManager::execute, this, command, gdnative, load_file, selected_os, "rust");
         }
     }
 }
@@ -548,7 +548,7 @@ void ProjectManager::create_rust_project(String path, bool gdnative, int project
     cast_to<EditorFile>(this->get_parent())->execute_command("cargo init " + lib + path + "/" + project_name);
     String gdn_version = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/Rust/Version/HBoxContainer/LineEdit")))->get_text();
     String gdnlib_file = ((LineEdit *)get_node(NodePath("TabContainer/NewProject/VBoxContainer/Rust/GDNative/Library/HBoxContainer/LineEdit")))->get_text();
-    
+
     File *file = File::_new();
     if (gdnative)
     {
@@ -611,7 +611,9 @@ void ProjectManager::create_rust_project(String path, bool gdnative, int project
         file->store_string("[settings]\n"
                            "language=\"rust\"\n\n"
                            "gdnative=true\n"
-                           "path=\"" +
+                           "gdnlib_path=\"" +
+                           gdnlib_file + "\"\n"
+                                         "path=\"" +
                            path + "/" + project_name + "\"\n"
                                                        "gdnative_version=\"" +
                            gdn_version + "\"\n"
@@ -627,6 +629,7 @@ void ProjectManager::create_rust_project(String path, bool gdnative, int project
         file->store_string("[settings]\n"
                            "language=\"rust\"\n\n"
                            "gdnative=false\n"
+                           "gdnlib_path=\"\"\n"
                            "path=\"" +
                            path + "/" + project_name + "\"\n"
                                                        "gdnative_version=\"\"\n"
@@ -658,9 +661,14 @@ void ProjectManager::check_thread()
     }
 }
 
-void ProjectManager::execute(String command, bool gdnative, String load_file, String selected_os)
+void ProjectManager::execute(String command, bool gdnative, String load_file, String selected_os, String lang)
 {
     cast_to<EditorFile>(this->get_parent())->execute_command(command);
+    String lang_path = "/bin/";
+    if (lang == "rust")
+    {
+        lang_path = "/target/debug/";
+    }
     if (gdnative)
     {
         ConfigFile *config = ConfigFile::_new();
@@ -673,15 +681,15 @@ void ProjectManager::execute(String command, bool gdnative, String load_file, St
             String name = settings[1].split("/")[size];
             if (selected_os == "windows")
             {
-                config->set_value("entry", "Windows.64", settings[1] + "/bin/" + name + ".dll");
+                config->set_value("entry", "Windows.64", settings[1] + lang_path + name + ".dll");
             }
             else if (selected_os == "x11")
             {
-                config->set_value("entry", "X11.64", settings[1] + "/bin/" + name + ".so");
+                config->set_value("entry", "X11.64", settings[1] + lang_path + name + ".so");
             }
             else if (selected_os == "osx")
             {
-                config->set_value("entry", "OSX.64", settings[1] + "/bin/" + name + ".dylib");
+                config->set_value("entry", "OSX.64", settings[1] + lang_path + name + ".dylib");
             }
             config->save(settings[0]);
         }
