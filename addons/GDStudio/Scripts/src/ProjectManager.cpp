@@ -395,7 +395,7 @@ void ProjectManager::create_new_project()
                                    "env = Environment(tools=['mingw'])\n"
                                    "else:\n\t"
                                    "env = Environment()\n\n"
-                                   "godot_headers_path = ARGUMENTS.get(\"headers\", os.getenv(\"GODOT_HEADERS\", bindings+\"/godot_headers\"))\n"
+                                   "godot_headers_path = ARGUMENTS.get(\"headers\", os.getenv(\"GODOT_HEADERS\", bindings+\"/godot-headers\"))\n"
                                    "godot_bindings_path = ARGUMENTS.get(\"cpp_bindings\", os.getenv(\"CPP_BINDINGS\", bindings))\n\n"
                                    "target = ARGUMENTS.get(\"target\", \"debug\")\n\n"
                                    "if ARGUMENTS.get(\"use_llvm\", \"no\") == \"yes\":\n\t"

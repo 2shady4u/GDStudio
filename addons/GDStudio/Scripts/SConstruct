@@ -58,7 +58,7 @@ def add_languages(sources, dir):
 env.Append(
     CPPPATH=[
         "godot-cpp",
-        "godot-cpp/godot_headers",
+        "godot-cpp/godot-headers",
         "godot-cpp/include",
         "godot-cpp/include/gen/",
         "godot-cpp/include/core/",
